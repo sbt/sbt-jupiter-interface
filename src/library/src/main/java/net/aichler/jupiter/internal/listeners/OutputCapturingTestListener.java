@@ -107,7 +107,7 @@ public class OutputCapturingTestListener implements TestExecutionListener {
         }
     }
 
-    class CapturedOutputStream extends ByteArrayOutputStream {
+    static class CapturedOutputStream extends ByteArrayOutputStream {
 
         final Consumer<String> consumer;
         final List<String> output = new ArrayList<>();
@@ -120,9 +120,13 @@ public class OutputCapturingTestListener implements TestExecutionListener {
         @Override
         public void flush() throws IOException {
 
-            final String content = toString();
-            consumer.accept(content);
-            output.add(content);
+            final String[] lines = toString().split("\\r?\\n");
+            for (String line : lines) {
+                if (!line.isEmpty()) {
+                    consumer.accept(line);
+                    output.add(line);
+                }
+            }
             reset();
         }
     }

@@ -49,7 +49,7 @@ public class TestRunner extends ExternalResource {
     private DummyLogger logger = new DummyLogger();
     private ClassLoader classLoader = getClass().getClassLoader();
     private DummyEventHandler eventHandler = new DummyEventHandler();
-    private StreamPair streamPair;
+    private static final StreamPair streamPair = new StreamPair(System.out, System.err);
 
     /**
      *
@@ -100,19 +100,6 @@ public class TestRunner extends ExternalResource {
         JupiterRunner runner = new JupiterRunner(args, remoteArgs, classLoader, streamPair);
         Task[] tasks = runner.tasks(new TaskDef[]{ createTaskDef(fullyQualifiedClassName) });
         tasks[0].execute(eventHandler, new Logger[] { logger });
-    }
-
-    @Override
-    protected void before() throws Throwable {
-
-        streamPair = new StreamPair(System.out, System.err);
-    }
-
-    @Override
-    protected void after() {
-
-        System.setOut(streamPair.get(StreamPair.Type.OUT));
-        System.setErr(streamPair.get(StreamPair.Type.ERR));
     }
 
     private TaskDef createTaskDef(String fullyQualifiedName) {
