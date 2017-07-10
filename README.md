@@ -12,13 +12,13 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following lines to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.1.0")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.1.1")
 
 ## Releases
 
  SBT Plugin      | JUnit Platform | JUnit Engine
 :----------------|:---------------|:-------------
- 0.1.0           | 1.0.0-M4       | 5.0.0-M4
+ 0.1.x           | 1.0.0-M4       | 5.0.0-M4
  
  
 ## Framework Options
