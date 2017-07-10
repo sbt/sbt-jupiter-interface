@@ -90,10 +90,6 @@ public class Dispatcher implements JupiterTestListener {
     @Override
     public void executionFinished(TestIdentifier identifier, TestExecutionResult result) {
 
-        if (!identifier.isTest()) {
-            return;
-        }
-
         reportedIds.computeIfAbsent(identifier, key -> {
 
             final Status status;
@@ -101,22 +97,33 @@ public class Dispatcher implements JupiterTestListener {
             final String taskName = configuration.fullyQualifiedTaskName(identifier);
             final long duration = calculateDuration(identifier);
 
+            // dispatch only tests by default so that number of executed tests
+            // match those from junit-interface
+
+            boolean dispatch = identifier.isTest();
+
             switch (result.getStatus()) {
                 case ABORTED:
                     status = Status.Canceled;
+                    dispatch = true;
                     break;
                 case FAILED:
                     status = Status.Failure;
+                    dispatch = true;
                     break;
                 case SUCCESSFUL:
                     status = Status.Success;
                     break;
                 default:
                     status = Status.Pending;
+                    dispatch = true;
                     break;
             }
 
-            eventHandler.handle(new DispatchEvent(taskName, status, duration, throwable));
+            if (dispatch) {
+                eventHandler.handle(new DispatchEvent(taskName, status, duration, throwable));
+            }
+
             return true;
         });
     }

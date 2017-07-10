@@ -19,8 +19,6 @@
 
 name := "test-project"
 
-scalaVersion := "2.10.2"
-
 libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test",
   "junit" % "junit" % "4.12" % "test"
