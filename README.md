@@ -19,6 +19,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
  SBT Plugin      | JUnit Platform | JUnit Engine
 :----------------|:---------------|:-------------
  0.1.x           | 1.0.0-M4       | 5.0.0-M4
+ 0.2.x           | 1.0.0-M5       | 5.0.0-M5
  
  
 ## Framework Options
