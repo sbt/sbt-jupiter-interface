@@ -64,6 +64,7 @@ public class JupiterRunner implements Runner {
 
     public JupiterRunner(String[] args, String[] remoteArgs, ClassLoader testClassLoader,
                          StreamPair systemStreamPair) {
+
         this.args = args;
         this.remoteArgs = remoteArgs;
         this.testClassLoader = testClassLoader;
@@ -172,6 +173,7 @@ public class JupiterRunner implements Runner {
                 builder.filters(testFilters(dispatcher));
 
                 Launcher launcher = LauncherFactory.create();
+
                 launcher.registerTestExecutionListeners(dispatcher);
                 launcher.registerTestExecutionListeners(outputCapturingListener);
                 launcher.registerTestExecutionListeners(summaryListener);

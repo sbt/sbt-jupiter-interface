@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ObjectArrayArguments;
 
 import java.util.stream.Stream;
 
@@ -17,7 +16,7 @@ class Ticket0001 {
     @SuppressWarnings("unused")
     public static Stream<Arguments> data() {
         return Stream.of(
-                ObjectArrayArguments.create("foo")
+                Arguments.of("foo")
         );
     }
 
@@ -25,7 +24,7 @@ class Ticket0001 {
     class SomeParameterizedTest {
 
         @ParameterizedTest
-        @MethodSource(names = "dataProvider")
+        @MethodSource("dataProvider")
         void testSomeData(String data) {
 
             System.out.println(data);

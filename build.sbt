@@ -18,8 +18,8 @@
  */
 
 val Versions = new {
-  val junitJupiter = "5.0.0-M4"
-  val junitPlatform = "1.0.0-M4"
+  val junitJupiter = "5.0.0-M5"
+  val junitPlatform = "1.0.0-M5"
   val testInterface = "1.0"
   val scalaVersion = "2.10.6"
 }
@@ -54,7 +54,11 @@ lazy val plugin = (project in file("src/plugin"))
     sbtPlugin := true,
     scriptedSettings,
     scriptedBufferLog := false,
-    scriptedLaunchOpts ++= Seq(s"-Dproject.version=${version.value}"),
+    scriptedLaunchOpts ++= Seq(
+      s"-Dproject.version=${version.value}",
+      s"-Djunit.jupiter.version=${Versions.junitJupiter}",
+      s"-Djunit.platform.version=${Versions.junitPlatform}"
+    ),
     scriptedDependencies := {
       val () = publishLocal.value
       val () = (publishLocal in library).value
@@ -64,8 +68,7 @@ lazy val plugin = (project in file("src/plugin"))
     publishArtifact in Test := false,
     (javacOptions in compile) ++= Seq("-source", "1.6", "-target", "1.6"),
     (javacOptions in doc) := Seq("-source", "1.6"),
-    bintrayRepository := "sbt-plugins"/*
-    test in Test := (test in Test dependsOn scripted.toTask("")).value*/
+    bintrayRepository := "sbt-plugins"
   )
 
 lazy val root = (project in file("."))
@@ -75,7 +78,8 @@ lazy val root = (project in file("."))
     name := "jupiter-root",
     publish := {},
     publishLocal := {},
-    publishTo := Some(Resolver.file("no-publish", crossTarget.value / "no-publish"))
+    publishTo := Some(Resolver.file("no-publish", crossTarget.value / "no-publish")),
+    bintrayRelease := {}
   )
   .settings(
     inThisBuild(Seq(

@@ -6,7 +6,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ObjectArrayArguments;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.concurrent.TimeUnit;
@@ -36,7 +35,7 @@ class ParameterizedTests {
     }
 
     @ParameterizedTest
-    @MethodSource(names = "stringProvider")
+    @MethodSource("stringProvider")
     void testWithSimpleMethodSource(String argument) {
         assertNotNull(argument);
     }
@@ -47,7 +46,7 @@ class ParameterizedTests {
     }
 
     @ParameterizedTest
-    @MethodSource(names = "stringAndIntProvider")
+    @MethodSource("stringAndIntProvider")
     void testWithMultiArgMethodSource(String first, int second) {
         assertNotNull(first);
         assertNotEquals(0, second);
@@ -55,7 +54,7 @@ class ParameterizedTests {
 
     @SuppressWarnings("unused")
     static Stream<Arguments> stringAndIntProvider() {
-        return Stream.of(ObjectArrayArguments.create("foo", 1), ObjectArrayArguments.create("bar", 2));
+        return Stream.of(Arguments.of("foo", 1), Arguments.of("bar", 2));
     }
 
     @ParameterizedTest

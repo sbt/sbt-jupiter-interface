@@ -1,4 +1,4 @@
-package jupiter.samples;
+package jupiter.basic;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
