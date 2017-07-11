@@ -15,7 +15,7 @@ lazy val junit = (project in file("src/junit"))
 lazy val jupiter = (project in file("src/jupiter"))
   .settings(
     libraryDependencies ++= Seq(
-      "org.junit.jupiter" % "junit-jupiter-params" % "5.0.0-M4" % "test"
+      "org.junit.jupiter" % "junit-jupiter-params" % readJupiterVersion % "test"
     ),
     resolvers += Resolver.mavenLocal,
     parallelExecution in Test := true
@@ -24,3 +24,14 @@ lazy val jupiter = (project in file("src/jupiter"))
 lazy val root = (project in file("."))
   .aggregate(junit)
   .aggregate(jupiter)
+
+/*
+ * Reads Versions.junitJupiter value from ../build.sbt
+ */
+def readJupiterVersion = {
+
+  IO.readLines(file("../build.sbt"))
+    .filter(_.contains("val junitJupiter ="))
+    .map(line => line.substring(line.indexOf('"')+1, line.lastIndexOf('"')))
+    .head
+}

@@ -1,4 +1,4 @@
-package jupiter.samples;
+package jupiter.basic;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
