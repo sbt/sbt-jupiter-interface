@@ -47,7 +47,7 @@ public class SummaryPrintingTestListener extends SummaryGeneratingListener {
     public void testPlanExecutionFinished(TestPlan testPlan) {
 
         TestExecutionSummary summary = getSummary();
-        long testRunDuration = summary.getTimeFinished() - summary.getTimeFinished();
+        long testRunDuration = System.currentTimeMillis() - summary.getTimeStarted();
 
         long totalFailureCount = summary.getTotalFailureCount();
         long testsSkippedCount = summary.getTestsSkippedCount();

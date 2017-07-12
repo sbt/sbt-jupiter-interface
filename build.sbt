@@ -64,7 +64,7 @@ lazy val plugin = (project in file("src/plugin"))
       val () = (publishLocal in library).value
     },
     resourceGenerators in Compile += generateVersionFile.taskValue,
-    publishMavenStyle := isSnapshot.value,
+    publishMavenStyle := false,
     publishArtifact in Test := false,
     (javacOptions in compile) ++= Seq("-source", "1.6", "-target", "1.6"),
     (javacOptions in doc) := Seq("-source", "1.6"),
