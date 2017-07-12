@@ -12,7 +12,7 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following lines to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.2.0")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.2.1")
 
 ## Releases
 
@@ -39,7 +39,7 @@ The following options are supported when running JUnit Jupiter tests:
  `+s`                             | Turn off `-s`. Takes precedence over `-s`.
  `+a`                             | Turn off `-a`. Takes precedence over `-a`.
  `+c`                             | Turn off `-c`. Takes precedence over `-c`.
- `--display=<MODE>`               | Select an output display mode for when tests are executed. Use either `flat` or `tree`.
+ `--display-mode=<MODE>`          | Select an output display mode for when tests are executed. Use either `flat` or `tree`.
  `--tests=<REGEXPS>`              | Run only the tests whose names match one of the specified regular expressions (in a comma-separated list). Non-matched tests are ignored. Only individual test case names are matched, not test classes. Example: For test `MyClassTest.testBasic()` only "testBasic" is matched. Use sbt's `test-only` command instead to match test classes.
  `-Dkey=value`                    | Temporarily set a system property for the duration of the test run. The property is restored to its previous value after the test has ended. Note that system properties are global to the entire JVM and they can be modified in a non-transactional way, so you should run tests serially and not perform any other tasks in parallel which depend on the modified property.
  `--run-listener=<CLASS_NAME>`    | A (user defined) class which extends either `org.junit.platform.launcher.TestExecutionListener` or `net.aichler.jupiter.api.JupiterTestListener`. An instance of this class is created and added to the JUnit Launcher, so that it will receive test execution events. For more information, see [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html). *Note: this uses the test-classloader, so the class needs to be defined in `src/test` or `src/main` or included as a test or compile dependency*
