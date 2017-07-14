@@ -155,9 +155,9 @@ public class JupiterRunner implements Runner {
 
         Task[] execute() {
 
-            String testClassName = taskDef.fullyQualifiedName();
+            String testSuiteName = taskDef.fullyQualifiedName();
 
-            Configuration configuration = new Configuration(loggers, options);
+            Configuration configuration = new Configuration(testSuiteName, loggers, options);
             Dispatcher dispatcher = new Dispatcher(configuration, eventHandler);
 
             SummaryPrintingTestListener summaryListener = new SummaryPrintingTestListener(configuration);
@@ -169,7 +169,7 @@ public class JupiterRunner implements Runner {
             try
             {
                 LauncherDiscoveryRequestBuilder builder = LauncherDiscoveryRequestBuilder.request();
-                builder.selectors(testSelector(testClassName));
+                builder.selectors(testSelector(testSuiteName));
                 builder.filters(testFilters(dispatcher));
 
                 Launcher launcher = LauncherFactory.create();
@@ -187,7 +187,7 @@ public class JupiterRunner implements Runner {
                 return new Task[0];
             }
             catch (Throwable t) {
-                dispatcher.executionFailed(testClassName, t);
+                dispatcher.executionFailed(testSuiteName, t);
                 t.printStackTrace();
                 return new Task[0];
             }

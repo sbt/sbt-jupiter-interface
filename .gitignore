@@ -8,6 +8,7 @@ project/plugins/project/
 .history
 .cache
 .lib/
+build.local.sbt
 
 # Intellij
 *.iws

@@ -31,6 +31,7 @@ import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import sbt.testing.Logger;
+import sbt.testing.TaskDef;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -49,10 +50,12 @@ public class Configuration {
     private final Options options;
     private final TestLogger logger;
     private final ColorTheme colorTheme = new ColorTheme() {};
+    private final String testSuiteName;
 
-    public Configuration(Logger[] loggers, Options options) {
+    public Configuration(String testSuiteName, Logger[] loggers, Options options) {
 
         this.options = options;
+        this.testSuiteName = testSuiteName;
         this.logger = new TestLogger(loggers, this);
     }
 
@@ -81,15 +84,25 @@ public class Configuration {
     }
 
     /**
+     * @see TaskDef#fullyQualifiedName()
+     * @return The name of the test suite which is currently executed.
+     */
+    public String getTestSuiteName() {
+
+        return testSuiteName;
+    }
+
+    /**
      * @return The configured test listener.
      */
     public JupiterTestListener getTestListener() {
 
-        if ("tree".equals(options.getDisplayMode())) {
-            return new TreePrintingTestListener(this);
+        switch (options.getDisplayMode()) {
+            case "tree":
+                return new TreePrintingTestListener(this);
+            default:
+                return new FlatPrintingTestListener(this);
         }
-
-        return new FlatPrintingTestListener(this);
     }
 
     /**
@@ -187,27 +200,6 @@ public class Configuration {
         }
 
         return Optional.empty();
-    }
-
-    public String fullyQualifiedTaskName(TestIdentifier identifier) {
-
-        TestSource testSource = identifier.getSource().orElse(null);
-
-        if (testSource instanceof ClassSource) {
-
-            ClassSource classSource = (ClassSource)testSource;
-            return classSource.getClassName();
-        }
-
-        if (testSource instanceof MethodSource) {
-
-            MethodSource methodSource = (MethodSource)testSource;
-            return methodSource.getClassName()
-                    + '#' + methodSource.getMethodName()
-                    + '(' + methodSource.getMethodParameterTypes() + ')';
-        }
-
-        return identifier.getLegacyReportingName();
     }
 
     public String buildInfoMessage(Throwable t) {
