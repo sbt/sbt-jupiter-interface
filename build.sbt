@@ -43,6 +43,7 @@ lazy val library = (project in file("src/library"))
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "junit" % "junit" % "4.12" % Test
     ),
+    testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
     publishMavenStyle := true,
     bintrayRepository := "maven"
   )

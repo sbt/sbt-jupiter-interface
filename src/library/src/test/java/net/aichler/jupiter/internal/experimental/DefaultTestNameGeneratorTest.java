@@ -36,13 +36,15 @@ public class DefaultTestNameGeneratorTest {
 
     public static class WithTestPlanAndIdentifier {
 
+        TestHelper testHelper = new TestHelper();
+
         @Test
         public void should() {
 
-            TestPlan testPlan = TestHelper.fromClassName("jupiter.samples.SimpleTests");
-            TestIdentifier testIdentifier = TestHelper.findByName(testPlan, "firstTestMethod()");
+            testHelper.loadTestClass("jupiter.samples.SimpleTests");
+            TestIdentifier testIdentifier = testHelper.findByName("firstTestMethod()");
 
-            TestName name = create(testPlan, testIdentifier);
+            TestName name = create(testHelper.testPlan(), testIdentifier);
             assertThat(name.technicalName(), equalTo("jupiter.samples.SimpleTests#firstTestMethod()"));
         }
     }

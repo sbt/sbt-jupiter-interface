@@ -90,6 +90,16 @@ public class TestRunner extends ExternalResource {
     }
 
     /**
+     * Execute {@link JupiterRunner} with the specified test class.
+     *
+     * @param clazz The test class which is to be run.
+     */
+    public void execute(Class<?> clazz) {
+
+        execute(clazz.getName());
+    }
+
+    /**
      * Execute {@link JupiterRunner} for a test matching {@code fullyQualifiedClassName}.
      *
      * @param fullyQualifiedClassName The fully qualified name of the test class.

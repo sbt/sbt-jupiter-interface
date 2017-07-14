@@ -44,16 +44,17 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Dispatcher implements JupiterTestListener {
 
-    private final Configuration configuration;
+    private final static Fingerprint fingerprint = new JupiterTestFingerprint();
+
     private final EventHandler eventHandler;
-    private final Fingerprint fingerprint = new JupiterTestFingerprint();
     private final Map<TestIdentifier,Boolean> reportedIds = new ConcurrentHashMap<>();
     private final Map<TestIdentifier,Long> startTimes = new ConcurrentHashMap<>();
+    private final String testSuiteName;
 
     public Dispatcher(Configuration configuration, EventHandler eventHandler) {
 
-        this.configuration = configuration;
         this.eventHandler = eventHandler;
+        this.testSuiteName = configuration.getTestSuiteName();
     }
 
     @Override
@@ -62,7 +63,7 @@ public class Dispatcher implements JupiterTestListener {
         reportedIds.computeIfAbsent(identifier, key -> {
 
             final long duration = calculateDuration(key);
-            final String taskName = configuration.fullyQualifiedTaskName(identifier);
+            final TaskName taskName = TaskName.of(testSuiteName, identifier);
             eventHandler.handle(new DispatchEvent(taskName, Status.Skipped, duration));
             return true;
         });
@@ -77,14 +78,15 @@ public class Dispatcher implements JupiterTestListener {
     @Override
     public void executionFailed(String className, Throwable throwable) {
 
-        eventHandler.handle(new DispatchEvent(className, Status.Error, 0L, throwable));
+        final TaskName taskName = TaskName.of(testSuiteName, className);
+        eventHandler.handle(new DispatchEvent(taskName, Status.Error, 0L, throwable));
     }
 
     @Override
     public void executionFiltered(TestDescriptor descriptor, String reason) {
 
-        final String fqn = configuration.fullyQualifiedTaskName(TestIdentifier.from(descriptor));
-        eventHandler.handle(new DispatchEvent(fqn, Status.Skipped, 0L));
+        final TaskName taskName = TaskName.of(testSuiteName, TestIdentifier.from(descriptor));
+        eventHandler.handle(new DispatchEvent(taskName, Status.Skipped, 0L));
     }
 
     @Override
@@ -94,7 +96,7 @@ public class Dispatcher implements JupiterTestListener {
 
             final Status status;
             final Throwable throwable = result.getThrowable().orElse(null);
-            final String taskName = configuration.fullyQualifiedTaskName(identifier);
+            final TaskName taskName = TaskName.of(testSuiteName, identifier);
             final long duration = calculateDuration(identifier);
 
             // dispatch only tests by default so that number of executed tests
@@ -128,35 +130,62 @@ public class Dispatcher implements JupiterTestListener {
         });
     }
 
-    class DispatchEvent implements Event {
+    static class DispatchEvent implements Event {
 
         final Status status;
         final Throwable throwable;
         final long duration;
         final String className;
-        final String methodName;
         final Selector selector;
 
-        DispatchEvent(String fqn, Status status, long duration) {
-            this(fqn, status, duration, null);
+        DispatchEvent(TaskName name, Status status, long duration) {
+            this(name, status, duration, null);
         }
 
-        DispatchEvent(String fqn, Status status, long duration, Throwable throwable) {
+        DispatchEvent(TaskName name, Status status, long duration, Throwable throwable) {
 
             this.status = status;
             this.throwable = throwable;
             this.duration = duration;
+            this.className = name.fullyQualifiedName();
+            this.selector = toSelector(name);
+        }
 
-            int indexOfHash = fqn.indexOf('#');
-            if (-1 == indexOfHash) {
-                className = fqn;
-                methodName = null;
-                selector = new SuiteSelector();
-            } else {
-                className = fqn.substring(0, indexOfHash);
-                methodName = fqn.substring(indexOfHash + 1);
-                selector = new TestSelector(methodName);
+        /**
+         * Converts the specified {@code taskName} to a selector.
+         *
+         * @param name The task name.
+         * @return An appropriate selector instance.
+         */
+        static Selector toSelector(TaskName name) {
+
+            String testName = name.testName();
+            if (null != testName) {
+                if (null != name.invocation()) {
+                    testName = testName + ":" + name.invocation();
+                }
             }
+
+            if (null != name.nestedSuiteId()) {
+                if (null != name.testName()) {
+
+                    // FIXME: as soon as JUnitXmlTestsListener supports this
+                    // return new NestedTestSelector(name.nestedSuiteId(), name.testName());
+                    return new TestSelector(name.nestedSuiteId() + "#" + testName);
+                }
+
+
+                // FIXME: as soon as JUnitXmlTestsListener supports this
+                // return new NestedSuiteSelector(name.nestedSuiteId());
+                return new TestSelector(name.nestedSuiteId());
+            }
+
+            if (null != name.testName()) {
+
+                return new TestSelector(testName);
+            }
+
+            return new SuiteSelector();
         }
 
         @Override
