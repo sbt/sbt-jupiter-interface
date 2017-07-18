@@ -43,6 +43,7 @@ class TaskName {
      * @return The fully qualified name of the test suite.
      */
     String fullyQualifiedName() {
+
         return fullyQualifiedName;
     }
 
@@ -50,6 +51,7 @@ class TaskName {
      * @return An optional nested suite id (might be {@code null}).
      */
     String nestedSuiteId() {
+
         return nestedSuiteId;
     }
 
@@ -57,6 +59,7 @@ class TaskName {
      * @return An optional test name (might be {@code null}).
      */
     String testName() {
+
         return testName;
     }
 
@@ -64,6 +67,7 @@ class TaskName {
      * @return An optional invocation for repeated tests.
      */
     String invocation() {
+
         return invocation;
     }
 
@@ -149,6 +153,7 @@ class TaskName {
     static String testName(String methodName, String methodParameterTypes) {
 
         String parameterTypes = "";
+
         if (null != methodParameterTypes && !methodParameterTypes.isEmpty()) {
             String[] parts = methodParameterTypes.split(",\\s*");
             parameterTypes = Arrays.stream(parts).map(type -> {
@@ -168,6 +173,7 @@ class TaskName {
     static String invocation(UniqueId id) {
 
         List<UniqueId.Segment> segments = id.getSegments();
+
         if (!segments.isEmpty()) {
 
             UniqueId.Segment last = segments.get(segments.size() - 1);

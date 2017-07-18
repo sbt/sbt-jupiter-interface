@@ -51,6 +51,10 @@ public class StreamPair {
         this.err = Objects.requireNonNull(err, "Error stream must not be null.");
     }
 
+    /**
+     * @param type The requested type.
+     * @return The print stream of the specified {@code type}.
+     */
     public PrintStream get(final Type type) {
 
         Objects.requireNonNull(type, "Stream type must not be null.");

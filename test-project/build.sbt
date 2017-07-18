@@ -9,7 +9,8 @@ lazy val junit = (project in file("src/junit"))
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % "test",
       "junit" % "junit" % "4.12" % "test"
-    )
+    ),
+    testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v")
   )
 
 lazy val jupiter = (project in file("src/jupiter"))

@@ -64,7 +64,9 @@ public class JupiterTestCollector {
     public Result collectTests() throws Exception {
 
         if (!classDirectory.exists()) {
-            return new Result();
+
+            // prevent JUnits Launcher to trip over non-existent directory
+            return Result.emptyResult();
         }
 
         final ClassLoader customClassLoader = new URLClassLoader(runtimeClassPath, classLoader);
@@ -78,7 +80,17 @@ public class JupiterTestCollector {
      */
     public static class Result {
 
+        final static Result EMPTY_RESULT = new Result();
+
         private List<Item> discoveredTests = new ArrayList<>();
+
+        /**
+         * @return An empty result.
+         */
+        public static Result emptyResult() {
+
+            return EMPTY_RESULT;
+        }
 
         /**
          * @return The list of discovered test items.
@@ -99,7 +111,7 @@ public class JupiterTestCollector {
         private String fullyQualifiedClassName;
         private Fingerprint fingerprint = new JupiterTestFingerprint();
         private List<Selector> selectors = new ArrayList<>();
-        private boolean explicit = true;
+        private boolean explicit;
 
         /**
          * @return The fully qualified class-name of the discovered test.

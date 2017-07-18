@@ -99,6 +99,12 @@ public class GlobFilter implements PostDiscoveryFilter {
                 .collect(Collectors.joining("."));
     }
 
+    /**
+     * Tries to match any of the compiled patterns against the specified {@code testName}.
+     *
+     * @param testName The test name which is to be matched.
+     * @return The first pattern which matches the specified {@code testName}.
+     */
     Optional<Pattern> findMatchingPattern(String testName) {
 
         return patterns.stream()
@@ -106,6 +112,12 @@ public class GlobFilter implements PostDiscoveryFilter {
                 .findAny();
     }
 
+    /**
+     * Compiles the specified string representation of a glob pattern into a {@link Pattern}.
+     *
+     * @param glob The glob pattern which is to be compiled.
+     * @return The compiled pattern.
+     */
     private Pattern compile(String glob) {
 
         String[] a = glob.split("\\*", -1);
