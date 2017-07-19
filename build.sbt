@@ -18,8 +18,8 @@
  */
 
 val Versions = new {
-  val junitJupiter = "5.0.0-M5"
-  val junitPlatform = "1.0.0-M5"
+  val junitJupiter = "5.0.0-M6"
+  val junitPlatform = "1.0.0-M6"
   val testInterface = "1.0"
   val scalaVersion = "2.10.6"
 }
