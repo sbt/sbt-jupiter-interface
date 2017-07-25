@@ -20,6 +20,7 @@
 val Versions = new {
   val junitJupiter = "5.0.0-M6"
   val junitPlatform = "1.0.0-M6"
+  val junitVintage = "4.12.0-M6"
   val testInterface = "1.0"
   val scalaVersion = "2.10.6"
 }
@@ -118,7 +119,10 @@ lazy val root = (project in file("."))
 def generateVersionFile = Def.task {
   val version = (Keys.version in library).value
   val file = (resourceManaged in Compile).value / "jupiter-interface.properties"
-  val content = s"version=$version"
+  val content = s"version=$version\n" +
+    s"junit.platform.version=${Versions.junitPlatform}\n" +
+    s"junit.jupiter.version=${Versions.junitJupiter}\n" +
+    s"junit.vintage.version=${Versions.junitVintage}\n"
   IO.write(file, content)
   Seq(file)
 }

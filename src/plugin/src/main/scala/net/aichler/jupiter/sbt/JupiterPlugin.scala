@@ -25,6 +25,23 @@ import sbt.{AutoPlugin, Def, _}
 
 import scala.collection.JavaConversions._
 
+object Import {
+
+  val jupiterTestFramework:TestFramework = new TestFramework("net.aichler.jupiter.api.JupiterFramework")
+
+  object JupiterKeys {
+
+    val jupiterVersion: SettingKey[String] = SettingKey[String]("jupiter-version",
+      "The jupiter-interface version that should be added to the library dependencies.")
+    val junitPlatformVersion: SettingKey[String] = SettingKey[String]("junit-platform-version",
+      "The JUnit Platform version which is used by this plugin.")
+    val junitJupiterVersion: SettingKey[String] = SettingKey[String]("junit-jupiter-version",
+      "The JUnit Jupiter version which is used by this plugin.")
+    val junitVintageVersion: SettingKey[String] = SettingKey[String]("junit-vintage-version",
+      "The JUnit Vintage version which is compatible with this plugin.")
+  }
+}
+
 /**
   * SBT plugin for the JUnit Jupiter test framework.
   *
@@ -32,21 +49,20 @@ import scala.collection.JavaConversions._
   */
 object JupiterPlugin extends AutoPlugin {
 
-  object autoImport {
-
-    val jupiterTestFramework:TestFramework = new TestFramework("net.aichler.jupiter.api.JupiterFramework")
-    val jupiterVersion: SettingKey[String] = settingKey[String](
-      "The jupiter-interface version that should be added to the library dependencies.")
-  }
+  val autoImport = Import
 
   import autoImport._
+  import JupiterKeys._
 
   override def requires = JvmPlugin
   override def trigger: PluginTrigger = allRequirements
 
   override def globalSettings: Seq[Def.Setting[_]] = Seq(
 
-    jupiterVersion := readResourceProperty("jupiter-interface.properties", "version")
+    jupiterVersion := readResourceProperty("jupiter-interface.properties", "version"),
+    junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
+    junitJupiterVersion := readResourceProperty("jupiter-interface.properties", "junit.jupiter.version"),
+    junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version")
   )
 
   override def projectSettings: Seq[Def.Setting[_]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
