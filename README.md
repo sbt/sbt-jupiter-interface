@@ -12,7 +12,7 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following lines to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.3.1")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.4.0")
 
 ## Releases
 
@@ -21,6 +21,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
  0.1.x           | 1.0.0-M4       | 5.0.0-M4
  0.2.x           | 1.0.0-M5       | 5.0.0-M5
  0.3.x           | 1.0.0-M6       | 5.0.0-M6
+ 0.4.x           | 1.0.0-RC2      | 5.0.0-RC2
  
  
 ## Framework Options
