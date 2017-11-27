@@ -12,7 +12,14 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following lines to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
+    resolvers += Resolver.jcenterRepo
+    
     addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.5.0")
+    
+Note that if you are using a different dependency resolver (e.g. `coursier`) then the resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
+
+    resolvers in ThisBuild += Resolver.jcenterRepo
+    
 
 ## Releases
 
