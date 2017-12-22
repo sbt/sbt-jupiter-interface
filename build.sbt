@@ -115,8 +115,8 @@ lazy val root = (project in file("."))
         setReleaseVersion,
         commitReleaseVersion,
         tagRelease,
-        publishArtifacts,
-        releaseStepTask(bintrayRelease in thisProjectRef.value),
+        releaseStepCommandAndRemaining("^ releasePublishArtifactsAction"),
+        releaseStepCommandAndRemaining("^ bintrayRelease"),
         setNextVersion,
         commitNextVersion//,
 //        pushChanges
