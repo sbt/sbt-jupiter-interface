@@ -22,8 +22,9 @@ val Versions = new {
   val junitPlatform = "1.0.0"
   val junitVintage = "4.12.0"
   val testInterface = "1.0"
-  val scalaVersion = "2.10.6"
 }
+
+crossSbtVersions := Vector("0.13.16", "1.0.0")
 
 lazy val library = (project in file("src/library"))
   .settings(
@@ -87,7 +88,14 @@ lazy val root = (project in file("."))
     inThisBuild(Seq(
       licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
       organization := "net.aichler",
-      scalaVersion := Versions.scalaVersion,
+      scalaVersion := {
+        val sbtCrossVersion = (sbtVersion in pluginCrossBuild).value
+        sbtCrossVersion match {
+          case v if v.startsWith("0.13.") => "2.10.6"
+          case v if v.startsWith("1.") => "2.12.3"
+          case _ => sys.error(s"Unhandled sbt version $sbtCrossVersion")
+        }
+      },
       bintrayOrganization := None,
       bintrayVcsUrl := Some("git@github.com:maichler/sbt-jupiter-interface.git"),
       bintrayPackageLabels := Seq("sbt", "junit", "jupiter"),
@@ -102,8 +110,8 @@ lazy val root = (project in file("."))
       Seq[ReleaseStep](
         checkSnapshotDependencies,
         inquireVersions,
-        runTest,
-        releaseStepTask(releaseExtraTests in thisProjectRef.value),
+        releaseStepCommandAndRemaining("^ test"),
+        releaseStepCommandAndRemaining("^ scripted"),
         setReleaseVersion,
         commitReleaseVersion,
         tagRelease,
@@ -125,10 +133,4 @@ def generateVersionFile = Def.task {
     s"junit.vintage.version=${Versions.junitVintage}\n"
   IO.write(file, content)
   Seq(file)
-}
-
-lazy val releaseExtraTests = taskKey[Unit]("Run extra tests during the release")
-
-releaseExtraTests := {
-  (scripted in plugin).toTask("").value
 }

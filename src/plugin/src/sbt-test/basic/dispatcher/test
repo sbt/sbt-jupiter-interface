@@ -1,16 +1,16 @@
 # s
 > set testOptions := Seq(Tests.Argument(Constants.TraceDispatchEvents))
-> test-silent
-> check-status Success 3
-> check-status Skipped 1
-> check-status Failure 1
-> check-total 5
+> testSilent
+> checkStatus Success 3
+> checkStatus Skipped 1
+> checkStatus Failure 1
+> checkTotal 5
 
-> reset-tests
+> resetTests
 
 # With test filter
 > testOnly basic.NestedTest
-> check-status Success 2
-> check-total 2
+> checkStatus Success 2
+> checkTotal 2
 
-> reset-tests
+> resetTests

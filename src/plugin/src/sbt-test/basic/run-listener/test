@@ -1,6 +1,6 @@
 # Test
 > set testOptions := Seq(Tests.Argument(Constants.FooTestListener))
 > test
-> tests-executed testFoo()
+> testsExecuted testFoo()
 
-> reset-tests
+> resetTests
