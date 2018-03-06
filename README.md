@@ -14,7 +14,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
 
     resolvers += Resolver.jcenterRepo
     
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.6.0")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.7.0")
     
 Note that if you are using a different dependency resolver (e.g. `coursier`) then the resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
 
@@ -33,6 +33,7 @@ Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0
  0.4.x           | 1.0.0-RC2      | 5.0.0-RC2
  0.5.x           | 1.0.0          | 5.0.0
  0.6.x           | 1.0.0          | 5.0.0
+ 0.7.x           | 1.1.0          | 5.1.0
  
 ## Framework Options
 
