@@ -20,6 +20,7 @@
 name := "test-project"
 
 libraryDependencies ++= Seq(
+  "org.junit.platform" % "junit-platform-runner" % JupiterKeys.junitPlatformVersion.value % "test",
   "com.novocode" % "junit-interface" % "0.11" % "test",
   "junit" % "junit" % "4.12" % "test"
 )
