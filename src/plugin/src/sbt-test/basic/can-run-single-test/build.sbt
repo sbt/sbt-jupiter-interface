@@ -1,4 +1,7 @@
 name := "test-project"
+libraryDependencies ++= Seq(
+  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+)
 
 val checkTestDefinitions = taskKey[Unit]("Tests that the test is discovered properly")
 

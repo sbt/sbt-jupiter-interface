@@ -1,4 +1,7 @@
 name := "test-project"
+libraryDependencies ++= Seq(
+  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+)
 
 InputKey[Unit]("tests-executed") := {
   val expected = Def.spaceDelimited("<test-classes>").parsed

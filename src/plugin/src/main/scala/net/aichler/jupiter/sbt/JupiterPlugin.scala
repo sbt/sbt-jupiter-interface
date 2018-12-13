@@ -49,7 +49,7 @@ object Import {
   */
 object JupiterPlugin extends AutoPlugin {
 
-  val autoImport = Import
+  val autoImport: Import.type = Import
 
   import autoImport._
   import JupiterKeys._
@@ -69,8 +69,7 @@ object JupiterPlugin extends AutoPlugin {
 
   private def unscopedSettings = Seq(
 
-    testFrameworks += jupiterTestFramework,
-    libraryDependencies += "net.aichler" % "jupiter-interface" % jupiterVersion.value % Test
+    testFrameworks += jupiterTestFramework
   )
 
   /*

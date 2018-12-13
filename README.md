@@ -20,6 +20,11 @@ Note that if you are using a different dependency resolver (e.g. `coursier`) the
 
     resolvers in ThisBuild += Resolver.jcenterRepo
     
+Additionally a test dependency to this plugins runtime library `jupiter-interface` is required for every module which wants to run `JUnit 5` tests:
+
+    libraryDependencies ++= Seq(
+        "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+    )
 
 ## Releases
 
