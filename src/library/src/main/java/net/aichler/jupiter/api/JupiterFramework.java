@@ -28,7 +28,6 @@ import sbt.testing.Runner;
  *
  * @author Michael Aichler
  */
-@SuppressWarnings("unused")
 public class JupiterFramework implements Framework {
 
     private static final StreamPair system = new StreamPair(System.out, System.err);
