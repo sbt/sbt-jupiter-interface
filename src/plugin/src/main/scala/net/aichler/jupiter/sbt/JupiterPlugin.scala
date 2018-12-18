@@ -19,6 +19,9 @@
 package net.aichler.jupiter.sbt
 
 import net.aichler.jupiter.api.JupiterTestCollector
+import java.net.URLClassLoader
+
+import net.aichler.jupiter.api.JupiterFramework
 import sbt.Keys.{testFrameworks, _}
 import sbt.plugins.JvmPlugin
 import sbt.{AutoPlugin, Def, _}
@@ -49,7 +52,7 @@ object Import {
   */
 object JupiterPlugin extends AutoPlugin {
 
-  val autoImport = Import
+  val autoImport: Import.type = Import
 
   import autoImport._
   import JupiterKeys._
@@ -69,8 +72,7 @@ object JupiterPlugin extends AutoPlugin {
 
   private def unscopedSettings = Seq(
 
-    testFrameworks += jupiterTestFramework,
-    libraryDependencies += "net.aichler" % "jupiter-interface" % jupiterVersion.value % Test
+    testFrameworks += jupiterTestFramework
   )
 
   /*
@@ -98,7 +100,36 @@ object JupiterPlugin extends AutoPlugin {
       .build()
 
     val discoveredTests = collector.collectTests().getDiscoveredTests.toList.map(toTestDefinition)
+    if (discoveredTests.nonEmpty) {
+      if (!hasRuntimeLibrary(classpath)) {
+        throw new RuntimeException(
+          "Found at least one JUnit 5 test silently ignored by SBT due to `jupiter-interface` " +
+            "not being on this projects test-classpath."
+        )
+      }
+    }
+
     result ++ discoveredTests
+  }
+
+  /*
+   * Checks whether this plugins runtime library is on the given classpath.
+   */
+  private def hasRuntimeLibrary(classpath:Array[URL]):Boolean = {
+
+    val runtimeClassLoader = new URLClassLoader(classpath)
+
+    try {
+      runtimeClassLoader.loadClass(classOf[JupiterFramework].getName)
+      true
+    }
+    catch {
+      case _:ClassNotFoundException =>
+        false
+    }
+    finally {
+        runtimeClassLoader.close()
+    }
   }
 
   private def toTestDefinition(item:JupiterTestCollector.Item) = {

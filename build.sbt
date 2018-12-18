@@ -34,7 +34,7 @@ lazy val library = (project in file("src/library"))
     (javacOptions in compile) ++= Seq("-source", "1.8", "-target", "1.8"),
     (javacOptions in doc) := Seq("-source", "1.8"),
     libraryDependencies ++= Seq(
-      "org.junit.platform" % "junit-platform-runner" % Versions.junitPlatform,
+      "org.junit.platform" % "junit-platform-launcher" % Versions.junitPlatform,
       "org.junit.jupiter" % "junit-jupiter-engine" % Versions.junitJupiter,
       "org.scala-sbt" % "test-interface" % Versions.testInterface
     ),

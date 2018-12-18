@@ -18,10 +18,11 @@
  */
 
 name := "test-project"
-
 libraryDependencies ++= Seq(
-  "com.novocode" % "junit-interface" % "0.11" % "test",
-  "junit" % "junit" % "4.12" % "test"
+  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+  "org.junit.platform" % "junit-platform-runner" % JupiterKeys.junitPlatformVersion.value % Test,
+  "com.novocode" % "junit-interface" % "0.11" % Test,
+  "junit" % "junit" % "4.12" % Test
 )
 
 testOptions += Tests.Argument("-v", "-n")

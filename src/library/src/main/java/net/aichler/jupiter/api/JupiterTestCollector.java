@@ -142,7 +142,7 @@ public class JupiterTestCollector {
          */
         public Selector[] getSelectors() {
 
-            return selectors.toArray(new Selector[selectors.size()]);
+            return selectors.toArray(new Selector[0]);
         }
 
         @Override
