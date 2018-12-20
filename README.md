@@ -3,7 +3,9 @@ Jupiter Interface
 
 [![Build Status](https://api.travis-ci.org/maichler/sbt-jupiter-interface.png?branch=master)](https://travis-ci.org/maichler/sbt-jupiter-interface)
 [![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/maichler/sbt-jupiter-interface/master/LICENSE)
-
+ [ ![Download Plugin](https://api.bintray.com/packages/maichler/sbt-plugins/sbt-jupiter-interface/images/download.svg?version=0.8.0) ](https://bintray.com/maichler/sbt-plugins/sbt-jupiter-interface/0.8.0/link)
+ [ ![Download Runtime](https://api.bintray.com/packages/maichler/maven/jupiter-interface/images/download.svg?version=0.8.0) ](https://bintray.com/maichler/maven/jupiter-interface/0.8.0/link)
+ 
 An implementation of [SBT's test interface](https://github.com/sbt/test-interface) for [JUnit Jupiter](http://junit.org/junit5). This allows you to run JUnit 5 tests from [SBT](http://www.scala-sbt.org/).
 
 The code is split into a runtime library `jupiter-interface` and an SBT plugin `sbt-jupiter-interface`. The runtime library is written in pure Java and does all the heavy lifting like collecting and running tests. The SBT plugin makes the runtime library available to the SBT build by adding it to `sbt.Keys.testFrameworks` and as project `test dependency`. It also overwrites `sbt.Keys.detectTests` with a custom task that uses JUnits discovery mechanism to collect available tests. This step is necessary since SBT is currently not capable of detecting package private test classes.
@@ -14,7 +16,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
 
     resolvers += Resolver.jcenterRepo
     
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.7.0")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.0")
     
 Note that if you are using a different dependency resolver (e.g. `coursier`) then a resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
 
