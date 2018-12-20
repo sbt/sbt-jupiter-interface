@@ -16,7 +16,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
     
     addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.7.0")
     
-Note that if you are using a different dependency resolver (e.g. `coursier`) then the resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
+Note that if you are using a different dependency resolver (e.g. `coursier`) then a resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
 
     resolvers in ThisBuild += Resolver.jcenterRepo
     
@@ -26,6 +26,10 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
         "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
     )
 
+Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
+
+    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.0" % Test
+    
 ## Releases
 
 Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
@@ -39,6 +43,7 @@ Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0
  0.5.x           | 1.0.0          | 5.0.0
  0.6.x           | 1.0.0          | 5.0.0
  0.7.x           | 1.1.0          | 5.1.0
+ 0.8.x           | 1.1.0          | 5.1.0
  
 ## Framework Options
 
