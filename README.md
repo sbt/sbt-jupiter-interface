@@ -8,7 +8,7 @@ Jupiter Interface
  
 An implementation of [SBT's test interface](https://github.com/sbt/test-interface) for [JUnit Jupiter](http://junit.org/junit5). This allows you to run JUnit 5 tests from [SBT](http://www.scala-sbt.org/).
 
-The code is split into a runtime library `jupiter-interface` and an SBT plugin `sbt-jupiter-interface`. The runtime library is written in pure Java and does all the heavy lifting like collecting and running tests. The SBT plugin makes the runtime library available to the SBT build by adding it to `sbt.Keys.testFrameworks` and as project `test dependency`. It also overwrites `sbt.Keys.detectTests` with a custom task that uses JUnits discovery mechanism to collect available tests. This step is necessary since SBT is currently not capable of detecting package private test classes.
+The code is split into a runtime library `jupiter-interface` and an SBT plugin `sbt-jupiter-interface`. The runtime library is written in pure Java and does all the heavy lifting like collecting and running tests. The SBT plugin makes the runtime library available to the SBT build by adding it to `sbt.Keys.testFrameworks`. It also overwrites `sbt.Keys.detectTests` with a custom task that uses JUnits discovery mechanism to collect available tests. This step is necessary since SBT is currently not capable of detecting package private test classes.
 
 ## Usage
 
