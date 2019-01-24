@@ -72,8 +72,10 @@ public class FlatPrintingTestListener implements JupiterTestListener {
         startTimes.putIfAbsent(testIdentifier.getUniqueId(), System.currentTimeMillis());
 
         if (!testIdentifier.getParentId().isPresent()) {
-            String message = "Test run started (" + testIdentifier.getDisplayName() + ")";
-            debugOrInfo(colorTheme.info().format(message));
+            if (!testPlan.getChildren(testIdentifier).isEmpty()) {
+                String message = "Test run started (" + testIdentifier.getDisplayName() + ")";
+                debugOrInfo(colorTheme.info().format(message));
+            }
         }
 
         if (testIdentifier.isTest()) {

@@ -22,6 +22,7 @@ import net.aichler.jupiter.api.JupiterTestListener;
 import net.aichler.jupiter.internal.listeners.FlatPrintingTestListener;
 import net.aichler.jupiter.internal.listeners.TreePrintingTestListener;
 import net.aichler.jupiter.internal.options.Options;
+import org.junit.jupiter.api.Test;
 import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.UniqueId.Segment;
@@ -33,11 +34,15 @@ import org.junit.platform.launcher.TestPlan;
 import sbt.testing.Logger;
 import sbt.testing.TaskDef;
 
+import java.io.FileWriter;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -156,9 +161,8 @@ public class Configuration {
      */
     public String formatIdentifier(TestPlan testPlan, TestIdentifier identifier) {
 
-        return getPath(testPlan, identifier).stream().skip(1)
-                .map(this::toName)
-                .collect(Collectors.joining());
+        return new TestIdentifierFormatter(testPlan, identifier)
+                .format();
     }
 
     /**
@@ -295,74 +299,166 @@ public class Configuration {
         return b.toString();
     }
 
-    private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
+    /**
+     * Helper class which knows how to format a {@link TestIdentifier}.
+     */
+    class TestIdentifierFormatter {
 
-        List<TestIdentifier> result = new ArrayList<>();
+        final static String VINTAGE_ENGINE = "junit-vintage";
 
-        do {
-            result.add(identifier);
-            identifier = testPlan.getParent(identifier).orElse(null);
-        }
-        while (null != identifier);
+        final TestPlan testPlan;
+        final TestIdentifier identifier;
 
-        Collections.reverse(result);
-        return result;
-    }
+        private String testEngine;
 
-    private String toName(TestIdentifier identifier) {
+        TestIdentifierFormatter(TestPlan testPlan, TestIdentifier testIdentifier) {
 
-        String name = identifier.getLegacyReportingName();
-        List<Segment> segments = UniqueId.parse(identifier.getUniqueId()).getSegments();
-
-        if (!segments.isEmpty()) {
-            Segment lastSegment = segments.get(segments.size() - 1);
-            name = toName(lastSegment);
+            this.testPlan = testPlan;
+            this.identifier = testIdentifier;
         }
 
-        return name;
-    }
+        /**
+         * @return The formatted test name using the configured color theme.
+         */
+        public String format() {
 
-    private String toName(Segment segment) {
+            final List<TestIdentifier> path = getPath(testPlan, identifier);
 
-        String name;
+            testEngine = UniqueId.parse(identifier.getUniqueId())
+                    .getEngineId()
+                    .orElse(null);
 
-        switch (segment.getType()) {
-            case "class":
-                String[] parts = segment.getValue().split("\\.");
-                name = IntStream.range(0, parts.length).mapToObj(i -> {
-                    if (i == (parts.length - 1))
-                        return colorTheme.container().format(parts[i]);
-                    return parts[i];
-
-                }).collect(Collectors.joining("."));
-                break;
-            case "nested-class":
-                name = colorTheme.container().format("$" + segment.getValue());
-                break;
-            case "method":
-                name = colorTheme.testMethod().format("#" + segment.getValue());
-                break;
-            case "test-factory":
-                name = colorTheme.testFactory().format("#" + segment.getValue());
-                break;
-            case "dynamic-test":
-                name = colorTheme.dynamicTest().format(":" + segment.getValue());
-                break;
-            case "test-template":
-                name = colorTheme.testTemplate().format("#" + segment.getValue());
-                break;
-            case "test-template-invocation":
-                name = colorTheme.container().format(":" + segment.getValue());
-                break;
-            default:
-                name = segment.getValue();
-                break;
+            return path.stream()
+                    .skip(1)
+                    .map(this::toName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining());
         }
 
-        if (options.isTypesEnabled()) {
-            name = segment.getType() + ":" + name;
+        private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
+
+            List<TestIdentifier> result = new ArrayList<>();
+
+            do {
+                result.add(identifier);
+                identifier = testPlan.getParent(identifier).orElse(null);
+            }
+            while (null != identifier);
+
+            Collections.reverse(result);
+            return result;
         }
 
-        return name;
+        /**
+         * @return A formatted display name on success, {@code NULL} if the given
+         *  identifier should be ignored.
+         */
+        private String toName(TestIdentifier identifier) {
+
+            String name = identifier.getDisplayName();
+            List<Segment> segments = UniqueId.parse(identifier.getUniqueId()).getSegments();
+
+            if (!segments.isEmpty()) {
+                Segment lastSegment = segments.get(segments.size() - 1);
+
+                name = VINTAGE_ENGINE.equals(testEngine)
+                        ? toVintageName(identifier, lastSegment)
+                        : toName(lastSegment);
+            }
+
+            return name;
+        }
+
+        /*
+         * Formats a test segment from junit-jupiter.
+         */
+        private String toName(Segment segment) {
+
+            String name;
+
+            switch (segment.getType()) {
+                case "class":
+                    name = colorClassName(segment.getValue(), colorTheme.container());
+                    break;
+                case "nested-class":
+                    name = colorTheme.container().format("$" + segment.getValue());
+                    break;
+                case "method":
+                    name = colorTheme.testMethod().format("#" + segment.getValue());
+                    break;
+                case "test-factory":
+                    name = colorTheme.testFactory().format("#" + segment.getValue());
+                    break;
+                case "dynamic-test":
+                    name = colorTheme.dynamicTest().format(":" + segment.getValue());
+                    break;
+                case "test-template":
+                    name = colorTheme.testTemplate().format("#" + segment.getValue());
+                    break;
+                case "test-template-invocation":
+                    name = colorTheme.container().format(":" + segment.getValue());
+                    break;
+                default:
+                    name = segment.getValue();
+                    break;
+            }
+
+            if (options.isTypesEnabled()) {
+                name = segment.getType() + ":" + name;
+            }
+
+            return name;
+        }
+
+        /*
+         * Formats a test identifier run by junit-vintage engine.
+         */
+        private String toVintageName(TestIdentifier identifier, Segment lastSegment) {
+
+            final String type = lastSegment.getType();
+
+            if ("runner".equals(type)) {
+
+                String className = identifier.getDisplayName();
+                return colorClassName(className, colorTheme.container());
+            }
+
+            if ("test".equals(type)) {
+
+                final TestSource source = identifier.getSource().orElse(null);
+
+                if (null == source) {
+                    // Caused by Parameterized test runner, display name usually is the index name in brackets.
+                    // Ignored since the index name is repeated in the display name of the test method.
+                    return null;
+                }
+
+                if (source instanceof ClassSource) {
+                    String nestedClassName = "$" + identifier.getDisplayName().replaceFirst(".*?\\$", "");
+                    return colorTheme.container().format(nestedClassName);
+                }
+
+                if (source instanceof MethodSource) {
+                    String testName = "#" + identifier.getDisplayName();
+                    return colorTheme.testMethod().format(testName);
+                }
+            }
+
+            return "/" + identifier.getDisplayName();
+        }
+
+        /*
+         * Colors the last part of <className> with the given <color>.
+         */
+        private String colorClassName(String className, Color color) {
+
+            String[] parts = className.split("\\.");
+            return IntStream.range(0, parts.length).mapToObj(i -> {
+                if (i == (parts.length - 1))
+                    return color.format(parts[i]);
+                return parts[i];
+
+            }).collect(Collectors.joining("."));
+        }
     }
 }

@@ -1,12 +1,13 @@
 package jupiter;
 
+import org.junit.platform.engine.TestSource;
+import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,44 +18,65 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
  */
 public class TestHelper {
 
-    private TestPlan testPlan;
+    /**
+     * Creates a new test plan helper for a specific test class.
+     *
+     * @param testClass The name of the test class.
+     * @return A new test helper instance.
+     */
+    public static TestHelper of(String testClass) {
 
-    public Set<TestIdentifier> descendantsOfFirstRoot() {
+        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(selectClass(testClass))
+                .build();
 
-        return testPlan.getRoots().stream().findAny()
-                .map(testPlan::getDescendants)
-                .orElseGet(Collections::emptySet);
+        final TestPlan testPlan = LauncherFactory.create().discover(request);
+
+        return new TestHelper(testPlan);
     }
 
-    public TestIdentifier findByName(String testName) {
+    public TestIdentifier findByMethodName(String testMethodName) {
 
-        return descendantsOfFirstRoot().stream()
-                .filter(identifier -> testName.equals(identifier.getLegacyReportingName()))
-                .findAny().orElseThrow(() -> {
-                    String message = "Could not find test " + testName + " in:\n";
-                    String identifiers = descendantsOfFirstRoot().stream()
-                            .map(TestIdentifier::getLegacyReportingName)
-                            .collect(Collectors.joining("\n"));
+        final Set<TestIdentifier> descendantIdentifiers = getAllDescendants();
+        return descendantIdentifiers.stream()
+                .filter(testIdentifier -> {
+
+                    TestSource testSource = testIdentifier.getSource().orElse(null);
+                    if (testSource instanceof MethodSource) {
+                        return ((MethodSource) testSource).getMethodName().equals(testMethodName);
+                    }
+                    return false;
+                })
+                .findAny()
+                .orElseThrow(() -> {
+                    String message = "Could not find test method " + testMethodName + " in:\n";
+                    String identifiers = descendantIdentifiers.stream()
+                            .map(TestIdentifier::getUniqueId)
+                            .collect(Collectors.joining(",\n"));
+
                     return new AssertionError(message + identifiers);
                 });
     }
 
-    public TestHelper loadTestClass(String className) {
-
-        LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
-                .selectors(selectClass(className))
-                .build();
-
-        testPlan = LauncherFactory.create().discover(request);
-        return this;
-    }
-
-    /**
-     * @see #loadTestClass(String)
-     * @return The test plan
-     */
     public TestPlan testPlan() {
         return testPlan;
     }
 
+    final private TestPlan testPlan;
+
+    private TestHelper(TestPlan testPlan) {
+
+        this.testPlan = testPlan;
+    }
+
+    /**
+     * @return Descendant test identifiers from all available roots (test engines).
+     */
+    private Set<TestIdentifier> getAllDescendants() {
+
+        return testPlan.getRoots().stream()
+                .map(r -> testPlan().getDescendants(r).stream())
+                .flatMap(s -> s)
+                .collect(Collectors.toSet());
+    }
 }
