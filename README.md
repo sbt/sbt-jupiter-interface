@@ -54,6 +54,7 @@ The following options are supported when running JUnit Jupiter tests:
  Option                           | Description
 :---------------------------------|:---------------------------------
  `-v`                             | Log "test run started" / "test started" / "test run finished" events on log level "info" instead of "debug".
+ `-q`                             | Suppress `STDOUT` for successful tests. Does not affect `STDERR` which is printed to the console normally. If a test fails the previously buffered output is dumped to the console.
  `-n`                             | Do not use ANSI colors in the output even if sbt reports that they are supported.
  `-s`                             | Try to decode Scala names in stack traces and test names. Fall back silently to non-decoded names if no matching Scala library is on the class path.
  `-a`                             | Show stack traces and exception class name for AssertionErrors (thrown by all assert* methods in JUnit).`
