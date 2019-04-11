@@ -32,6 +32,19 @@ Note that if you want to restore default behaviour like in versions before `0.8.
 
     libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.1" % Test
     
+### Integration Testing
+
+Basic configuration of a project to have `it:test` is [documented in SBT](https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests). For `Jupiter Interface` to work, you will also need to install plugin specific settings and tasks to the `it` configuration, as follows:
+
+```
+lazy val root = project.in(file("."))
+  .configs(IntegrationTest)
+  .settings(Defaults.itSettings: _*)
+  .settings(inConfig(IntegrationTest)(JupiterPlugin.scopedSettings): _*)
+  ...
+```
+Don’t forget to mark test dependencies as `test,it` if you have both unit and integration tests.
+
 ## Releases
 
 Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
