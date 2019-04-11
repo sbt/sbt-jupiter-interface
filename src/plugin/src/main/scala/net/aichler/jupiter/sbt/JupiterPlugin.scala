@@ -18,13 +18,16 @@
  */
 package net.aichler.jupiter.sbt
 
-import net.aichler.jupiter.api.JupiterTestCollector
 import java.net.URLClassLoader
 
 import net.aichler.jupiter.api.JupiterFramework
-import sbt.Keys.{testFrameworks, _}
+import net.aichler.jupiter.api.JupiterTestCollector
+import sbt.Keys.testFrameworks
+import sbt.Keys._
 import sbt.plugins.JvmPlugin
-import sbt.{AutoPlugin, Def, _}
+import sbt.AutoPlugin
+import sbt.Def
+import sbt._
 
 import scala.collection.JavaConversions._
 
@@ -70,17 +73,24 @@ object JupiterPlugin extends AutoPlugin {
 
   override def projectSettings: Seq[Def.Setting[_]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
 
-  private def unscopedSettings = Seq(
+  /**
+   * Configuration scope specific plugin settings.
+   *
+   * Intercepts sbt.Keys.definedTests.
+   *
+   * By default this is applied to the Test configuration only.
+   */
+  def scopedSettings: Seq[Def.Setting[_]] = Seq(
 
-    testFrameworks += jupiterTestFramework
+    definedTests := collectTests.value
   )
 
   /*
-   * Intercepts sbt.Keys.definedTests
+   * Adds this plugins test framework to the list of testFrameworks.
    */
-  private def scopedSettings = Seq(
+  private def unscopedSettings = Seq(
 
-    definedTests := collectTests.value
+    testFrameworks += jupiterTestFramework
   )
 
   /*

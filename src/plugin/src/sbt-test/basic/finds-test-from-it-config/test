@@ -1,0 +1,6 @@
+# make sure we discover the unit tests appropriately
+> checkTestDefinitions
+# make sure the unit test passes
+> it:test
+# Debugging.
+> show it:definedTests
