@@ -7,5 +7,5 @@ JUnit Jupiter tests from within SBT.
 
 build.sbt:
 ```
-libraryDependencies += "net.aichler" % "jupiter-interface" % "0.8.1" % "test"
+libraryDependencies += "net.aichler" % "jupiter-interface" % "0.8.2" % "test"
 ```

@@ -3,8 +3,8 @@ Jupiter Interface
 
 [![Build Status](https://api.travis-ci.org/maichler/sbt-jupiter-interface.png?branch=master)](https://travis-ci.org/maichler/sbt-jupiter-interface)
 [![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/maichler/sbt-jupiter-interface/master/LICENSE)
- [ ![Download Plugin](https://api.bintray.com/packages/maichler/sbt-plugins/sbt-jupiter-interface/images/download.svg?version=0.8.1) ](https://bintray.com/maichler/sbt-plugins/sbt-jupiter-interface/0.8.1/link)
- [ ![Download Runtime](https://api.bintray.com/packages/maichler/maven/jupiter-interface/images/download.svg?version=0.8.1) ](https://bintray.com/maichler/maven/jupiter-interface/0.8.1/link)
+ [ ![Download Plugin](https://api.bintray.com/packages/maichler/sbt-plugins/sbt-jupiter-interface/images/download.svg?version=0.8.2) ](https://bintray.com/maichler/sbt-plugins/sbt-jupiter-interface/0.8.2/link)
+ [ ![Download Runtime](https://api.bintray.com/packages/maichler/maven/jupiter-interface/images/download.svg?version=0.8.2) ](https://bintray.com/maichler/maven/jupiter-interface/0.8.2/link)
  
 An implementation of [SBT's test interface](https://github.com/sbt/test-interface) for [JUnit Jupiter](http://junit.org/junit5). This allows you to run JUnit 5 tests from [SBT](http://www.scala-sbt.org/).
 
@@ -16,7 +16,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
 
     resolvers += Resolver.jcenterRepo
     
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.1")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.2")
     
 Note that if you are using a different dependency resolver (e.g. `coursier`) then a resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
 
@@ -30,7 +30,7 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
 
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
-    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.1" % Test
+    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.2" % Test
     
 ### Integration Testing
 
