@@ -82,8 +82,8 @@ The following options are supported when running JUnit Jupiter tests:
  `--tests=<REGEXPS>`              | Run only the tests whose names match one of the specified regular expressions (in a comma-separated list). Non-matched tests are ignored. Only individual test case names are matched, not test classes. Example: For test `MyClassTest.testBasic()` only "testBasic" is matched. Use sbt's `test-only` command instead to match test classes.
  `-Dkey=value`                    | Temporarily set a system property for the duration of the test run. The property is restored to its previous value after the test has ended. Note that system properties are global to the entire JVM and they can be modified in a non-transactional way, so you should run tests serially and not perform any other tasks in parallel which depend on the modified property.
  `--run-listener=<CLASS_NAME>`    | A (user defined) class which extends either `org.junit.platform.launcher.TestExecutionListener` or `net.aichler.jupiter.api.JupiterTestListener`. An instance of this class is created and added to the JUnit Launcher, so that it will receive test execution events. For more information, see [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html). *Note: this uses the test-classloader, so the class needs to be defined in `src/test` or `src/main` or included as a test or compile dependency*
- `--include-tags=<NAMES>`         | A comma separated list of tag names that should be included. Only tests with one or more of these tags will be run.
- `--exclude-tags=<NAMES>`         | A comma separated list of tag names that should be excluded. No tests that match one or more of these tags will be run.
+ `--include-tags=<EXPRESSIONS>`   | A comma separated list of tag expressions which should be included. Only tests matching one or more of those expressions will be run.
+ `--exclude-tags=<EXPRESSIONS>`   | A comma separated list of tag expressions which should be excluded. Any test matching one or more of those expressions  will not be run.
  `--trace-dispatch-events`        | Write dispatch events to file `target/jupiterDispatchEvents.log` (used internally to test the event dispatcher).
  `--with-types`                   | When using the standard `flat` display mode, this flag causes the internal JUnit types of test identifiers to be added to the test name.
 
@@ -97,6 +97,17 @@ Or use them with the test-quick and test-only commands:
 
     test-only -- +q +v *Sequence*h2mem*
     
+### Tag Expressions
+
+Tag expressions can be used with `--include-tags` and `exclude-tags` respectively.
+
+    testOnly -- --include-tags=(micro&product),(micro&shipping)
+    
+Special care has to be taken if any expression contains white-space. In that case the entire parameter needs to be enclosed by double quotes.
+
+    testOnly -- "include-tags=(micro & product),(micro & shipping)"
+    
+Please see the corresponding chapter in [JUnit Documentation](https://junit.org/junit5/docs/current/user-guide/#running-tests-tag-expressions) for a detailed description on how to build tag expressions.
 
 ## Credits
 
