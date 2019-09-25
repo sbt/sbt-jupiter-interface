@@ -1,51 +1,65 @@
 # check everything runs
 > test
-> testsExecuted one-fast one-slow one-none two-a two-b
+> testsExecuted one-fast one-slow one-none two-a two-b op-sdi-0 op-sdi-1 op-spi op-fpi
 
 > resetTests
 
 # Turn on fast category
-> set testOptions := Seq(Tests.Argument(Constants.IncludeFast))
-> test
+> testOnly -- --include-tags=fast
 > testsExecuted one-fast two-a two-b
 > testsNotExecuted one-slow one-none
 
 > resetTests
 
 # Turn on slow category
-> set testOptions := Seq(Tests.Argument(Constants.IncludeSlow))
-> test
+> testOnly -- --include-tags=slow
 > testsExecuted one-slow
 > testsNotExecuted one-fast one-none two-a two-b
 
 > resetTests
 
 # Turn on fast and slow category
-> set testOptions := Seq(Tests.Argument(Constants.IncludeFastAndSlow))
-> test
+> testOnly -- --include-tags=fast,slow
 > testsExecuted one-fast one-slow two-a two-b
 > testsNotExecuted one-none
 
 > resetTests
 
 # Exclude fast category
-> set testOptions := Seq(Tests.Argument(Constants.ExcludeFast))
-> test
-> testsExecuted one-slow one-none
+> testOnly -- --exclude-tags=fast
+> testsExecuted one-slow one-none op-sdi-0 op-sdi-1 op-spi op-fpi
 > testsNotExecuted one-fast two-a two-b
 
 > resetTests
 
 # Exclude slow category
-> set testOptions := Seq(Tests.Argument(Constants.ExcludeSlow))
-> test
-> testsExecuted one-fast one-none two-a two-b
+> testOnly -- --exclude-tags=slow
+> testsExecuted one-fast one-none two-a two-b op-sdi-0 op-sdi-1 op-spi op-fpi
 > testsNotExecuted one-slow
 
 > resetTests
 
 # Exclude slow and fast category
-> set testOptions := Seq(Tests.Argument(Constants.ExcludeFastAndSlow))
-> test
-> testsExecuted one-none
+> testOnly -- --exclude-tags=fast,slow
+> testsExecuted one-none op-sdi-0 op-sdi-1 op-spi op-fpi
 > testsNotExecuted one-fast one-slow two-a two-b
+
+> resetTests
+
+> testOnly -- --include-tags=full
+> testsExecuted op-fpi
+
+> resetTests
+
+> testOnly -- --include-tags=(development&integration)
+> testsExecuted op-sdi-0 op-sdi-1
+
+> resetTests
+
+> testOnly -- --include-tags=integration&(!production)
+> testsExecuted op-sdi-0 op-sdi-1
+
+> resetTests
+
+> testOnly -- --include-tags=smoke&production
+> testsExecuted op-spi
