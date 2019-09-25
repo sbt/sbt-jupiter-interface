@@ -110,17 +110,45 @@ public class OptionsParser {
         return new AbstractMap.SimpleEntry<>(key, value);
     }
 
+    /**
+     * Splits a comma separated list of arguments into a set of strings.
+     *
+     * @param key parameter name with equal sign (e.g. --include-tags=)
+     * @param arg arg
+     */
     private Set<String> toSet(String key, String arg) {
 
-        String[] values = arg.substring(key.length()).split(",");
+        final String arguments = arg.substring(key.length());
+        final String[] values = stripQuotes(arguments).split(",");
         return Arrays.stream(values)
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
+                .map(this::stripQuotes)
                 .collect(Collectors.toSet());
     }
 
     private String toValue(String key, String arg) {
 
         return arg.substring(key.length());
+    }
+
+    private final static char DQ = '"';
+    private final static char SQ = '\'';
+
+    private String stripQuotes(String s) {
+
+        final int len = s.length();
+
+        if (len > 1) {
+            if (DQ == s.charAt(0) && DQ == s.charAt(len - 1)) {
+                return s.substring(1, len - 1);
+            }
+
+            if (SQ == s.charAt(0) && SQ == s.charAt(len - 1)) {
+                return s.substring(1, len - 1);
+            }
+        }
+
+        return s;
     }
 }

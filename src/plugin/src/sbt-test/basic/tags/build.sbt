@@ -11,6 +11,11 @@ InputKey[Unit]("tests-executed") := {
       throw new RuntimeException("Expected test " + test + " to be run, but it wasn't.  Tests that were run:\n" + testsrun.mkString("\n"))
     }
   }
+
+  val unexpected = testsrun filterNot expected.contains
+  if (unexpected.nonEmpty) {
+    throw new RuntimeException("Unexpected tests were run:\n" + unexpected.mkString("\n"))
+  }
 }
 
 InputKey[Unit]("tests-not-executed") := {
