@@ -58,7 +58,7 @@ Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0
  0.5.x           | 1.0.0          | 5.0.0
  0.6.x           | 1.0.0          | 5.0.0
  0.7.x           | 1.1.0          | 5.1.0
- 0.8.x           | 1.1.0          | 5.1.0
+ 0.8.x           | 1.1.x          | 5.1.x
  
 ## Framework Options
 
