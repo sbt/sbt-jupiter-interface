@@ -34,15 +34,12 @@ import org.junit.platform.launcher.TestPlan;
 import sbt.testing.Logger;
 import sbt.testing.TaskDef;
 
-import java.io.FileWriter;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -166,6 +163,19 @@ public class Configuration {
     }
 
     /**
+     * Extracts the class-name or alternatively the display name from the given identifier.
+     *
+     * @param identifier The identifier from which to extract the class-name or display name.
+     * @return The class-name of the specified test identifier if a source is attached to the
+     * identifier, otherwise the display name is returned.
+     */
+    public String extractClassNameOrDisplayName(TestIdentifier identifier) {
+        return identifier.getSource()
+                .map(s -> extractClassName(identifier))
+                .orElse(identifier.getDisplayName());
+    }
+
+    /**
      * Extracts the class-name from the specified test identifier.
      *
      * @param identifier The identifier from which to extract the class-name.
@@ -233,7 +243,7 @@ public class Configuration {
 
     private String buildColoredName(TestIdentifier identifier, Color c1, Color c2, Color c3) {
 
-        String className = extractClassName(identifier);
+        String className = extractClassNameOrDisplayName(identifier);
         Optional<String> methodName = extractMethodName(identifier);
 
         StringBuilder b = new StringBuilder();

@@ -103,7 +103,7 @@ public class FlatPrintingTestListener implements JupiterTestListener {
                 fqn = configuration.buildErrorName(identifier);
                 message = configuration.buildErrorMessage(throwable);
                 message = "Test " + fqn + " failed: " + message + duration;
-                logger.error(configuration.extractClassName(identifier), message, throwable);
+                logger.error(configuration.extractClassNameOrDisplayName(identifier), message, throwable);
                 break;
             case SUCCESSFUL:
                 fqn = configuration.formatIdentifier(testPlan, identifier);
