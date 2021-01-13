@@ -16,7 +16,7 @@ Add the following lines to `./project/plugins.sbt`. See the section [Using Plugi
 
     resolvers += Resolver.jcenterRepo
     
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.3")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.4")
     
 Note that if you are using a different dependency resolver (e.g. `coursier`) then a resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
 
@@ -30,7 +30,7 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
 
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
-    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.3" % Test
+    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.4" % Test
     
 ### Integration Testing
 
