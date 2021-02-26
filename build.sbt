@@ -1,3 +1,6 @@
+import sbtrelease.ReleasePlugin.autoImport.releaseStepCommandAndRemaining
+import xerial.sbt.Sonatype.GitHubHosting
+
 /*
  * jupiter-interface
  *
@@ -47,8 +50,7 @@ lazy val library = (project in file("src/library"))
       "junit" % "junit" % "4.12" % Test
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
-    publishMavenStyle := true,
-    bintrayRepository := "maven"
+    publishTo := sonatypePublishTo.value
   )
 
 lazy val plugin = (project in file("src/plugin"))
@@ -68,11 +70,10 @@ lazy val plugin = (project in file("src/plugin"))
       val () = (publishLocal in library).value
     },
     resourceGenerators in Compile += generateVersionFile.taskValue,
-    publishMavenStyle := false,
     publishArtifact in Test := false,
     (javacOptions in compile) ++= Seq("-source", "1.6", "-target", "1.6"),
     (javacOptions in doc) := Seq("-source", "1.6"),
-    bintrayRepository := "sbt-plugins"
+    publishTo := sonatypePublishTo.value
   )
 
 lazy val root = (project in file("."))
@@ -80,13 +81,11 @@ lazy val root = (project in file("."))
   .aggregate(plugin)
   .settings(
     name := "jupiter-root",
-    publish := {},
-    publishLocal := {},
-    publishTo := Some(Resolver.file("no-publish", crossTarget.value / "no-publish")),
-    bintrayRelease := {}
+    publishTo := sonatypePublishTo.value
   )
   .settings(
     inThisBuild(Seq(
+      homepage := Some(url("https://github.com/maichler/sbt-jupiter-interface")),
       licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
       organization := "net.aichler",
       scalaVersion := {
@@ -97,10 +96,19 @@ lazy val root = (project in file("."))
           case _ => sys.error(s"Unhandled sbt version $sbtCrossVersion")
         }
       },
-      bintrayOrganization := None,
-      bintrayVcsUrl := Some("git@github.com:maichler/sbt-jupiter-interface.git"),
-      bintrayPackageLabels := Seq("sbt", "junit", "jupiter"),
-      bintrayReleaseOnPublish := false
+      usePgpKeyHex("4944210D30F5FBFC1D57957908C33DB0CBC4CC5A"),
+      publishMavenStyle := true,
+      sonatypeProfileName := "net.aichler",
+      sonatypeProjectHosting := Some(GitHubHosting("maichler", "sbt-jupiter-interface", "maichler@gmail.com")),
+      developers := List(
+        Developer(id = "maichler", name = "Michael Aichler", email = "maichler@gmail.com", url = url("https://github.com/maichler"))
+      ),
+      scmInfo := Some(
+        ScmInfo(
+          url("https://github.com/maichler/sbt-jupiter-interface"),
+          "scm:git@github.com:maichler/sbt-jupiter-interface.git"
+        )
+      )
     ))
   )
   .settings(
@@ -116,10 +124,10 @@ lazy val root = (project in file("."))
         setReleaseVersion,
         commitReleaseVersion,
         tagRelease,
-        releaseStepCommandAndRemaining("^ releasePublishArtifactsAction"),
-        releaseStepCommandAndRemaining("^ bintrayRelease"),
+        releaseStepCommandAndRemaining("^ publishSigned"),
         setNextVersion,
-        commitNextVersion//,
+        commitNextVersion,
+        releaseStepCommandAndRemaining("^ sonatypeReleaseAll")
 //        pushChanges
       )
     }
