@@ -21,9 +21,9 @@ import xerial.sbt.Sonatype.GitHubHosting
  */
 
 val Versions = new {
-  val junitJupiter = "5.7.0"
-  val junitPlatform = "1.7.0"
-  val junitVintage = "5.7.0"
+  val junitJupiter = "5.8.2"
+  val junitPlatform = "1.8.2"
+  val junitVintage = "5.8.2"
   val testInterface = "1.0"
 }
 
