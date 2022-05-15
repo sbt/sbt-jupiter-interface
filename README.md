@@ -1,7 +1,7 @@
 Jupiter Interface
 =================
 
-[![Build Status](https://api.travis-ci.org/maichler/sbt-jupiter-interface.png?branch=master)](https://travis-ci.org/maichler/sbt-jupiter-interface)
+[![Build Status](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml/badge.svg)](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml)
 [![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/maichler/sbt-jupiter-interface/master/LICENSE)
  [ ![Download Plugin](https://api.bintray.com/packages/maichler/sbt-plugins/sbt-jupiter-interface/images/download.svg?version=0.8.3) ](https://bintray.com/maichler/sbt-plugins/sbt-jupiter-interface/0.8.3/link)
  [ ![Download Runtime](https://api.bintray.com/packages/maichler/maven/jupiter-interface/images/download.svg?version=0.8.3) ](https://bintray.com/maichler/maven/jupiter-interface/0.8.3/link)
