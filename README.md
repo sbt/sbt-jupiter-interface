@@ -46,7 +46,11 @@ Don’t forget to mark test dependencies as `test,it` if you have both unit and 
 
 ## Releases
 
-Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
+**Note** that unfortunately artifacts which were hosted at `Bintray` are no longer available since
+the service has been discontinued. This includes releases up to and including `0.8.4`. Starting with
+`0.9.0` artifacts are published on `Maven Central` through `Sonatype`.
+
+Since version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
 
  SBT Plugin      | JUnit Platform | JUnit Engine
 :----------------|:---------------|:-------------
