@@ -22,7 +22,7 @@ public class Ticket0001Test {
 
         assertThat(testRunner.eventHandler().byStatus(Status.Failure), hasSize(1));
         assertThat(testRunner.logger().byLevel("error"), hasItem(
-                containsString("Could not find factory method [dataProvider]")
+                containsString("Could not find method [dataProvider]")
         ));
     }
 }
