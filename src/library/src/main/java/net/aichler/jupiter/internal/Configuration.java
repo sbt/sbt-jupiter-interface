@@ -429,7 +429,7 @@ public class Configuration {
 
             if ("runner".equals(type)) {
 
-                String className = identifier.getDisplayName();
+                String className = identifier.getLegacyReportingName();
                 return colorClassName(className, colorTheme.container());
             }
 
