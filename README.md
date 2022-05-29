@@ -11,15 +11,9 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 ## Usage
 
-Add the following lines to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
+Add the following line to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    resolvers += Resolver.jcenterRepo
-    
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.4")
-    
-Note that if you are using a different dependency resolver (e.g. `coursier`) then a resolver for `jcenterRepo` needs to be added to `build.sbt` as well:
-
-    resolvers in ThisBuild += Resolver.jcenterRepo
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.10.0")
     
 Additionally a test dependency to this plugins runtime library `jupiter-interface` is required for every module which wants to run `JUnit 5` tests:
 
@@ -29,7 +23,7 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
 
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
-    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.8.4" % Test
+    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.10.0" % Test
     
 ### Integration Testing
 
@@ -46,7 +40,11 @@ Don’t forget to mark test dependencies as `test,it` if you have both unit and 
 
 ## Releases
 
-Note that as of version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
+**Note** that unfortunately artifacts which were hosted at `Bintray` are no longer available since
+the service has been discontinued. This includes releases up to and including `0.8.4`. Starting with
+`0.9.0` artifacts are published on `Maven Central` through `Sonatype`.
+
+Since version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `scala_2.12/sbt_1.0`.
 
  SBT Plugin      | JUnit Platform | JUnit Engine
 :----------------|:---------------|:-------------

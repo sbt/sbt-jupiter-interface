@@ -1,8 +1,9 @@
 
 
 lazy val commonSettings = Seq(
-  // Needed only if a non-standard dependency resolver is used (e.g. coursier)
-  resolvers += Resolver.jcenterRepo
+  libraryDependencies ++= Seq(
+    "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+  )
 )
 
 lazy val moduleA = project.in(file("moduleA"))
