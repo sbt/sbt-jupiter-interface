@@ -14,7 +14,7 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 Add the following line to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
     addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.10.0")
-    
+
 Additionally a test dependency to this plugins runtime library `jupiter-interface` is required for every module which wants to run `JUnit 5` tests:
 
     libraryDependencies ++= Seq(
@@ -24,7 +24,7 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
     libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.10.0" % Test
-    
+
 ### Integration Testing
 
 Basic configuration of a project to have `it:test` is [documented in SBT](https://www.scala-sbt.org/0.13/docs/Testing.html#Integration+Tests). For `Jupiter Interface` to work, you will also need to install plugin specific settings and tasks to the `it` configuration, as follows:
@@ -58,7 +58,8 @@ Since version `0.6.0` this plugin is cross built for `scala_2.10/sbt_0.13` and `
  0.8.x           | 1.1.x          | 5.1.x
  0.9.x           | 1.7.x          | 5.7.x
  0.10.x          | 1.8.x          | 5.8.x
- 
+ 0.11.x          | 1.9.x          | 5.9.x
+
 ## Framework Options
 
 The following options are supported when running JUnit Jupiter tests:
@@ -95,17 +96,17 @@ You can set default options in your build.sbt file:
 Or use them with the test-quick and test-only commands:
 
     test-only -- +q +v *Sequence*h2mem*
-    
+
 ### Tag Expressions
 
 Tag expressions can be used with `--include-tags` and `exclude-tags` respectively.
 
     testOnly -- --include-tags=(micro&product),(micro&shipping)
-    
+
 Special care has to be taken if any expression contains white-space. In that case the entire parameter needs to be enclosed by double quotes.
 
     testOnly -- "include-tags=(micro & product),(micro & shipping)"
-    
+
 Please see the corresponding chapter in [JUnit Documentation](https://junit.org/junit5/docs/current/user-guide/#running-tests-tag-expressions) for a detailed description on how to build tag expressions.
 
 ## Credits
