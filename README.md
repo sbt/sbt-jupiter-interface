@@ -13,7 +13,7 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following line to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.10.0")
+    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.11.1")
 
 Additionally a test dependency to this plugins runtime library `jupiter-interface` is required for every module which wants to run `JUnit 5` tests:
 
@@ -23,7 +23,7 @@ Additionally a test dependency to this plugins runtime library `jupiter-interfac
 
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
-    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.10.0" % Test
+    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.11.1" % Test
 
 ### Integration Testing
 
