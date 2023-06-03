@@ -29,7 +29,7 @@ import sbt.AutoPlugin
 import sbt.Def
 import sbt._
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 object Import {
 
@@ -109,7 +109,7 @@ object JupiterPlugin extends AutoPlugin {
       .withRuntimeClassPath(classpath)
       .build()
 
-    val discoveredTests = collector.collectTests().getDiscoveredTests.toList.map(toTestDefinition)
+    val discoveredTests = collector.collectTests().getDiscoveredTests.asScala.map(toTestDefinition)
     if (discoveredTests.nonEmpty) {
       if (!hasRuntimeLibrary(classpath)) {
         throw new RuntimeException(

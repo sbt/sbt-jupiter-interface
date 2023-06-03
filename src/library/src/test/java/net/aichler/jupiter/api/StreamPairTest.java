@@ -18,16 +18,13 @@
  */
 package net.aichler.jupiter.api;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.PrintStream;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -35,30 +32,28 @@ import static org.mockito.Mockito.mock;
  */
 public class StreamPairTest {
 
-    @Rule
-    public final ExpectedException thrownException = ExpectedException.none();
-
     @Test
     public void shouldThrowExceptionIfOutIsNull() {
+        Exception thrownException = assertThrows(
+            NullPointerException.class,
+            () -> new StreamPair(null, mock(PrintStream.class))
+        );
 
-        thrownException.expect(NullPointerException.class);
-        thrownException.expectMessage(startsWith("Output stream "));
-
-        new StreamPair(null, mock(PrintStream.class));
+        assertThat(thrownException.getMessage(), startsWith("Output stream "));
     }
 
     @Test
     public void shouldThrowExceptionIfErrIsNull() {
+        Exception thrownException = assertThrows(
+            NullPointerException.class,
+            () ->  new StreamPair(mock(PrintStream.class), null)
+        );
 
-        thrownException.expect(NullPointerException.class);
-        thrownException.expectMessage(startsWith("Error stream "));
-
-        new StreamPair(mock(PrintStream.class), null);
+        assertThat(thrownException.getMessage(), startsWith("Error stream "));
     }
 
     @Test
     public void shouldGetTypeOut() {
-
         PrintStream out = mock(PrintStream.class);
         PrintStream err = mock(PrintStream.class);
 
@@ -69,7 +64,6 @@ public class StreamPairTest {
 
     @Test
     public void shouldGetTypeErr() {
-
         PrintStream out = mock(PrintStream.class);
         PrintStream err = mock(PrintStream.class);
 
