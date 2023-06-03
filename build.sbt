@@ -32,7 +32,24 @@ lazy val commonSettings: Seq[Setting[_]] = Def.settings(
   Compile / javacOptions ++= Seq(
     "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "1.8", "-target", "1.8"
   ),
-  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "1.8")
+  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "1.8"),
+  homepage := Some(url("https://github.com/maichler/sbt-jupiter-interface")),
+  licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
+  organization := "net.aichler",
+  scalaVersion := Versions.scala,
+  usePgpKeyHex("4944210D30F5FBFC1D57957908C33DB0CBC4CC5A"),
+  publishMavenStyle := true,
+  sonatypeProfileName := "net.aichler",
+  sonatypeProjectHosting := Some(GitHubHosting("maichler", "sbt-jupiter-interface", "maichler@gmail.com")),
+  developers := List(
+    Developer(id = "maichler", name = "Michael Aichler", email = "maichler@gmail.com", url = url("https://github.com/maichler"))
+  ),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/maichler/sbt-jupiter-interface"),
+      "scm:git@github.com:maichler/sbt-jupiter-interface.git"
+    )
+  )
 )
 
 lazy val library = (project in file("src/library"))
@@ -86,27 +103,6 @@ lazy val root = (project in file("."))
   .settings(
     name := "jupiter-root",
     publishTo := sonatypePublishTo.value
-  )
-  .settings(
-    inThisBuild(Seq(
-      homepage := Some(url("https://github.com/maichler/sbt-jupiter-interface")),
-      licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
-      organization := "net.aichler",
-      scalaVersion := Versions.scala,
-      usePgpKeyHex("4944210D30F5FBFC1D57957908C33DB0CBC4CC5A"),
-      publishMavenStyle := true,
-      sonatypeProfileName := "net.aichler",
-      sonatypeProjectHosting := Some(GitHubHosting("maichler", "sbt-jupiter-interface", "maichler@gmail.com")),
-      developers := List(
-        Developer(id = "maichler", name = "Michael Aichler", email = "maichler@gmail.com", url = url("https://github.com/maichler"))
-      ),
-      scmInfo := Some(
-        ScmInfo(
-          url("https://github.com/maichler/sbt-jupiter-interface"),
-          "scm:git@github.com:maichler/sbt-jupiter-interface.git"
-        )
-      )
-    ))
   )
   .settings(
     releaseTagName := (ThisBuild / version).value,
