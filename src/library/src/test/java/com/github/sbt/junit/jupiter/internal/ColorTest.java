@@ -21,7 +21,7 @@ package com.github.sbt.junit.jupiter.internal;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Michael Aichler

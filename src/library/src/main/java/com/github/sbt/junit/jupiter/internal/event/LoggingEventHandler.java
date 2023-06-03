@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * Writes dispatch events to a file for testing/debugging purposes.
  *
- * <h3>Example Usage</h3>
+ * <h2>Example Usage</h2>
  * <pre>{@code
  *   SBT> testOnly -- --trace-dispatch-events
  * }
