@@ -20,6 +20,8 @@ package net.aichler.jupiter.api;
 
 import sbt.testing.AnnotatedFingerprint;
 
+import java.util.Objects;
+
 /**
  * A dummy fingerprint implementation used for all discovered tests.
  *
@@ -32,7 +34,6 @@ public class JupiterTestFingerprint implements AnnotatedFingerprint {
      */
     @Override
     public boolean isModule() {
-
         return false;
     }
 
@@ -42,13 +43,11 @@ public class JupiterTestFingerprint implements AnnotatedFingerprint {
      */
     @Override
     public String annotationName() {
-
         return getClass().getName();
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (obj instanceof AnnotatedFingerprint) {
             AnnotatedFingerprint f = (AnnotatedFingerprint) obj;
             if (annotationName().equals(f.annotationName())) {
@@ -57,5 +56,10 @@ public class JupiterTestFingerprint implements AnnotatedFingerprint {
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.annotationName(), this.isModule());
     }
 }

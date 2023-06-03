@@ -21,21 +21,26 @@ import xerial.sbt.Sonatype.GitHubHosting
  */
 
 val Versions = new {
-  val junitJupiter = "5.9.1"
-  val junitPlatform = "1.9.1"
-  val junitVintage = "5.9.1"
+  val junitJupiter = "5.9.3"
+  val junitPlatform = "1.9.3"
+  val junitVintage = "5.9.3"
+  val scala = "2.12.18"
   val testInterface = "1.0"
 }
 
-crossSbtVersions := Vector("0.13.16", "1.0.0")
+lazy val commonSettings: Seq[Setting[_]] = Def.settings(
+  Compile / javacOptions ++= Seq(
+    "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "1.8", "-target", "1.8"
+  ),
+  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "1.8")
+)
 
 lazy val library = (project in file("src/library"))
+  .settings(commonSettings)
   .settings(
     name := "jupiter-interface",
     autoScalaLibrary := false,
     crossPaths := false,
-    (javacOptions in compile) ++= Seq("-source", "1.8", "-target", "1.8"),
-    (javacOptions in doc) := Seq("-source", "1.8"),
     libraryDependencies ++= Seq(
       "org.junit.platform" % "junit-platform-launcher" % Versions.junitPlatform,
       "org.junit.jupiter" % "junit-jupiter-engine" % Versions.junitJupiter,
@@ -44,21 +49,22 @@ lazy val library = (project in file("src/library"))
     libraryDependencies ++= Seq(
       "org.junit.jupiter" % "junit-jupiter-params" % Versions.junitJupiter % Test,
       "org.junit.vintage" % "junit-vintage-engine" % Versions.junitVintage % Test,
-      "org.hamcrest" % "hamcrest-library" % "1.3" % Test,
-      "org.mockito" % "mockito-core" % "2.23.4" % Test,
+      "org.hamcrest" % "hamcrest-library" % "2.2" % Test,
+      "org.mockito" % "mockito-core" % "4.11.0" % Test,
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "junit" % "junit" % "4.12" % Test
+      "junit" % "junit" % "4.13.2" % Test
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
     publishTo := sonatypePublishTo.value
   )
 
 lazy val plugin = (project in file("src/plugin"))
+  .enablePlugins(SbtPlugin)
   .dependsOn(library)
+  .settings(commonSettings)
   .settings(
     name := "sbt-jupiter-interface",
     sbtPlugin := true,
-    scriptedSettings,
     scriptedBufferLog := false,
     scriptedLaunchOpts ++= Seq(
       s"-Dproject.version=${version.value}",
@@ -67,12 +73,10 @@ lazy val plugin = (project in file("src/plugin"))
     ),
     scriptedDependencies := {
       val () = publishLocal.value
-      val () = (publishLocal in library).value
+      val () = (library / publishLocal).value
     },
-    resourceGenerators in Compile += generateVersionFile.taskValue,
-    publishArtifact in Test := false,
-    (javacOptions in compile) ++= Seq("-source", "1.6", "-target", "1.6"),
-    (javacOptions in doc) := Seq("-source", "1.6"),
+    Compile / resourceGenerators += generateVersionFile.taskValue,
+    Test / publishArtifact := false,
     publishTo := sonatypePublishTo.value
   )
 
@@ -88,14 +92,7 @@ lazy val root = (project in file("."))
       homepage := Some(url("https://github.com/maichler/sbt-jupiter-interface")),
       licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")),
       organization := "net.aichler",
-      scalaVersion := {
-        val sbtCrossVersion = (sbtVersion in pluginCrossBuild).value
-        sbtCrossVersion match {
-          case v if v.startsWith("0.13.") => "2.10.6"
-          case v if v.startsWith("1.") => "2.12.3"
-          case _ => sys.error(s"Unhandled sbt version $sbtCrossVersion")
-        }
-      },
+      scalaVersion := Versions.scala,
       usePgpKeyHex("4944210D30F5FBFC1D57957908C33DB0CBC4CC5A"),
       publishMavenStyle := true,
       sonatypeProfileName := "net.aichler",
@@ -112,7 +109,7 @@ lazy val root = (project in file("."))
     ))
   )
   .settings(
-    releaseTagName := (version in ThisBuild).value,
+    releaseTagName := (ThisBuild / version).value,
     releaseCrossBuild := false,
     releaseProcess := {
       import ReleaseTransformations._
@@ -128,14 +125,14 @@ lazy val root = (project in file("."))
         setNextVersion,
         commitNextVersion,
         releaseStepCommandAndRemaining("^ sonatypeReleaseAll")
-//        pushChanges
+        // pushChanges
       )
     }
   )
 
 def generateVersionFile = Def.task {
-  val version = (Keys.version in library).value
-  val file = (resourceManaged in Compile).value / "jupiter-interface.properties"
+  val version = (library / Keys.version).value
+  val file = (Compile / resourceManaged).value / "jupiter-interface.properties"
   val content = s"version=$version\n" +
     s"junit.platform.version=${Versions.junitPlatform}\n" +
     s"junit.jupiter.version=${Versions.junitJupiter}\n" +

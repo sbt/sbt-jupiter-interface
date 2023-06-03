@@ -1,15 +1,12 @@
 import sbt.Keys.libraryDependencies
 import net.aichler.jupiter.sbt.Import.JupiterKeys._
 
-
-//logBuffered in Test := false
-
 lazy val junit = (project in file("src/junit"))
   .enablePlugins(JvmPlugin)
   .settings(
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % "test",
-      "junit" % "junit" % "4.12" % "test"
+      "junit" % "junit" % "4.13.2" % "test"
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v")
   )
