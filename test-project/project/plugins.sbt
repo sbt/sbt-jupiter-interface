@@ -1,5 +1,5 @@
 lazy val pluginVersion = IO.readLines(file("../version.sbt"))
-  .filter(_.startsWith("version in ThisBuild"))
+  .filter(_.startsWith("ThisBuild / version"))
   .map(line => line.substring(line.indexOf('"')+1, line.lastIndexOf('"')))
   .head
 
