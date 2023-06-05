@@ -85,6 +85,7 @@ class TaskName {
    * @return A task name representing the given identifier.
    */
   static TaskName of(String testSuite, TestIdentifier identifier) {
+    final String removedJunit5SuiteName = removeJunit5SuiteName(testSuite, identifier);
 
     TaskName result = new TaskName();
     result.fullyQualifiedName = testSuite;
@@ -94,19 +95,44 @@ class TaskName {
     if (testSource instanceof ClassSource) {
 
       ClassSource classSource = (ClassSource) testSource;
-      result.nestedSuiteId = nestedSuiteId(testSuite, classSource.getClassName());
+      result.nestedSuiteId = nestedSuiteId(removedJunit5SuiteName, classSource.getClassName());
     }
 
     if (testSource instanceof MethodSource) {
 
       MethodSource methodSource = (MethodSource) testSource;
-      result.nestedSuiteId = nestedSuiteId(testSuite, methodSource.getClassName());
+      result.nestedSuiteId = nestedSuiteId(removedJunit5SuiteName, methodSource.getClassName());
       result.invocation = invocation(UniqueId.parse(identifier.getUniqueId()));
       result.testName =
           testName(methodSource.getMethodName(), methodSource.getMethodParameterTypes());
     }
 
     return result;
+  }
+
+  /**
+   * Removes a leading JUnit 5 suite name from the test suite name, if present.
+   *
+   * @param testSuite The name of the enclosing test suite.
+   * @param identifier The test identifier.
+   * @return The suite identifier.
+   */
+  private static String removeJunit5SuiteName(String testSuite, TestIdentifier identifier) {
+    final List<UniqueId.Segment> suiteSegments =
+        identifier.getUniqueIdObject().getSegments().stream()
+            .filter(segment -> segment.getType().equals("suite"))
+            .collect(Collectors.toList());
+
+    if (suiteSegments.isEmpty()) {
+      return testSuite;
+    }
+
+    final String suiteIdentifier = suiteSegments.get(0).getValue();
+    if (!testSuite.startsWith(suiteIdentifier)) {
+      throw new RuntimeException(
+          "Test: " + testSuite + " does not start with JUnit 5 suite: " + suiteIdentifier);
+    }
+    return testSuite.substring(suiteIdentifier.length());
   }
 
   /**
