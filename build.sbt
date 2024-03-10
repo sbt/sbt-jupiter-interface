@@ -44,7 +44,7 @@ lazy val library = (project in file("src/library"))
     libraryDependencies ++= Seq(
       "org.junit.jupiter" % "junit-jupiter-params" % Versions.junitJupiter % Test,
       "org.junit.vintage" % "junit-vintage-engine" % Versions.junitVintage % Test,
-      "org.hamcrest" % "hamcrest-library" % "1.3" % Test,
+      "org.hamcrest" % "hamcrest-library" % "2.2" % Test,
       "org.mockito" % "mockito-core" % "2.23.4" % Test,
       "com.novocode" % "junit-interface" % "0.11" % Test,
       "junit" % "junit" % "4.12" % Test
