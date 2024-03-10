@@ -47,7 +47,7 @@ lazy val library = (project in file("src/library"))
       "org.hamcrest" % "hamcrest-library" % "1.3" % Test,
       "org.mockito" % "mockito-core" % "2.23.4" % Test,
       "com.novocode" % "junit-interface" % "0.11" % Test,
-      "junit" % "junit" % "4.12" % Test
+      "junit" % "junit" % "4.13.2" % Test
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
     publishTo := sonatypePublishTo.value
