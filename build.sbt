@@ -46,7 +46,7 @@ lazy val library = (project in file("src/library"))
       "org.junit.vintage" % "junit-vintage-engine" % Versions.junitVintage % Test,
       "org.hamcrest" % "hamcrest-library" % "1.3" % Test,
       "org.mockito" % "mockito-core" % "2.23.4" % Test,
-      "com.novocode" % "junit-interface" % "0.11" % Test,
+      "com.github.sbt" % "junit-interface" % "0.13.3" % Test,
       "junit" % "junit" % "4.12" % Test
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
