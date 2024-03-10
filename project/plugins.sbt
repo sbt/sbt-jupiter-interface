@@ -4,7 +4,7 @@ libraryDependencies ++= Seq(
 
 resolvers += Resolver.typesafeIvyRepo("releases")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.7")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.13")
 
 // For sbt 0.13.x (upto sbt-sonatype 2.3)
 addSbtPlugin("org.xerial.sbt" % "sbt-sonatype" % "2.3")
