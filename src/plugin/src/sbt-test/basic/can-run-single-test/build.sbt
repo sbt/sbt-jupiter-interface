@@ -1,12 +1,12 @@
 name := "test-project"
 libraryDependencies ++= Seq(
-  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+  "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
 )
 
 val checkTestDefinitions = taskKey[Unit]("Tests that the test is discovered properly")
 
 checkTestDefinitions := {
-  val definitions = (definedTests in Test).value
+  val definitions = (Test / definedTests).value
 
   assert(definitions.nonEmpty, "Did not find any test !")
   assert(definitions.length == 1, "Found more than the one test (" + definitions.length + ")!")
