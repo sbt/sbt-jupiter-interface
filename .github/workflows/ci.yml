@@ -12,6 +12,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
+    tags: [v*]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,7 +76,7 @@ jobs:
   publish:
     name: Publish Artifacts
     needs: [build]
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main')
+    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v'))
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -122,4 +123,4 @@ jobs:
           rm targets.tar
 
       - name: Publish project
-        run: sbt +publish
+        run: sbt ci-release
