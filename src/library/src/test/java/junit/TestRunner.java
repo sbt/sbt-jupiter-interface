@@ -18,9 +18,9 @@
  */
 package junit;
 
-import net.aichler.jupiter.api.JupiterTestFingerprint;
-import net.aichler.jupiter.api.StreamPair;
-import net.aichler.jupiter.internal.JupiterRunner;
+import com.github.sbt.junit.jupiter.api.JupiterTestFingerprint;
+import com.github.sbt.junit.jupiter.api.StreamPair;
+import com.github.sbt.junit.jupiter.internal.JupiterRunner;
 import org.junit.rules.ExternalResource;
 import sbt.testing.Event;
 import sbt.testing.EventHandler;
