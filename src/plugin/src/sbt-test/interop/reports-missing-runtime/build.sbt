@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
  * library is missing.
  */
 TaskKey[Unit]("checkDefinedTestsThrowsException") := {
-  (definedTests in Test).result.value match {
+  (Test / definedTests).result.value match {
     case Inc(cause:Incomplete) =>
       val actualMessage = cause.directCause.map(c => c.getMessage).getOrElse("")
       val expectedMessage = "Found at least one JUnit 5 test"

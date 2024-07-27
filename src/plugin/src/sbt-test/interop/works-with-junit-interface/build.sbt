@@ -19,7 +19,7 @@
 
 name := "test-project"
 libraryDependencies ++= Seq(
-  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
+  "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.junit.platform" % "junit-platform-runner" % JupiterKeys.junitPlatformVersion.value % Test,
   "com.novocode" % "junit-interface" % "0.11" % Test,
   "junit" % "junit" % "4.12" % Test
@@ -31,7 +31,7 @@ val checkTestDefinitions = taskKey[Unit]("Checks that tests were discovered prop
 
 checkTestDefinitions := {
 
-  val definitions = (definedTests in Test).value
+  val definitions = (Test / definedTests).value
   streams.value.log.info("" + definitions)
 
 

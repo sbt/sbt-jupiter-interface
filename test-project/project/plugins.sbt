@@ -3,4 +3,4 @@ lazy val pluginVersion = IO.readLines(file("../version.sbt"))
   .map(line => line.substring(line.indexOf('"')+1, line.lastIndexOf('"')))
   .head
 
-addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % pluginVersion)
+addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % pluginVersion)
