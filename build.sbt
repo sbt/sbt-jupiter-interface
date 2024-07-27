@@ -110,6 +110,14 @@ ThisBuild / scmInfo := Some(
   )
 )
 ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest", "windows-latest")
+ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.zulu("8"), JavaSpec.temurin("17"))
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
+  val sv = (ThisBuild / scalaVersion).value
+  List(
+    MatrixExclude(Map("scala" -> sv, "java" -> "zulu@8", "os" -> "macos-latest")),
+    MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
+  )
+}
 ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("test", "scripted")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
