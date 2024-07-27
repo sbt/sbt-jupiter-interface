@@ -8,8 +8,8 @@ lazy val junit = (project in file("src/junit"))
   .enablePlugins(JvmPlugin)
   .settings(
     libraryDependencies ++= Seq(
-      "com.novocode" % "junit-interface" % "0.11" % "test",
-      "junit" % "junit" % "4.13.2" % "test"
+      "com.github.sbt" % "junit-interface" % "0.13.3" % "test",
+      "junit" % "junit" % "4.13.2" % "test",
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v")
   )

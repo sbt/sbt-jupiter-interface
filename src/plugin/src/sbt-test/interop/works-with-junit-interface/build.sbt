@@ -21,8 +21,8 @@ name := "test-project"
 libraryDependencies ++= Seq(
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
   "org.junit.platform" % "junit-platform-runner" % JupiterKeys.junitPlatformVersion.value % Test,
-  "com.novocode" % "junit-interface" % "0.11" % Test,
-  "junit" % "junit" % "4.13.2" % Test
+  "com.github.sbt" % "junit-interface" % "0.13.3" % Test,
+  "junit" % "junit" % "4.13.2" % Test,
 )
 
 testOptions += Tests.Argument("-v", "-n")
