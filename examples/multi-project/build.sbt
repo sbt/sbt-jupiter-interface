@@ -2,7 +2,7 @@
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
-    "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+    "com.github.sbt.jupiter" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
   )
 )
 

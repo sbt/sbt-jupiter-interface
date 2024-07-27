@@ -7,7 +7,7 @@ lazy val root = (project in file("."))
   .settings(inConfig(IntegrationTest)(JupiterPlugin.scopedSettings): _*)
   .settings(
     libraryDependencies ++= Seq(
-      "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % IntegrationTest,
+      "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % IntegrationTest,
       "org.junit.jupiter" % "junit-jupiter-engine" % "5.4.2" % IntegrationTest
     )
   )
@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
 val checkTestDefinitions = taskKey[Unit]("Tests that the test is discovered properly")
 
 checkTestDefinitions := {
-  val definitions = (definedTests in IntegrationTest).value
+  val definitions = (IntegrationTest / definedTests).value
 
   assert(definitions.nonEmpty, "Did not find any test !")
   assert(definitions.length == 1, "Found more than the one test (" + definitions.length + ")!")
