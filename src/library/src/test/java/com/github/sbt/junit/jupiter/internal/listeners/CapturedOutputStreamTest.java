@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import static com.github.sbt.junit.jupiter.internal.listeners.OutputCapturingTestListener.CapturedOutputStream;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Michael Aichler

@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 /**
  * Sample test methods for the vintage-engine using {@link Parameterized} runner.
@@ -18,7 +18,6 @@ public class VintageParameterizedTests {
     private final int code;
 
     public VintageParameterizedTests(char alpha, int number) {
-
         this.alpha = alpha;
         this.code = number;
     }
@@ -34,7 +33,6 @@ public class VintageParameterizedTests {
 
     @Test
     public void testParameters() {
-
         assertThat((int)alpha, equalTo(code));
     }
 }

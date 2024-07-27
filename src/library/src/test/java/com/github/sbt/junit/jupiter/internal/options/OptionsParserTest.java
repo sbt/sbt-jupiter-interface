@@ -3,7 +3,7 @@ package com.github.sbt.junit.jupiter.internal.options;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionsParserTest {
 

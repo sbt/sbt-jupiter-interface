@@ -22,13 +22,19 @@ import Dependencies.*
 ThisBuild / organization := "com.github.sbt.junit"
 ThisBuild / scalaVersion := "2.12.19"
 
+lazy val commonSettings: Seq[Setting[_]] = Def.settings(
+  Compile / javacOptions ++= Seq(
+    "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "1.8", "-target", "1.8"
+  ),
+  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "1.8"),
+)
+
 lazy val library = (project in file("src/library"))
   .settings(
+    commonSettings,
     name := "jupiter-interface",
     autoScalaLibrary := false,
     crossPaths := false,
-    (compile / javacOptions) ++= Seq("-source", "1.8", "-target", "1.8"),
-    (doc / javacOptions) := Seq("-source", "1.8"),
     libraryDependencies ++= Seq(
       junitPlatformLauncher,
       junitJupiterEngine,
@@ -49,6 +55,7 @@ lazy val plugin = (project in file("src/plugin"))
   .enablePlugins(SbtPlugin)
   .dependsOn(library)
   .settings(
+    commonSettings,
     name := "sbt-jupiter-interface",
     Compile / scalacOptions ++= Seq("-Xlint", "-Xfatal-warnings"),
     scriptedBufferLog := false,
@@ -103,6 +110,14 @@ ThisBuild / scmInfo := Some(
   )
 )
 ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest", "windows-latest")
+ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.zulu("8"), JavaSpec.temurin("17"))
+ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
+  val sv = (ThisBuild / scalaVersion).value
+  List(
+    MatrixExclude(Map("scala" -> sv, "java" -> "zulu@8", "os" -> "macos-latest")),
+    MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
+  )
+}
 ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("test", "scripted")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=

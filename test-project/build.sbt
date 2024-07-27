@@ -21,7 +21,7 @@ lazy val jupiter = (project in file("src/jupiter"))
       "org.junit.jupiter" % "junit-jupiter-params" % junitJupiterVersion.value % "test"
     ),
     resolvers += Resolver.mavenLocal,
-    parallelExecution in Test := true
+    Test / parallelExecution := true
   )
 
 lazy val vintage = (project in file("src/vintage"))
