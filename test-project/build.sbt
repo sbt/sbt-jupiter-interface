@@ -1,5 +1,5 @@
 import sbt.Keys.libraryDependencies
-import net.aichler.jupiter.sbt.Import.JupiterKeys._
+import com.github.sbt.junit.jupiter.sbt.Import.JupiterKeys._
 
 
 //logBuffered in Test := false

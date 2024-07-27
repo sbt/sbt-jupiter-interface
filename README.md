@@ -2,8 +2,8 @@ Jupiter Interface
 =================
 
 [![Build Status](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml/badge.svg)](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml)
-[![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/maichler/sbt-jupiter-interface/master/LICENSE)
-![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/net.aichler/jupiter-interface?server=https%3A%2F%2Foss.sonatype.org)
+[![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/sbt/sbt-jupiter-interface/main/LICENSE)
+![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.sbt.junit/jupiter-interface?server=https%3A%2F%2Foss.sonatype.org)
 
 An implementation of [SBT's test interface](https://github.com/sbt/test-interface) for [JUnit Jupiter](http://junit.org/junit5). This allows you to run JUnit 5 tests from [SBT](http://www.scala-sbt.org/).
 
@@ -13,17 +13,17 @@ The code is split into a runtime library `jupiter-interface` and an SBT plugin `
 
 Add the following line to `./project/plugins.sbt`. See the section [Using Plugins](http://www.scala-sbt.org/release/docs/Using-Plugins.html) in the sbt wiki for more information.
 
-    addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.11.1")
+    addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.11.1")
 
 Additionally a test dependency to this plugins runtime library `jupiter-interface` is required for every module which wants to run `JUnit 5` tests:
 
     libraryDependencies ++= Seq(
-        "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+        "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
     )
 
 Note that if you want to restore default behaviour like in versions before `0.8.0` you can globally activate this plugin by adding the runtime dependency to `ThisScope` of the root project.
 
-    libraryDependencies in ThisBuild += "net.aichler" % "jupiter-interface" % "0.11.1" % Test
+    ThisBuild / libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" % "0.11.1" % Test
 
 ### Integration Testing
 
@@ -81,7 +81,7 @@ The following options are supported when running JUnit Jupiter tests:
  `--display-mode=<MODE>`          | Select an output display mode for when tests are executed. Use either `flat` or `tree`.
  `--tests=<REGEXPS>`              | Run only the tests whose names match one of the specified regular expressions (in a comma-separated list). Non-matched tests are ignored. Only individual test case names are matched, not test classes. Example: For test `MyClassTest.testBasic()` only "testBasic" is matched. Use sbt's `test-only` command instead to match test classes.
  `-Dkey=value`                    | Temporarily set a system property for the duration of the test run. The property is restored to its previous value after the test has ended. Note that system properties are global to the entire JVM and they can be modified in a non-transactional way, so you should run tests serially and not perform any other tasks in parallel which depend on the modified property.
- `--run-listener=<CLASS_NAME>`    | A (user defined) class which extends either `org.junit.platform.launcher.TestExecutionListener` or `net.aichler.jupiter.api.JupiterTestListener`. An instance of this class is created and added to the JUnit Launcher, so that it will receive test execution events. For more information, see [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html). *Note: this uses the test-classloader, so the class needs to be defined in `src/test` or `src/main` or included as a test or compile dependency*
+ `--run-listener=<CLASS_NAME>`    | A (user defined) class which extends either `org.junit.platform.launcher.TestExecutionListener` or `com.github.sbt.junit.jupiter.api.JupiterTestListener`. An instance of this class is created and added to the JUnit Launcher, so that it will receive test execution events. For more information, see [TestExecutionListener](http://junit.org/junit5/docs/current/api/org/junit/platform/launcher/TestExecutionListener.html). *Note: this uses the test-classloader, so the class needs to be defined in `src/test` or `src/main` or included as a test or compile dependency*
  `--include-tags=<EXPRESSIONS>`   | A comma separated list of tag expressions which should be included. Only tests matching one or more of those expressions will be run.
  `--exclude-tags=<EXPRESSIONS>`   | A comma separated list of tag expressions which should be excluded. Any test matching one or more of those expressions  will not be run.
  `--trace-dispatch-events`        | Write dispatch events to file `target/jupiterDispatchEvents.log` (used internally to test the event dispatcher).

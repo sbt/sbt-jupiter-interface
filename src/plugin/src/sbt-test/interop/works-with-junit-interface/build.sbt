@@ -37,8 +37,8 @@ checkTestDefinitions := {
 
   val expected = Map(
     "interop.JUnit4Test" -> "com.novocode.junit",
-    "interop.JUnitVintageTest" -> "net.aichler.jupiter",
-    "interop.JUnitJupiterTest" -> "net.aichler.jupiter"
+    "interop.JUnitVintageTest" -> "com.github.sbt.junit.jupiter",
+    "interop.JUnitJupiterTest" -> "com.github.sbt.junit.jupiter"
   )
 
   expected.foreach { case (testName, annotationName) =>
