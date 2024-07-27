@@ -22,6 +22,6 @@ name := "test-project"
 val checkTestDefinitions = taskKey[Unit]("Checks that tests were discovered properly")
 
 checkTestDefinitions := {
-  val definitions = (definedTests in Test).value
+  val definitions = (Test / definedTests).value
   assert(definitions.isEmpty, "There should be no defined tests!")
 }
