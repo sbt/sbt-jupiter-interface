@@ -1,6 +1,6 @@
 name := "test-project"
 libraryDependencies ++= Seq(
-  "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+  "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
 )
 
 val traceFile = file("target/jupiterDispatchEvents.log")
@@ -39,7 +39,7 @@ InputKey[Unit]("check-total") := {
 }
 
 TaskKey[Unit]("test-silent") := {
-  (test in Test).result.value
+  (Test / test).result.value
 }
 
 TaskKey[Unit]("reset-tests") := {
