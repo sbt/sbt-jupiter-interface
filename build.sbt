@@ -72,7 +72,6 @@ lazy val plugin = (project in file("src/plugin"))
     },
     Compile / resourceGenerators += generateVersionFile.taskValue,
     Test / publishArtifact := false,
-    publishTo := sonatypePublishTo.value,
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" => "1.5.8"
