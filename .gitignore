@@ -9,6 +9,7 @@ project/plugins/project/
 .cache
 .lib/
 build.local.sbt
+.bsp/
 
 # Intellij
 *.iws
@@ -17,5 +18,10 @@ build.local.sbt
 .idea/
 .idea_modules/
 atlassian-ide-plugin.xml
+
+# Metals
+.metals/
+.vscode/
+metals.sbt
 
 test-project/junit-platform-console-standalone-1.0.0-M4.jar

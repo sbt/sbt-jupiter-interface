@@ -8,7 +8,7 @@ In order to make SBT generally aware of another test framework, `sbt-jupiter-int
 
 project/plugins.sbt:
 ```
-addSbtPlugin("net.aichler" % "sbt-jupiter-interface" % "0.8.2")
+addSbtPlugin("com.github.sbt.junit" % "sbt-jupiter-interface" % "0.8.2")
 ```
 
 Additionally a test dependency to this plugins runtime library is required for every module which wants to run `JUnit 5` tests.
@@ -16,6 +16,6 @@ Additionally a test dependency to this plugins runtime library is required for e
 build.sbt:
 ```
 libraryDependencies ++= Seq(
-    "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
+    "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
 )
 ```
