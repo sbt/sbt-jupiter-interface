@@ -23,13 +23,12 @@ import java.net.URLClassLoader
 import net.aichler.jupiter.api.JupiterFramework
 import net.aichler.jupiter.api.JupiterTestCollector
 import sbt.Keys.testFrameworks
-import sbt.Keys._
+import sbt.Keys.*
 import sbt.plugins.JvmPlugin
 import sbt.AutoPlugin
 import sbt.Def
-import sbt._
-
-import scala.collection.JavaConversions._
+import sbt.*
+import scala.collection.JavaConverters.*
 
 object Import {
 
@@ -109,7 +108,7 @@ object JupiterPlugin extends AutoPlugin {
       .withRuntimeClassPath(classpath)
       .build()
 
-    val discoveredTests = collector.collectTests().getDiscoveredTests.toList.map(toTestDefinition)
+    val discoveredTests = collector.collectTests().getDiscoveredTests.asScala.toList.map(toTestDefinition)
     if (discoveredTests.nonEmpty) {
       if (!hasRuntimeLibrary(classpath)) {
         throw new RuntimeException(
