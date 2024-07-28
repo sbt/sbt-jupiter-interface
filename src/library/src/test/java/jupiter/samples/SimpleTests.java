@@ -5,12 +5,9 @@ import org.junit.jupiter.api.TestInfo;
 
 class SimpleTests {
 
-    @Test
-    void firstTestMethod() {
-    }
+  @Test
+  void firstTestMethod() {}
 
-    @Test
-    void testWithParameter(TestInfo info) {
-
-    }
+  @Test
+  void testWithParameter(TestInfo info) {}
 }

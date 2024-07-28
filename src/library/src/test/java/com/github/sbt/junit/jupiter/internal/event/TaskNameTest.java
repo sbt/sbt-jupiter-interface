@@ -18,111 +18,108 @@
  */
 package com.github.sbt.junit.jupiter.internal.event;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.platform.engine.UniqueId;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 @RunWith(Enclosed.class)
 public class TaskNameTest {
 
-    public static class NestedSuiteIdTest {
+  public static class NestedSuiteIdTest {
 
-        @Test(expected = RuntimeException.class)
-        public void shouldThrowExceptionIfSuiteDoesNotMatch() {
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionIfSuiteDoesNotMatch() {
 
-            TaskName.nestedSuiteId("jupiter.SampleTests", "SomeOtherTest$Nested");
-        }
-
-        @Test
-        public void shouldReturnNullIfEqualsTestSuite() {
-
-            String testSuite = "jupiter.NestedTests";
-            String className = "jupiter.NestedTests";
-
-            String result = TaskName.nestedSuiteId(testSuite, className);
-            assertThat(result, nullValue());
-        }
-
-        @Test
-        public void shouldStripTestSuite() {
-
-            String testSuite = "jupiter.NestedTests";
-            String className = "jupiter.NestedTests$First";
-
-            String result = TaskName.nestedSuiteId(testSuite, className);
-            assertThat(result, equalTo("$First"));
-        }
+      TaskName.nestedSuiteId("jupiter.SampleTests", "SomeOtherTest$Nested");
     }
 
-    public static class TestNameTest {
+    @Test
+    public void shouldReturnNullIfEqualsTestSuite() {
 
-        @Test
-        public void withEmptyParameterTypes() {
+      String testSuite = "jupiter.NestedTests";
+      String className = "jupiter.NestedTests";
 
-            String testName = "someTestMethod";
-
-            String result = TaskName.testName(testName, "");
-            assertThat(result, equalTo("someTestMethod()"));
-        }
-
-        @Test
-        public void withSingleParameterType() {
-
-            String testName = "someTestMethod";
-            String methodParameterTypes = "java.lang.String";
-
-            String result = TaskName.testName(testName, methodParameterTypes);
-            assertThat(result, equalTo("someTestMethod(String)"));
-        }
-
-        @Test
-        public void withMultipleParameterTypes() {
-
-            String testName = "someTestMethod";
-            String methodParameterTypes = "java.lang.String, java.lang.Integer";
-
-            String result = TaskName.testName(testName, methodParameterTypes);
-            assertThat(result, equalTo("someTestMethod(String, Integer)"));
-        }
+      String result = TaskName.nestedSuiteId(testSuite, className);
+      assertThat(result, nullValue());
     }
 
-    public static class InvocationTest {
+    @Test
+    public void shouldStripTestSuite() {
 
-        @Test
-        public void shouldFindDynamicTest() {
+      String testSuite = "jupiter.NestedTests";
+      String className = "jupiter.NestedTests$First";
 
-            UniqueId id = UniqueId.root("method", "someTestMethod")
-                    .append("dynamic-test", "#1");
-
-            String result = TaskName.invocation(id);
-            assertThat(result, equalTo("1"));
-        }
-
-        @Test
-        public void shouldFindTestTemplateInvocation() {
-
-            UniqueId id = UniqueId.root("method", "someTestMethod")
-                    .append("test-template-invocation", "#1");
-
-            String result = TaskName.invocation(id);
-            assertThat(result, equalTo("1"));
-        }
-
-        @Test
-        public void shouldReturnNullOtherwise() {
-
-            UniqueId id = UniqueId.root("method", "someTestMethod");
-
-            String result = TaskName.invocation(id);
-            assertThat(result, nullValue());
-        }
+      String result = TaskName.nestedSuiteId(testSuite, className);
+      assertThat(result, equalTo("$First"));
     }
+  }
+
+  public static class TestNameTest {
+
+    @Test
+    public void withEmptyParameterTypes() {
+
+      String testName = "someTestMethod";
+
+      String result = TaskName.testName(testName, "");
+      assertThat(result, equalTo("someTestMethod()"));
+    }
+
+    @Test
+    public void withSingleParameterType() {
+
+      String testName = "someTestMethod";
+      String methodParameterTypes = "java.lang.String";
+
+      String result = TaskName.testName(testName, methodParameterTypes);
+      assertThat(result, equalTo("someTestMethod(String)"));
+    }
+
+    @Test
+    public void withMultipleParameterTypes() {
+
+      String testName = "someTestMethod";
+      String methodParameterTypes = "java.lang.String, java.lang.Integer";
+
+      String result = TaskName.testName(testName, methodParameterTypes);
+      assertThat(result, equalTo("someTestMethod(String, Integer)"));
+    }
+  }
+
+  public static class InvocationTest {
+
+    @Test
+    public void shouldFindDynamicTest() {
+
+      UniqueId id = UniqueId.root("method", "someTestMethod").append("dynamic-test", "#1");
+
+      String result = TaskName.invocation(id);
+      assertThat(result, equalTo("1"));
+    }
+
+    @Test
+    public void shouldFindTestTemplateInvocation() {
+
+      UniqueId id =
+          UniqueId.root("method", "someTestMethod").append("test-template-invocation", "#1");
+
+      String result = TaskName.invocation(id);
+      assertThat(result, equalTo("1"));
+    }
+
+    @Test
+    public void shouldReturnNullOtherwise() {
+
+      UniqueId id = UniqueId.root("method", "someTestMethod");
+
+      String result = TaskName.invocation(id);
+      assertThat(result, nullValue());
+    }
+  }
 }

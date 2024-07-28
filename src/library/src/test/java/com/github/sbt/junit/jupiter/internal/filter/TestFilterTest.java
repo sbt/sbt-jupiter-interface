@@ -18,68 +18,63 @@
  */
 package com.github.sbt.junit.jupiter.internal.filter;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import com.github.sbt.junit.jupiter.internal.event.Dispatcher;
+import java.util.HashSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 @RunWith(MockitoJUnitRunner.class)
 public class TestFilterTest {
 
-    @Mock
-    Dispatcher dispatcher;
+  @Mock Dispatcher dispatcher;
 
+  @Test
+  public void testFindMatchingPattern() {
 
-    @Test
-    public void testFindMatchingPattern() {
+    String testName;
+    TestFilter filter = newTestFilter("basic.FooTest#testFoo", "basic.BarTest#testBar");
 
-        String testName;
-        TestFilter filter = newTestFilter("basic.FooTest#testFoo", "basic.BarTest#testBar");
+    testName = "basic.FooTest#testFoo";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
 
-        testName = "basic.FooTest#testFoo";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
+    testName = "basic.BarTest#testBar";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
 
-        testName = "basic.BarTest#testBar";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
+    testName = "basic.FooBarTest#testFooBar";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(false));
+  }
 
-        testName = "basic.FooBarTest#testFooBar";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(false));
-    }
+  @Test
+  public void testFindMatchingResult() {
 
-    @Test
-    public void testFindMatchingResult() {
+    String testName;
+    TestFilter filter = newTestFilter("basic.FooTest#testFoo", "basic.BarTest#testBar");
 
-        String testName;
-        TestFilter filter = newTestFilter("basic.FooTest#testFoo", "basic.BarTest#testBar");
+    testName = "basic.FooTest#testFoo";
+    assertThat(testName, filter.findMatchingResult(testName).included(), is(true));
 
-        testName = "basic.FooTest#testFoo";
-        assertThat(testName, filter.findMatchingResult(testName).included(), is(true));
+    testName = "basic.BarTest#testBar";
+    assertThat(testName, filter.findMatchingResult(testName).included(), is(true));
 
-        testName = "basic.BarTest#testBar";
-        assertThat(testName, filter.findMatchingResult(testName).included(), is(true));
+    testName = "basic.FooBarTest#testFooBar";
+    assertThat(testName, filter.findMatchingResult(testName).included(), is(false));
+  }
 
-        testName = "basic.FooBarTest#testFooBar";
-        assertThat(testName, filter.findMatchingResult(testName).included(), is(false));
-    }
+  /**
+   * Creates a new glob filter from the specified patterns.
+   *
+   * @param patterns The test filter patterns.
+   * @return A new glob filter.
+   */
+  TestFilter newTestFilter(String... patterns) {
 
-    /**
-     * Creates a new glob filter from the specified patterns.
-     *
-     * @param patterns The test filter patterns.
-     * @return A new glob filter.
-     */
-    TestFilter newTestFilter(String... patterns) {
-
-        return new TestFilter(new HashSet<>(asList(patterns)), dispatcher);
-    }
+    return new TestFilter(new HashSet<>(asList(patterns)), dispatcher);
+  }
 }

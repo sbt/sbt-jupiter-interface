@@ -18,9 +18,6 @@
  */
 package com.github.sbt.junit.jupiter.internal.event;
 
-import sbt.testing.Event;
-import sbt.testing.EventHandler;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,50 +25,51 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Objects;
+import sbt.testing.Event;
+import sbt.testing.EventHandler;
 
 /**
  * Writes dispatch events to a file for testing/debugging purposes.
  *
  * <h2>Example Usage</h2>
+ *
  * <pre>{@code
- *   SBT> testOnly -- --trace-dispatch-events
- * }
- * </pre>
+ * SBT> testOnly -- --trace-dispatch-events
+ * }</pre>
  *
  * @author Michael Aichler
  */
 public class LoggingEventHandler implements EventHandler {
 
-    private final File targetFile;
-    private final EventHandler eventHandler;
+  private final File targetFile;
+  private final EventHandler eventHandler;
 
-    /**
-     * @param targetFile The target file where to log the events.
-     * @param eventHandler The real event handler.
-     */
-    public LoggingEventHandler(String targetFile, EventHandler eventHandler) {
+  /**
+   * @param targetFile The target file where to log the events.
+   * @param eventHandler The real event handler.
+   */
+  public LoggingEventHandler(String targetFile, EventHandler eventHandler) {
 
-        this.targetFile = new File(targetFile);
-        this.eventHandler = Objects.requireNonNull(eventHandler, "eventHandler");
+    this.targetFile = new File(targetFile);
+    this.eventHandler = Objects.requireNonNull(eventHandler, "eventHandler");
+  }
+
+  @Override
+  public void handle(Event event) {
+
+    writeEventToFile(event);
+    eventHandler.handle(event);
+  }
+
+  private void writeEventToFile(Event event) {
+
+    try (OutputStream out = new FileOutputStream(targetFile, true)) {
+      try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
+        writer.write(event.toString());
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
-
-    @Override
-    public void handle(Event event) {
-
-        writeEventToFile(event);
-        eventHandler.handle(event);
-    }
-
-    private void writeEventToFile(Event event) {
-
-        try (OutputStream out = new FileOutputStream(targetFile, true)) {
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-                writer.write(event.toString());
-                writer.newLine();
-            }
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+  }
 }

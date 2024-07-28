@@ -18,7 +18,12 @@
  */
 package com.github.sbt.junit.jupiter.internal.filter;
 
+import static java.util.Arrays.asList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import com.github.sbt.junit.jupiter.internal.event.Dispatcher;
+import java.util.HashSet;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.platform.engine.UniqueId;
@@ -26,52 +31,43 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashSet;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 @RunWith(MockitoJUnitRunner.class)
 public class GlobFilterTest {
 
-    @Mock
-    Dispatcher dispatcher;
+  @Mock Dispatcher dispatcher;
 
-    @Test
-    public void shouldMatchWildcardPattern() {
+  @Test
+  public void shouldMatchWildcardPattern() {
 
-        GlobFilter filter = newGlobFilter("basic.*");
+    GlobFilter filter = newGlobFilter("basic.*");
 
-        String testName = "basic.FooTest";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
+    String testName = "basic.FooTest";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
 
-        testName = "basic.FooTest#someTest()";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
+    testName = "basic.FooTest#someTest()";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(true));
 
-        testName = "failure.AssumptionsTest";
-        assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(false));
-    }
+    testName = "failure.AssumptionsTest";
+    assertThat(testName, filter.findMatchingPattern(testName).isPresent(), is(false));
+  }
 
-    @Test
-    @Ignore
-    public void shouldSkipEngineWhenConvertingUniqueIds() {
+  @Test
+  @Ignore
+  public void shouldSkipEngineWhenConvertingUniqueIds() {
 
-        GlobFilter filter = newGlobFilter("");
-        filter.toTestName(UniqueId.parse(""));
-    }
+    GlobFilter filter = newGlobFilter("");
+    filter.toTestName(UniqueId.parse(""));
+  }
 
-    /**
-     * Creates a new glob filter from the specified patterns.
-     *
-     * @param patterns The test filter patterns.
-     * @return A new glob filter.
-     */
-    GlobFilter newGlobFilter(String... patterns) {
+  /**
+   * Creates a new glob filter from the specified patterns.
+   *
+   * @param patterns The test filter patterns.
+   * @return A new glob filter.
+   */
+  GlobFilter newGlobFilter(String... patterns) {
 
-        return new GlobFilter(new HashSet<>(asList(patterns)), dispatcher);
-    }
+    return new GlobFilter(new HashSet<>(asList(patterns)), dispatcher);
+  }
 }

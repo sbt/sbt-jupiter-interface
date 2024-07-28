@@ -29,23 +29,19 @@ import sbt.testing.TaskDef;
  */
 public interface JupiterTestListener extends TestExecutionListener {
 
-    /**
-     * Called when the execution of a test task failed.
-     *
-     * @param className The class-name as reported by {@link TaskDef#fullyQualifiedName()}.
-     * @param throwable The throwable which caused test execution to fail.
-     */
-    default void executionFailed(String className, Throwable throwable) {
+  /**
+   * Called when the execution of a test task failed.
+   *
+   * @param className The class-name as reported by {@link TaskDef#fullyQualifiedName()}.
+   * @param throwable The throwable which caused test execution to fail.
+   */
+  default void executionFailed(String className, Throwable throwable) {}
 
-    }
-
-    /**
-     * Called when a test has been filtered.
-     *
-     * @param descriptor The descriptor of the filtered test.
-     * @param reason A string which describes why this test was filtered.
-     */
-    default void executionFiltered(TestDescriptor descriptor, String reason) {
-
-    }
+  /**
+   * Called when a test has been filtered.
+   *
+   * @param descriptor The descriptor of the filtered test.
+   * @param reason A string which describes why this test was filtered.
+   */
+  default void executionFiltered(TestDescriptor descriptor, String reason) {}
 }

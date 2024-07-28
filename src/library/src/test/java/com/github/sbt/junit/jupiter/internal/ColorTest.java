@@ -18,52 +18,50 @@
  */
 package com.github.sbt.junit.jupiter.internal;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 public class ColorTest {
 
-    @Test
-    public void colorNoneShouldNotFormatAnything() {
+  @Test
+  public void colorNoneShouldNotFormatAnything() {
 
-        String expected = "Some string";
-        String actual = Color.NONE.format(expected);
+    String expected = "Some string";
+    String actual = Color.NONE.format(expected);
 
-        assertThat(actual, equalTo(expected));
-    }
+    assertThat(actual, equalTo(expected));
+  }
 
-    @Test
-    public void shouldFormatWithColor() {
+  @Test
+  public void shouldFormatWithColor() {
 
-        String value = "Some string";
-        String expected = "\u001B[37mSome string\u001B[0m";
+    String value = "Some string";
+    String expected = "\u001B[37mSome string\u001B[0m";
 
-        assertThat(Color.WHITE.format(value), equalTo(expected));
-    }
+    assertThat(Color.WHITE.format(value), equalTo(expected));
+  }
 
-    @Test
-    public void shouldFilterColors() {
+  @Test
+  public void shouldFilterColors() {
 
-        String value = "\u001B[37mSome string\u001B[0m";
-        String expected = "Some string";
+    String value = "\u001B[37mSome string\u001B[0m";
+    String expected = "Some string";
 
-        assertThat(Color.filter(value), equalTo(expected));
-    }
+    assertThat(Color.filter(value), equalTo(expected));
+  }
 
-    @Test
-    public void toStringShouldReturnAnsiSequence() {
+  @Test
+  public void toStringShouldReturnAnsiSequence() {
 
-        assertThat(Color.BLACK.toString(), equalTo("\u001B[30m"));
-    }
+    assertThat(Color.BLACK.toString(), equalTo("\u001B[30m"));
+  }
 
-    @Test
-    public void toStringOfColorNoneShouldReturnEmptyString() {
+  @Test
+  public void toStringOfColorNoneShouldReturnEmptyString() {
 
-        assertThat(Color.NONE.toString(), equalTo(""));
-    }
+    assertThat(Color.NONE.toString(), equalTo(""));
+  }
 }

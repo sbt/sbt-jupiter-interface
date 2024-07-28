@@ -5,20 +5,17 @@ import org.junit.jupiter.api.Test;
 
 class NestedTests {
 
+  @Nested
+  class First {
 
-    @Nested
-    class First {
+    @Test
+    void testOfFirstNestedClass() {}
+  }
 
-        @Test
-        void testOfFirstNestedClass() {
-        }
-    }
+  @Nested
+  class Second {
 
-    @Nested
-    class Second {
-
-        @Test
-        void testOfSecondNestedClass() {
-        }
-    }
+    @Test
+    void testOfSecondNestedClass() {}
+  }
 }

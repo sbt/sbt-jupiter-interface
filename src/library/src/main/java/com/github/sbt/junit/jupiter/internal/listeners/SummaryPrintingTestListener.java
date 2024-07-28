@@ -26,54 +26,51 @@ import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 public class SummaryPrintingTestListener extends SummaryGeneratingListener {
 
-    private final ColorTheme colorTheme;
-    private final TestLogger logger;
-    private final boolean isVerbose;
+  private final ColorTheme colorTheme;
+  private final TestLogger logger;
+  private final boolean isVerbose;
 
-    public SummaryPrintingTestListener(Configuration configuration) {
+  public SummaryPrintingTestListener(Configuration configuration) {
 
-        this.colorTheme = configuration.getColorTheme();
-        this.isVerbose = configuration.getOptions().isVerbose();
-        this.logger = configuration.getLogger();
+    this.colorTheme = configuration.getColorTheme();
+    this.isVerbose = configuration.getOptions().isVerbose();
+    this.logger = configuration.getLogger();
+  }
+
+  @Override
+  public void testPlanExecutionFinished(TestPlan testPlan) {
+
+    TestExecutionSummary summary = getSummary();
+    long testRunDuration = System.currentTimeMillis() - summary.getTimeStarted();
+
+    long totalFailureCount = summary.getTotalFailureCount();
+    long testsSkippedCount = summary.getTestsSkippedCount();
+    long totalTestsFound = summary.getTestsFoundCount();
+
+    Color ignoreColor = testsSkippedCount > 0 ? colorTheme.ignoreCount() : colorTheme.info();
+    Color errorColor = totalFailureCount > 0 ? colorTheme.errorCount() : colorTheme.info();
+
+    debugOrInfo(
+        ""
+            + colorTheme.info().format("Test run finished: ")
+            + errorColor.format(totalFailureCount + " failed")
+            + colorTheme.info().format(", ")
+            + ignoreColor.format(testsSkippedCount + " ignored")
+            + colorTheme.info().format(", ")
+            + colorTheme.info().format(totalTestsFound + " total, ")
+            + colorTheme.info().format(testRunDuration / 1000.0 + "s"));
+  }
+
+  private void debugOrInfo(String message) {
+
+    if (isVerbose) {
+      logger.info(message);
+      return;
     }
 
-
-    @Override
-    public void testPlanExecutionFinished(TestPlan testPlan) {
-
-        TestExecutionSummary summary = getSummary();
-        long testRunDuration = System.currentTimeMillis() - summary.getTimeStarted();
-
-        long totalFailureCount = summary.getTotalFailureCount();
-        long testsSkippedCount = summary.getTestsSkippedCount();
-        long totalTestsFound = summary.getTestsFoundCount();
-
-        Color ignoreColor = testsSkippedCount > 0 ? colorTheme.ignoreCount() : colorTheme.info();
-        Color errorColor = totalFailureCount > 0 ? colorTheme.errorCount() : colorTheme.info();
-
-        debugOrInfo(""
-                + colorTheme.info().format("Test run finished: ")
-                + errorColor.format(totalFailureCount + " failed")
-                + colorTheme.info().format(", ")
-                + ignoreColor.format(testsSkippedCount + " ignored")
-                + colorTheme.info().format(", ")
-                + colorTheme.info().format(totalTestsFound + " total, ")
-                + colorTheme.info().format(testRunDuration/1000.0 + "s")
-        );
-    }
-
-    private void debugOrInfo(String message) {
-
-        if (isVerbose) {
-            logger.info(message);
-            return;
-        }
-
-        logger.debug(message);
-    }
+    logger.debug(message);
+  }
 }
