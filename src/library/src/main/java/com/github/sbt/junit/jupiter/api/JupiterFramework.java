@@ -30,29 +30,26 @@ import sbt.testing.Runner;
  */
 public class JupiterFramework implements Framework {
 
-    private static final StreamPair system = new StreamPair(System.out, System.err);
-    private static final Fingerprint[] FINGERPRINTS = new Fingerprint[] {
-            new JupiterTestFingerprint()
-    };
+  private static final StreamPair system = new StreamPair(System.out, System.err);
+  private static final Fingerprint[] FINGERPRINTS =
+      new Fingerprint[] {new JupiterTestFingerprint()};
 
-    /**
-     * @return The human-friendly name of the Jupiter test framework.
-     */
-    @Override
-    public String name() {
+  /** @return The human-friendly name of the Jupiter test framework. */
+  @Override
+  public String name() {
 
-        return "Jupiter";
-    }
+    return "Jupiter";
+  }
 
-    @Override
-    public Fingerprint[] fingerprints() {
+  @Override
+  public Fingerprint[] fingerprints() {
 
-        return FINGERPRINTS;
-    }
+    return FINGERPRINTS;
+  }
 
-    @Override
-    public Runner runner(String[] args, String[] remoteArgs, ClassLoader testClassLoader) {
+  @Override
+  public Runner runner(String[] args, String[] remoteArgs, ClassLoader testClassLoader) {
 
-        return new JupiterRunner(args, remoteArgs, testClassLoader, system);
-    }
+    return new JupiterRunner(args, remoteArgs, testClassLoader, system);
+  }
 }

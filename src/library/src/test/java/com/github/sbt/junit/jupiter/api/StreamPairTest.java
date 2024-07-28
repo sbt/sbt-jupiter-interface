@@ -18,57 +18,52 @@
  */
 package com.github.sbt.junit.jupiter.api;
 
-import org.junit.Test;
-
-import java.io.PrintStream;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Michael Aichler
- */
+import java.io.PrintStream;
+import org.junit.Test;
+
+/** @author Michael Aichler */
 public class StreamPairTest {
 
-    @Test
-    public void shouldThrowExceptionIfOutIsNull() {
-        Exception thrownException = assertThrows(
-            NullPointerException.class,
-            () -> new StreamPair(null, mock(PrintStream.class))
-        );
+  @Test
+  public void shouldThrowExceptionIfOutIsNull() {
+    Exception thrownException =
+        assertThrows(
+            NullPointerException.class, () -> new StreamPair(null, mock(PrintStream.class)));
 
-        assertThat(thrownException.getMessage(), startsWith("Output stream "));
-    }
+    assertThat(thrownException.getMessage(), startsWith("Output stream "));
+  }
 
-    @Test
-    public void shouldThrowExceptionIfErrIsNull() {
-        Exception thrownException = assertThrows(
-            NullPointerException.class,
-            () ->  new StreamPair(mock(PrintStream.class), null)
-        );
+  @Test
+  public void shouldThrowExceptionIfErrIsNull() {
+    Exception thrownException =
+        assertThrows(
+            NullPointerException.class, () -> new StreamPair(mock(PrintStream.class), null));
 
-        assertThat(thrownException.getMessage(), startsWith("Error stream "));
-    }
+    assertThat(thrownException.getMessage(), startsWith("Error stream "));
+  }
 
-    @Test
-    public void shouldGetTypeOut() {
-        PrintStream out = mock(PrintStream.class);
-        PrintStream err = mock(PrintStream.class);
+  @Test
+  public void shouldGetTypeOut() {
+    PrintStream out = mock(PrintStream.class);
+    PrintStream err = mock(PrintStream.class);
 
-        PrintStream result = new StreamPair(out, err).get(StreamPair.Type.OUT);
-        assertThat(result, equalTo(out));
-        assertThat(result, not(equalTo(err)));
-    }
+    PrintStream result = new StreamPair(out, err).get(StreamPair.Type.OUT);
+    assertThat(result, equalTo(out));
+    assertThat(result, not(equalTo(err)));
+  }
 
-    @Test
-    public void shouldGetTypeErr() {
-        PrintStream out = mock(PrintStream.class);
-        PrintStream err = mock(PrintStream.class);
+  @Test
+  public void shouldGetTypeErr() {
+    PrintStream out = mock(PrintStream.class);
+    PrintStream err = mock(PrintStream.class);
 
-        PrintStream result = new StreamPair(out, err).get(StreamPair.Type.ERR);
-        assertThat(result, equalTo(err));
-        assertThat(result, not(equalTo(out)));
-    }
+    PrintStream result = new StreamPair(out, err).get(StreamPair.Type.ERR);
+    assertThat(result, equalTo(err));
+    assertThat(result, not(equalTo(out)));
+  }
 }

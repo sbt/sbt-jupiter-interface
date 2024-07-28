@@ -18,47 +18,37 @@
  */
 package com.github.sbt.junit.jupiter.internal.listeners;
 
-
-import org.junit.Test;
+import static com.github.sbt.junit.jupiter.internal.listeners.OutputCapturingTestListener.CapturedOutputStream;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 
 import java.io.PrintStream;
+import org.junit.Test;
 
-import static com.github.sbt.junit.jupiter.internal.listeners.OutputCapturingTestListener.CapturedOutputStream;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-/**
- * @author Michael Aichler
- */
+/** @author Michael Aichler */
 public class CapturedOutputStreamTest {
 
+  @Test
+  public void shouldFilterNewLinesFromPrintln() {
 
-    @Test
-    public void shouldFilterNewLinesFromPrintln() {
+    CapturedOutputStream buffer = new CapturedOutputStream(this::devNull);
 
-        CapturedOutputStream buffer = new CapturedOutputStream(this::devNull);
+    PrintStream out = new PrintStream(buffer, true);
+    out.println("First line");
 
-        PrintStream out = new PrintStream(buffer, true);
-        out.println("First line");
+    assertThat(buffer.output, contains("First line"));
+  }
 
-        assertThat(buffer.output, contains("First line"));
-    }
+  @Test
+  public void shouldFilterNewLinesFromPrint() {
 
-    @Test
-    public void shouldFilterNewLinesFromPrint() {
+    CapturedOutputStream buffer = new CapturedOutputStream(this::devNull);
 
-        CapturedOutputStream buffer = new CapturedOutputStream(this::devNull);
+    PrintStream out = new PrintStream(buffer, true);
+    out.print("First line \nSecond line");
 
-        PrintStream out = new PrintStream(buffer, true);
-        out.print("First line \nSecond line");
+    assertThat(buffer.output, contains("First line ", "Second line"));
+  }
 
-        assertThat(buffer.output, contains(
-                "First line ",
-                "Second line"
-        ));
-    }
-
-    private void devNull(String str) {
-
-    }
+  private void devNull(String str) {}
 }

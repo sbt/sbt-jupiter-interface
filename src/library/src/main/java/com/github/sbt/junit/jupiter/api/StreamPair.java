@@ -28,36 +28,34 @@ import java.util.Objects;
  */
 public class StreamPair {
 
-    /**
-     * Defines available stream types.
-     */
-    public enum Type {
+  /** Defines available stream types. */
+  public enum Type {
+    ERR,
+    OUT
+  }
 
-        ERR, OUT
-    }
+  private final PrintStream out;
+  private final PrintStream err;
 
-    private final PrintStream out;
-    private final PrintStream err;
+  /**
+   * Creates a stream pair from the given output and error print stream.
+   *
+   * @param out The standard output print stream.
+   * @param err the error output print stream.
+   */
+  public StreamPair(final PrintStream out, final PrintStream err) {
 
-    /**
-     * Creates a stream pair from the given output and error print stream.
-     *
-     * @param out The standard output print stream.
-     * @param err the error output print stream.
-     */
-    public StreamPair(final PrintStream out, final PrintStream err) {
+    this.out = Objects.requireNonNull(out, "Output stream must not be null.");
+    this.err = Objects.requireNonNull(err, "Error stream must not be null.");
+  }
 
-        this.out = Objects.requireNonNull(out, "Output stream must not be null.");
-        this.err = Objects.requireNonNull(err, "Error stream must not be null.");
-    }
+  /**
+   * @param type The requested type.
+   * @return The print stream of the specified {@code type}.
+   */
+  public PrintStream get(final Type type) {
 
-    /**
-     * @param type The requested type.
-     * @return The print stream of the specified {@code type}.
-     */
-    public PrintStream get(final Type type) {
-
-        Objects.requireNonNull(type, "Stream type must not be null.");
-        return Type.OUT.equals(type) ? out : err;
-    }
+    Objects.requireNonNull(type, "Stream type must not be null.");
+    return Type.OUT.equals(type) ? out : err;
+  }
 }

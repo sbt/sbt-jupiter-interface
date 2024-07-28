@@ -18,9 +18,8 @@
  */
 package com.github.sbt.junit.jupiter.api;
 
-import sbt.testing.AnnotatedFingerprint;
-
 import java.util.Objects;
+import sbt.testing.AnnotatedFingerprint;
 
 /**
  * A dummy fingerprint implementation used for all discovered tests.
@@ -29,37 +28,35 @@ import java.util.Objects;
  */
 public class JupiterTestFingerprint implements AnnotatedFingerprint {
 
-    /**
-     * @return Always {@code false}.
-     */
-    @Override
-    public boolean isModule() {
-        return false;
+  /** @return Always {@code false}. */
+  @Override
+  public boolean isModule() {
+    return false;
+  }
+
+  /**
+   * @return The name of this class. This is to ensure that SBT does not find any tests so that we
+   *     can use JUnit Jupiter's test discovery mechanism.
+   */
+  @Override
+  public String annotationName() {
+    return getClass().getName();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof AnnotatedFingerprint) {
+      AnnotatedFingerprint f = (AnnotatedFingerprint) obj;
+      if (annotationName().equals(f.annotationName())) {
+        return isModule() == f.isModule();
+      }
     }
 
-    /**
-     * @return The name of this class. This is to ensure that SBT does not find
-     *      any tests so that we can use JUnit Jupiter's test discovery mechanism.
-     */
-    @Override
-    public String annotationName() {
-        return getClass().getName();
-    }
+    return false;
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof AnnotatedFingerprint) {
-            AnnotatedFingerprint f = (AnnotatedFingerprint) obj;
-            if (annotationName().equals(f.annotationName())) {
-                return isModule() == f.isModule();
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.annotationName(), this.isModule());
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.annotationName(), this.isModule());
+  }
 }

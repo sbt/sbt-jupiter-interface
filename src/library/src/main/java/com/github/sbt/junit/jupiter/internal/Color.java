@@ -24,74 +24,67 @@ package com.github.sbt.junit.jupiter.internal;
  * @author Michael Aichler
  */
 public enum Color {
+  NONE(-1),
+  RESET(0),
+  BLACK(30),
+  RED(31),
+  GREEN(32),
+  YELLOW(33),
+  BLUE(34),
+  MAGENTA(35),
+  CYAN(36),
+  WHITE(37);
 
-    NONE(-1),
-    RESET(0),
-    BLACK(30),
-    RED(31),
-    GREEN(32),
-    YELLOW(33),
-    BLUE(34),
-    MAGENTA(35),
-    CYAN(36),
-    WHITE(37);
+  private final String ansiString;
 
-    private final String ansiString;
+  /** @param ansiCode The ANSI color code. */
+  Color(int ansiCode) {
+    this.ansiString = (ansiCode > -1) ? "\u001B[" + ansiCode + "m" : "";
+  }
 
-    /**
-     * @param ansiCode The ANSI color code.
-     */
-    Color(int ansiCode) {
-        this.ansiString = (ansiCode > -1)
-                ? "\u001B[" + ansiCode + "m"
-                : "";
+  /**
+   * Filter color codes from the specified {@code value}.
+   *
+   * @param str The string which is to be filtered.
+   * @return The string without any color codes.
+   */
+  public static String filter(String str) {
+
+    if (null == str || !str.contains("\u001B[")) {
+      return str;
     }
 
-    /**
-     * Filter color codes from the specified {@code value}.
-     *
-     * @param str The string which is to be filtered.
-     * @return The string without any color codes.
-     */
-    public static String filter(String str) {
-
-        if (null == str || !str.contains("\u001B[")) {
-            return str;
-        }
-
-        StringBuilder b = new StringBuilder();
-        int len = str.length();
-        for (int i = 0; i < len; i++) {
-            char c = str.charAt(i);
-            if(c == '\u001B') {
-                do { i++; } while (str.charAt(i) != 'm');
-            }
-            else b.append(c);
-        }
-
-        return b.toString();
+    StringBuilder b = new StringBuilder();
+    int len = str.length();
+    for (int i = 0; i < len; i++) {
+      char c = str.charAt(i);
+      if (c == '\u001B') {
+        do {
+          i++;
+        } while (str.charAt(i) != 'm');
+      } else b.append(c);
     }
 
-    /**
-     *
-     * @param value The string which is to be colored.
-     * @return The colored string.
-     */
-    public String format(String value) {
+    return b.toString();
+  }
 
-        if (ansiString.isEmpty()) {
-            return value;
-        }
+  /**
+   * @param value The string which is to be colored.
+   * @return The colored string.
+   */
+  public String format(String value) {
 
-        return toString() + value + RESET;
+    if (ansiString.isEmpty()) {
+      return value;
     }
 
-    /**
-     * @return The ANSI representation of this color.
-     */
-    @Override
-    public String toString() {
+    return toString() + value + RESET;
+  }
 
-        return this.ansiString;
-    }
+  /** @return The ANSI representation of this color. */
+  @Override
+  public String toString() {
+
+    return this.ansiString;
+  }
 }
