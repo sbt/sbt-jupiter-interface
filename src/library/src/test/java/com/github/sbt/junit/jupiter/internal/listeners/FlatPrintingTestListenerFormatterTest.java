@@ -29,22 +29,18 @@ public class FlatPrintingTestListenerFormatterTest {
     // @formatter:off
 
     return new Object[][] {
-      {"jupiter.samples.NestedTests", "testOfFirstNestedClass", "{0}$First#{1}()"},
-      {"jupiter.samples.RepeatedTests", "repeatedTest", "{0}#{1}():#1"},
+      {"jupiter.samples.NestedTests", "testOfFirstNestedClass", "$First#{1}()"},
+      {"jupiter.samples.RepeatedTests", "repeatedTest", "#{1}():#1"},
       {
         "jupiter.samples.RepeatedTests",
         "repeatedTestWithRepetitionInfo",
-        "{0}#{1}(org.junit.jupiter.api.RepetitionInfo):#1"
+        "#{1}(org.junit.jupiter.api.RepetitionInfo):#1"
       },
-      {"jupiter.samples.SimpleTests", "firstTestMethod", "{0}#{1}()"},
-      {
-        "jupiter.samples.SimpleTests",
-        "testWithParameter",
-        "{0}#{1}(org.junit.jupiter.api.TestInfo)"
-      },
-      {"jupiter.samples.VintageTests", "vintageTestMethod", "{0}#{1}"},
-      {"jupiter.samples.VintageEnclosedTests", "testMethod", "{0}$NestedTest#{1}"},
-      {"jupiter.samples.VintageParameterizedTests", "testParameters", "{0}#{1}[A-65]"}
+      {"jupiter.samples.SimpleTests", "firstTestMethod", "#{1}()"},
+      {"jupiter.samples.SimpleTests", "testWithParameter", "#{1}(org.junit.jupiter.api.TestInfo)"},
+      {"jupiter.samples.VintageTests", "vintageTestMethod", "#{1}"},
+      {"jupiter.samples.VintageEnclosedTests", "testMethod", "$NestedTest#{1}"},
+      {"jupiter.samples.VintageParameterizedTests", "testParameters", "#{1}[A-65]"}
     };
 
     // @formatter:on

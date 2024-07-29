@@ -36,7 +36,6 @@ import java.util.List;
 import junit.TestRunner;
 import org.hamcrest.FeatureMatcher;
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import sbt.testing.Event;
@@ -130,7 +129,6 @@ public class DispatcherTest {
   }
 
   @Test
-  @Ignore("Does not work with JUnitXmlTestsListener currently")
   public void shouldReportNestedTestsCorrectly() {
 
     testRunner.withArgs("-v");
@@ -144,26 +142,6 @@ public class DispatcherTest {
     assertThat(result, hasSize(1));
     assertThat(result, hasItem(fullyQualifiedName(endsWith(suiteName))));
     assertThat(result, hasItem(selector(instanceOf(NestedTestSelector.class))));
-    assertThat(result, hasItem(selector(testName(equalTo(testName)))));
-  }
-
-  /*
-   * Hack until NestedTestSelector is reported correctly by JUnitXmlTestsListener
-   */
-  @Test
-  public void shouldReportNestedTestsHackForJUnitXmlTestsListener() {
-
-    testRunner.withArgs("-v");
-    testRunner.execute(NestedTests.class);
-
-    List<Event> result = testRunner.eventHandler().byStatus(Status.Success);
-
-    String suiteName = ".event.DispatcherSampleTests$NestedTests";
-    String testName = "$First#testOfFirstNestedClass()";
-
-    assertThat(result, hasSize(1));
-    assertThat(result, hasItem(fullyQualifiedName(endsWith(suiteName))));
-    assertThat(result, hasItem(selector(instanceOf(TestSelector.class))));
     assertThat(result, hasItem(selector(testName(equalTo(testName)))));
   }
 
