@@ -350,7 +350,7 @@ public class Configuration {
         name =
             VINTAGE_ENGINE.equals(testEngine)
                 ? toVintageName(identifier, lastSegment)
-                : toName(lastSegment);
+                : toName(identifier, lastSegment);
       }
 
       return name;
@@ -359,7 +359,7 @@ public class Configuration {
     /*
      * Formats a test segment from junit-jupiter.
      */
-    private String toName(Segment segment) {
+    private String toName(TestIdentifier identifier, Segment segment) {
 
       String name;
 
@@ -377,7 +377,7 @@ public class Configuration {
           name = colorTheme.testFactory().format("#" + segment.getValue());
           break;
         case "dynamic-test":
-          name = colorTheme.dynamicTest().format(":" + segment.getValue());
+          name = colorTheme.dynamicTest().format(":" + identifier.getDisplayName());
           break;
         case "test-template":
           name = colorTheme.testTemplate().format("#" + segment.getValue());

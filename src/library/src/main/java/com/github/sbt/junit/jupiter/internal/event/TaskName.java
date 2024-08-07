@@ -101,7 +101,7 @@ class TaskName {
 
       MethodSource methodSource = (MethodSource) testSource;
       result.nestedSuiteId = nestedSuiteId(testSuite, methodSource.getClassName());
-      result.invocation = invocation(UniqueId.parse(identifier.getUniqueId()));
+      result.invocation = invocation(identifier, UniqueId.parse(identifier.getUniqueId()));
       result.testName =
           testName(methodSource.getMethodName(), methodSource.getMethodParameterTypes());
     }
@@ -159,7 +159,7 @@ class TaskName {
    * @param id The unique test identifier.
    * @return A string representation of the current invocation (might be {@code null}).
    */
-  static String invocation(UniqueId id) {
+  static String invocation(TestIdentifier identifier, UniqueId id) {
 
     List<UniqueId.Segment> segments = id.getSegments();
 
@@ -169,6 +169,7 @@ class TaskName {
 
       switch (last.getType()) {
         case "dynamic-test":
+          return identifier.getDisplayName();
         case "test-template-invocation":
           return last.getValue().replace("#", "");
       }
