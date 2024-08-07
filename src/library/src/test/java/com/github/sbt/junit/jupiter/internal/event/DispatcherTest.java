@@ -32,6 +32,7 @@ import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.Multipl
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.NestedTests;
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.ParameterizedTests;
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.SingleParamTests;
+import java.util.Arrays;
 import java.util.List;
 import junit.TestRunner;
 import org.hamcrest.FeatureMatcher;
@@ -121,12 +122,16 @@ public class DispatcherTest {
     List<Event> result = testRunner.eventHandler().byStatus(Status.Success);
 
     String suiteName = ".event.DispatcherSampleTests$DynamicTests";
-    String testName = "test():1";
+    List<String> testNames =
+        Arrays.asList(
+            "test():1st dynamic test", "test():2nd dynamic test", "test():3rd dynamic test");
 
-    assertThat(result, hasSize(1));
+    assertThat(result, hasSize(3));
     assertThat(result, hasItem(fullyQualifiedName(endsWith(suiteName))));
     assertThat(result, hasItem(selector(instanceOf(TestSelector.class))));
-    assertThat(result, hasItem(selector(testName(equalTo(testName)))));
+    for (String testName : testNames) {
+      assertThat(result, hasItem(selector(testName(equalTo(testName)))));
+    }
   }
 
   @Test
