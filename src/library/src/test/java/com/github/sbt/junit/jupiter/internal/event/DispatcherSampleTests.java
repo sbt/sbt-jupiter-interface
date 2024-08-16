@@ -20,13 +20,14 @@ package com.github.sbt.junit.jupiter.internal.event;
 
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -45,7 +46,11 @@ class DispatcherSampleTests {
 
     @TestFactory
     Collection<DynamicTest> test() {
-      return Collections.singletonList(dynamicTest("1st dynamic test", () -> {}));
+      final Executable dummy = () -> {};
+      return Arrays.asList(
+          dynamicTest("1st dynamic test", dummy),
+          dynamicTest("2nd dynamic test", dummy),
+          dynamicTest("3rd dynamic test", dummy));
     }
   }
 

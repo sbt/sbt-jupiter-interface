@@ -24,7 +24,10 @@ import static org.hamcrest.Matchers.nullValue;
 
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
+import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.UniqueId;
+import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
+import org.junit.platform.launcher.TestIdentifier;
 import org.junit.runner.RunWith;
 
 /** @author Michael Aichler */
@@ -98,9 +101,11 @@ public class TaskNameTest {
     public void shouldFindDynamicTest() {
 
       UniqueId id = UniqueId.root("method", "someTestMethod").append("dynamic-test", "#1");
+      TestDescriptor descriptor = new DummyTestDescriptor(id, "myDynamicTest");
+      TestIdentifier identifier = TestIdentifier.from(descriptor);
 
-      String result = TaskName.invocation(id);
-      assertThat(result, equalTo("1"));
+      String result = TaskName.invocation(identifier, id);
+      assertThat(result, equalTo("myDynamicTest"));
     }
 
     @Test
@@ -108,8 +113,10 @@ public class TaskNameTest {
 
       UniqueId id =
           UniqueId.root("method", "someTestMethod").append("test-template-invocation", "#1");
+      TestDescriptor descriptor = new DummyTestDescriptor(id, "myTestTemplateInvocation");
+      TestIdentifier identifier = TestIdentifier.from(descriptor);
 
-      String result = TaskName.invocation(id);
+      String result = TaskName.invocation(identifier, id);
       assertThat(result, equalTo("1"));
     }
 
@@ -117,9 +124,22 @@ public class TaskNameTest {
     public void shouldReturnNullOtherwise() {
 
       UniqueId id = UniqueId.root("method", "someTestMethod");
+      TestDescriptor descriptor = new DummyTestDescriptor(id, "someTestMethod");
+      TestIdentifier identifier = TestIdentifier.from(descriptor);
 
-      String result = TaskName.invocation(id);
+      String result = TaskName.invocation(identifier, id);
       assertThat(result, nullValue());
+    }
+  }
+
+  private static class DummyTestDescriptor extends AbstractTestDescriptor {
+    protected DummyTestDescriptor(UniqueId uniqueId, String displayName) {
+      super(uniqueId, displayName);
+    }
+
+    @Override
+    public Type getType() {
+      return Type.CONTAINER_AND_TEST;
     }
   }
 }
