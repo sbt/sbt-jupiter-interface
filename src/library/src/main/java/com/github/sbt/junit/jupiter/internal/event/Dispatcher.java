@@ -27,14 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.TestExecutionResult;
 import org.junit.platform.launcher.TestIdentifier;
-import sbt.testing.Event;
-import sbt.testing.EventHandler;
-import sbt.testing.Fingerprint;
-import sbt.testing.OptionalThrowable;
-import sbt.testing.Selector;
-import sbt.testing.Status;
-import sbt.testing.SuiteSelector;
-import sbt.testing.TestSelector;
+import sbt.testing.*;
 
 /**
  * Dispatches test events to SBT.
@@ -170,17 +163,13 @@ public class Dispatcher implements JupiterTestListener {
       if (null != name.nestedSuiteId()) {
         if (null != name.testName()) {
 
-          // FIXME: as soon as JUnitXmlTestsListener supports this
-          // return new NestedTestSelector(name.nestedSuiteId(), name.testName());
-          return new TestSelector(name.nestedSuiteId() + "#" + testName);
+          return new NestedTestSelector(name.nestedSuiteId(), name.testName());
         }
 
-        // FIXME: as soon as JUnitXmlTestsListener supports this
-        // return new NestedSuiteSelector(name.nestedSuiteId());
-        return new TestSelector(name.nestedSuiteId());
+        return new NestedSuiteSelector(name.nestedSuiteId());
       }
 
-      if (null != name.testName()) {
+      if (null != testName) {
 
         return new TestSelector(testName);
       }

@@ -23,11 +23,7 @@ import com.github.sbt.junit.jupiter.internal.listeners.FlatPrintingTestListener;
 import com.github.sbt.junit.jupiter.internal.listeners.TreePrintingTestListener;
 import com.github.sbt.junit.jupiter.internal.options.Options;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.junit.platform.engine.TestSource;
@@ -327,7 +323,9 @@ public class Configuration {
       List<TestIdentifier> result = new ArrayList<>();
 
       do {
-        result.add(identifier);
+        if (identifier.getSource().isPresent()) {
+          result.add(identifier);
+        }
         identifier = testPlan.getParent(identifier).orElse(null);
       } while (null != identifier);
 
