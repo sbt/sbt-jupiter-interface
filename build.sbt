@@ -20,7 +20,7 @@
 import Dependencies.*
 
 ThisBuild / organization := "com.github.sbt.junit"
-ThisBuild / scalaVersion := "2.12.19"
+ThisBuild / scalaVersion := "2.12.20"
 
 lazy val commonSettings: Seq[Setting[_]] = Def.settings(
   Compile / javacOptions ++= Seq(
