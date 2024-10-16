@@ -14,7 +14,7 @@ object Dependencies {
   val junitJupiterParams = "org.junit.jupiter" % "junit-jupiter-params" % junitJupiterVer
   val junitVintageEngine = "org.junit.vintage" % "junit-vintage-engine" % junitVintageVer
   val hamcrestLibrary = "org.hamcrest" % "hamcrest-library" % "3.0"
-  val mockitoCore = "org.mockito" % "mockito-core" % "4.11.0"
+  val mockitoCore = "org.mockito" % "mockito-core" % "5.14.2"
   val junit4Interface = "com.github.sbt" % "junit-interface" % "0.13.3"
   val junit4 = "junit" % "junit" % "4.13.2"
 }
