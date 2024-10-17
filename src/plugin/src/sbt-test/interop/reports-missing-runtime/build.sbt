@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
 TaskKey[Unit]("checkDefinedTestsThrowsException") := {
   (Test / definedTests).result.value match {
     case Inc(cause:Incomplete) =>
-      val actualMessage = cause.directCause.map(c => c.getMessage).getOrElse("")
+      val actualMessage = cause.causes.headOption.flatMap(_.directCause).map(_.getMessage).getOrElse("")
       val expectedMessage = "Found at least one JUnit 5 test"
       assert(actualMessage.startsWith(expectedMessage),
         s"Expected an exception containing a message starting with `$expectedMessage` (actual: `$actualMessage`)")
