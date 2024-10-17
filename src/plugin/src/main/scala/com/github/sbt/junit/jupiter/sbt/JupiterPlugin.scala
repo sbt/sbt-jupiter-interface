@@ -80,8 +80,7 @@ object JupiterPlugin extends AutoPlugin {
    * By default this is applied to the Test configuration only.
    */
   def scopedSettings: Seq[Def.Setting[_]] = Seq(
-
-    definedTests := collectTests.value
+    definedTests ++= collectTests.value
   )
 
   /*
@@ -93,14 +92,11 @@ object JupiterPlugin extends AutoPlugin {
   )
 
   /*
-   * Collects available tests through JUnit Jupiter's discovery mechanism and
-   * combines them with the result of sbt.Keys.definedTests.
+   * Collects available tests through JUnit Jupiter's discovery mechanism.
    */
-  private def collectTests = Def.task {
-
+  private def collectTests = Def.task[Seq[TestDefinition]] {
     val classes = classDirectory.value
     val classpath = dependencyClasspath.value.map(_.data.toURI.toURL).toArray :+ classes.toURI.toURL
-    val result = Defaults.detectTests.value
 
     val collector = new JupiterTestCollector.Builder()
       .withClassDirectory(classes)
@@ -118,8 +114,8 @@ object JupiterPlugin extends AutoPlugin {
       }
     }
 
-    result ++ discoveredTests
-  }
+    discoveredTests
+  }.dependsOn(compile)
 
   /*
    * Checks whether this plugins runtime library is on the given classpath.
