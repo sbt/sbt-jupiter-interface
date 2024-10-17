@@ -115,7 +115,7 @@ object JupiterPlugin extends AutoPlugin {
     }
 
     discoveredTests
-  }.dependsOn(compile).triggeredBy(compile)
+  }.dependsOn(compile)
 
   /*
    * Checks whether this plugins runtime library is on the given classpath.
