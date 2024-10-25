@@ -41,6 +41,7 @@ lazy val library = (project in file("src/library"))
       testInterface,
       junitJupiterParams % Test,
       junitVintageEngine % Test,
+      junitPlatformSuite % Test,
       hamcrestLibrary % Test,
       mockitoCore % Test,
       junit4Interface % Test,

@@ -40,7 +40,9 @@ public class FlatPrintingTestListenerFormatterTest {
       {"jupiter.samples.SimpleTests", "testWithParameter", "#{1}(org.junit.jupiter.api.TestInfo)"},
       {"jupiter.samples.VintageTests", "vintageTestMethod", "#{1}"},
       {"jupiter.samples.VintageEnclosedTests", "testMethod", "$NestedTest#{1}"},
-      {"jupiter.samples.VintageParameterizedTests", "testParameters", "#{1}[A-65]"}
+      {"jupiter.samples.VintageParameterizedTests", "testParameters", "#{1}[A-65]"},
+      {"jupiter.samples.SuiteTest", "firstTestMethod", "jupiter.samples.SimpleTests#{1}()"},
+      {"jupiter.samples.SuiteTest", "vintageTestMethod", "jupiter.samples.VintageTests#{1}"}
     };
 
     // @formatter:on
