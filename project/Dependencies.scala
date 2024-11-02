@@ -13,6 +13,7 @@ object Dependencies {
   val testInterface = "org.scala-sbt" % "test-interface" % testInterfaceVer
   val junitJupiterParams = "org.junit.jupiter" % "junit-jupiter-params" % junitJupiterVer
   val junitVintageEngine = "org.junit.vintage" % "junit-vintage-engine" % junitVintageVer
+  val junitPlatformSuite = "org.junit.platform" % "junit-platform-suite" % junitPlatformVer
   val hamcrestLibrary = "org.hamcrest" % "hamcrest-library" % "3.0"
   val mockitoCore = "org.mockito" % "mockito-core" % "4.11.0"
   val junit4Interface = "com.github.sbt" % "junit-interface" % "0.13.3"

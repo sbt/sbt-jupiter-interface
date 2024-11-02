@@ -101,7 +101,7 @@ class TaskName {
     if (testSource instanceof MethodSource) {
 
       MethodSource methodSource = (MethodSource) testSource;
-      result.nestedSuiteId = nestedSuiteId(testSuite, methodSource.getClassName());
+      result.nestedSuiteId = nestedSuiteId(removedJunit5SuiteName, methodSource.getClassName());
       result.invocation = invocation(identifier, UniqueId.parse(identifier.getUniqueId()));
       result.testName =
           testName(methodSource.getMethodName(), methodSource.getMethodParameterTypes());

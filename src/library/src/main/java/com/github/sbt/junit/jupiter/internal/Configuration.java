@@ -309,7 +309,13 @@ public class Configuration {
 
       final List<TestIdentifier> path = getPath(testPlan, identifier);
 
-      testEngine = UniqueId.parse(identifier.getUniqueId()).getEngineId().orElse(null);
+      // When run as part of a suite, the suite engine is the first segment, so look further
+      testEngine =
+          UniqueId.parse(identifier.getUniqueId()).getSegments().stream()
+              .filter(segment -> segment.getType().equals("engine"))
+              .map(Segment::getValue)
+              .reduce((first, last) -> last)
+              .orElse(null);
 
       return path.stream()
           .skip(1)
