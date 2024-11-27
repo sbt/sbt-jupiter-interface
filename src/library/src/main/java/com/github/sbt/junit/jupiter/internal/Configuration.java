@@ -317,11 +317,7 @@ public class Configuration {
               .reduce((first, last) -> last)
               .orElse(null);
 
-      return path.stream()
-          .skip(1)
-          .map(this::toName)
-          .filter(Objects::nonNull)
-          .collect(Collectors.joining());
+      return path.stream().map(this::toName).filter(Objects::nonNull).collect(Collectors.joining());
     }
 
     private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
@@ -390,7 +386,7 @@ public class Configuration {
           name = colorTheme.container().format(":" + segment.getValue());
           break;
         default:
-          name = segment.getValue();
+          name = null;
           break;
       }
 
@@ -436,7 +432,7 @@ public class Configuration {
         }
       }
 
-      return "/" + identifier.getDisplayName();
+      return null;
     }
 
     /*
