@@ -327,7 +327,7 @@ public class Configuration {
       do {
         // If there is only one segment, do not filter it out even
         // if the source is not present, since we need to show something
-        boolean isOnlySegment = (result.isEmpty() && !testPlan.getParent(identifier).isPresent())
+        boolean isOnlySegment = (result.isEmpty() && !testPlan.getParent(identifier).isPresent());
         if (identifier.getSource().isPresent() || isOnlySegment) {
           result.add(identifier);
         }
