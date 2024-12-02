@@ -317,7 +317,11 @@ public class Configuration {
               .reduce((first, last) -> last)
               .orElse(null);
 
-      return path.stream().map(this::toName).filter(Objects::nonNull).collect(Collectors.joining());
+      return path.stream()
+          .map(this::toName)
+          .filter(Objects::nonNull)
+          .collect(Collectors.joining())
+          .trim();
     }
 
     private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
@@ -325,7 +329,10 @@ public class Configuration {
       List<TestIdentifier> result = new ArrayList<>();
 
       do {
-        if (identifier.getSource().isPresent()) {
+        // If there is only one segment, do not filter it out even
+        // if the source is not present, since we need to show something
+        boolean isOnlySegment = (result.isEmpty());
+        if (identifier.getSource().isPresent() || isOnlySegment) {
           result.add(identifier);
         }
         identifier = testPlan.getParent(identifier).orElse(null);
@@ -385,8 +392,11 @@ public class Configuration {
         case "test-template-invocation":
           name = colorTheme.container().format(":" + segment.getValue());
           break;
-        default:
+        case "suite": // Don't show junit5 suite as part of name
           name = null;
+          break;
+        default:
+          name = " " + segment.getValue();
           break;
       }
 
