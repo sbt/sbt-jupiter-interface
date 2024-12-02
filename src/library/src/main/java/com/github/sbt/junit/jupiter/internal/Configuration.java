@@ -317,7 +317,7 @@ public class Configuration {
               .reduce((first, last) -> last)
               .orElse(null);
 
-      return path.stream().map(this::toName).filter(Objects::nonNull).collect(Collectors.joining());
+      return path.stream().map(this::toName).filter(Objects::nonNull).collect(Collectors.joining()).trim();
     }
 
     private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
@@ -384,6 +384,9 @@ public class Configuration {
           break;
         case "test-template-invocation":
           name = colorTheme.container().format(":" + segment.getValue());
+          break;
+        case "suite": // Don't show junit5 suite as part of name
+          name = null;
           break;
         default:
           name = " " + segment.getValue();
