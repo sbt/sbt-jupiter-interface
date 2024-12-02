@@ -385,6 +385,14 @@ public class Configuration {
         case "test-template-invocation":
           name = colorTheme.container().format(":" + segment.getValue());
           break;
+        // Kotest JUnit segment types
+        // https://github.com/kotest/kotest/blob/1af8657ead54c6c6fc6f2ff8f54388a68bc2e7f6/kotest-runner/kotest-runner-junit5/src/jvmMain/kotlin/io/kotest/runner/junit/platform/uniqueids.kt#L19-L29
+        case "spec": // Same as "class" above
+          name = colorClassName(segment.getValue(), colorTheme.container());
+          break;
+        case "test": // same as "method" above
+          name = colorTheme.testMethod().format("#" + segment.getValue());
+          break;
         default:
           name = null;
           break;
