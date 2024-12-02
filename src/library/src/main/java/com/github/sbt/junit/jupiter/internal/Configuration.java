@@ -317,7 +317,11 @@ public class Configuration {
               .reduce((first, last) -> last)
               .orElse(null);
 
-      return path.stream().map(this::toName).filter(Objects::nonNull).collect(Collectors.joining()).trim();
+      return path.stream()
+          .map(this::toName)
+          .filter(Objects::nonNull)
+          .collect(Collectors.joining())
+          .trim();
     }
 
     private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
@@ -327,7 +331,7 @@ public class Configuration {
       do {
         // If there is only one segment, do not filter it out even
         // if the source is not present, since we need to show something
-        boolean isOnlySegment = (result.isEmpty() && !testPlan.getParent(identifier).isPresent());
+        boolean isOnlySegment = (result.isEmpty());
         if (identifier.getSource().isPresent() || isOnlySegment) {
           result.add(identifier);
         }
