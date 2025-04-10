@@ -26,7 +26,9 @@ import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class SummaryPrintingTestListener extends SummaryGeneratingListener {
 
   private final ColorTheme colorTheme;

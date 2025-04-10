@@ -139,12 +139,16 @@ public class OutputCapture {
 
     private static final String NAME = SharedProperty.class.getName();
 
-    /** @return A unique identifier for the current thread. */
+    /**
+     * @return A unique identifier for the current thread.
+     */
     String id() {
       return ":" + Thread.currentThread().getId();
     }
 
-    /** @return {@code True}, if output capture should be installed. */
+    /**
+     * @return {@code True}, if output capture should be installed.
+     */
     boolean install() {
 
       String property = Optional.ofNullable(System.getProperty(NAME)).orElse("");
@@ -159,7 +163,9 @@ public class OutputCapture {
       return true;
     }
 
-    /** @return {@code True}, if output capture should be uninstalled. */
+    /**
+     * @return {@code True}, if output capture should be uninstalled.
+     */
     boolean uninstall() {
 
       String property = Optional.ofNullable(System.getProperty(NAME)).orElse("");

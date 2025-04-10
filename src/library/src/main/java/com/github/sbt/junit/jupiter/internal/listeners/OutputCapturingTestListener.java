@@ -36,7 +36,9 @@ import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class OutputCapturingTestListener implements TestExecutionListener {
 
   private final Map<String, CapturedOutputStream> outputStreamMap = new ConcurrentHashMap<>();

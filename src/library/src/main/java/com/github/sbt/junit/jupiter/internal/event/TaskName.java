@@ -27,7 +27,9 @@ import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestIdentifier;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 class TaskName {
 
   private String fullyQualifiedName;
@@ -35,25 +37,33 @@ class TaskName {
   private String testName;
   private String invocation;
 
-  /** @return The fully qualified name of the test suite. */
+  /**
+   * @return The fully qualified name of the test suite.
+   */
   String fullyQualifiedName() {
 
     return fullyQualifiedName;
   }
 
-  /** @return An optional nested suite id (might be {@code null}). */
+  /**
+   * @return An optional nested suite id (might be {@code null}).
+   */
   String nestedSuiteId() {
 
     return nestedSuiteId;
   }
 
-  /** @return An optional test name (might be {@code null}). */
+  /**
+   * @return An optional test name (might be {@code null}).
+   */
   String testName() {
 
     return testName;
   }
 
-  /** @return An optional invocation for repeated tests. */
+  /**
+   * @return An optional invocation for repeated tests.
+   */
   String invocation() {
 
     return invocation;

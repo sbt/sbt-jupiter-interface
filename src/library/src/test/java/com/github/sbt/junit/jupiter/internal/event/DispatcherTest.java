@@ -45,7 +45,9 @@ import sbt.testing.Selector;
 import sbt.testing.Status;
 import sbt.testing.TestSelector;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class DispatcherTest {
 
   @Rule public final TestRunner testRunner = new TestRunner();

@@ -12,7 +12,9 @@ import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class TestHelper {
 
   /**
@@ -67,7 +69,9 @@ public class TestHelper {
     this.testPlan = testPlan;
   }
 
-  /** @return Descendant test identifiers from all available roots (test engines). */
+  /**
+   * @return Descendant test identifiers from all available roots (test engines).
+   */
   private Set<TestIdentifier> getAllDescendants() {
 
     return testPlan.getRoots().stream()

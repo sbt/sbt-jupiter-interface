@@ -30,7 +30,9 @@ import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.runner.RunWith;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 @RunWith(Enclosed.class)
 public class TaskNameTest {
 

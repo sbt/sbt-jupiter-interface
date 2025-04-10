@@ -50,7 +50,9 @@ import sbt.testing.Runner;
 import sbt.testing.Task;
 import sbt.testing.TaskDef;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class JupiterRunner implements Runner {
 
   private final StreamPair systemStreamPair;
