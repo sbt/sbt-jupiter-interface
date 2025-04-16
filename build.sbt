@@ -119,7 +119,7 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
     MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
   )
 }
-ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "test", "scripted")))
+ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "test", "scripted"), env = Map("SBT_OPTS" -> "-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED -J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED")))
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
