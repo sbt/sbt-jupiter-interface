@@ -49,7 +49,6 @@ lazy val library = (project in file("src/library"))
     ),
     testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
     bspEnabled := false,
-    sonatypeProfileName := (ThisBuild / sonatypeProfileName).value,
   )
 
 lazy val plugin = (project in file("src/plugin"))
@@ -76,7 +75,6 @@ lazy val plugin = (project in file("src/plugin"))
         case "2.12" => "1.5.8"
       }
     },
-    sonatypeProfileName := (ThisBuild / sonatypeProfileName).value,
   )
 
 lazy val root = (project in file("."))
@@ -85,7 +83,6 @@ lazy val root = (project in file("."))
     name := "jupiter-root",
     publish / skip := true,
     bspEnabled := false,
-    sonatypeProfileName := (ThisBuild / sonatypeProfileName).value,
   )
 
 def generateVersionFile = Def.task {
@@ -120,6 +117,10 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
   )
 }
 ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "test", "scripted")))
+ThisBuild / githubWorkflowBuildPostamble += WorkflowStep.Run(
+  commands = List("""rm -rf "$HOME/.ivy2/local""""),
+  name = Some("Clean up Ivy Local repo")
+)
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
@@ -135,20 +136,4 @@ ThisBuild / githubWorkflowPublish := Seq(
     )
   )
 )
-ThisBuild / sonatypeProfileName := "com.github.sbt"
-// So that publishLocal doesn't continuously create new versions
-def versionFmt(out: sbtdynver.GitDescribeOutput): String = {
-  val snapshotSuffix = if
-    (out.isSnapshot()) "-SNAPSHOT"
-  else ""
-    out.ref.dropPrefix + snapshotSuffix
-}
-
-def fallbackVersion(d: java.util.Date): String = s"HEAD-${sbtdynver.DynVer timestamp d}"
-
-ThisBuild / version := dynverGitDescribeOutput.value.mkVersion(versionFmt, fallbackVersion(dynverCurrentDate.value))
-ThisBuild / dynver := {
-  val d = new java.util.Date
-  sbtdynver.DynVer.getGitDescribeOutput(d).mkVersion(versionFmt, fallbackVersion(d))
-}
 Global / onChangedBuildSource := ReloadOnSourceChanges
