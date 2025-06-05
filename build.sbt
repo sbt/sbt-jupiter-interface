@@ -123,7 +123,10 @@ ThisBuild / githubWorkflowBuildPostamble += WorkflowStep.Run(
 )
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
-  Seq(RefPredicate.StartsWith(Ref.Tag("v")))
+  Seq(
+    RefPredicate.StartsWith(Ref.Tag("v")),
+    RefPredicate.Equals(Ref.Branch("main"))
+  )
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
     commands = List("ci-release"),
