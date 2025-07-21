@@ -1,7 +1,7 @@
 import sbt.*
 
 object Dependencies {
-  val junitJupiterVer = "5.13.3"
+  val junitJupiterVer = "5.13.4"
   // based on https://github.com/junit-team/junit5/releases/tag/r5.10.3 etc
   // The platform version seems to be "1." of the corresponding JUnit 5.x version.
   def junitPlatformVer = junitJupiterVer.replaceFirst("""^5\.""", "1.")
