@@ -26,10 +26,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Callable;
 import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.support.descriptor.ClassSource;
@@ -242,43 +239,48 @@ public class JupiterTestCollector {
 
       for (TestIdentifier identifier : testPlan.getChildren(rootIdentifier)) {
 
-        String fqn = fullyQualifiedName(identifier);
-        Selector selector = new SuiteSelector();
-
-        Item item = new Item();
-        item.fullyQualifiedClassName = fqn;
-        item.selectors.add(selector);
-        item.explicit = false;
-
-        result.discoveredTests.add(item);
+          fullyQualifiedName(identifier).ifPresent(fqn -> {
+    
+              Selector selector = new SuiteSelector();
+    
+              Item item = new Item();
+              item.fullyQualifiedClassName = fqn;
+              item.selectors.add(selector);
+              item.explicit = false;
+    
+              result.discoveredTests.add(item);
+          });
       }
     }
 
     return result;
   }
 
-  private String fullyQualifiedName(TestIdentifier testIdentifier) {
+  /**
+   * @return Optional.empty if the test is not a class or method
+   */
+  private Optional<String> fullyQualifiedName(TestIdentifier testIdentifier) {
 
     TestSource testSource = testIdentifier.getSource().orElse(null);
 
     if (testSource instanceof ClassSource) {
 
       ClassSource classSource = (ClassSource) testSource;
-      return classSource.getClassName();
+      return Optional.of(classSource.getClassName());
     }
 
     if (testSource instanceof MethodSource) {
 
       MethodSource methodSource = (MethodSource) testSource;
-      return methodSource.getClassName()
+      return Optional.of(methodSource.getClassName()
           + '#'
           + methodSource.getMethodName()
           + '('
           + methodSource.getMethodParameterTypes()
-          + ')';
+          + ')');
     }
 
-    return testIdentifier.getLegacyReportingName();
+    return Optional.empty();
   }
 
   /**
