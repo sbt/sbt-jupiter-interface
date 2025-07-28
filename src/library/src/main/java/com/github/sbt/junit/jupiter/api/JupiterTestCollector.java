@@ -239,26 +239,25 @@ public class JupiterTestCollector {
 
       for (TestIdentifier identifier : testPlan.getChildren(rootIdentifier)) {
 
-          fullyQualifiedName(identifier).ifPresent(fqn -> {
-    
-              Selector selector = new SuiteSelector();
-    
-              Item item = new Item();
-              item.fullyQualifiedClassName = fqn;
-              item.selectors.add(selector);
-              item.explicit = false;
-    
-              result.discoveredTests.add(item);
-          });
+        fullyQualifiedName(identifier)
+            .ifPresent(
+                fqn -> {
+                  Selector selector = new SuiteSelector();
+
+                  Item item = new Item();
+                  item.fullyQualifiedClassName = fqn;
+                  item.selectors.add(selector);
+                  item.explicit = false;
+
+                  result.discoveredTests.add(item);
+                });
       }
     }
 
     return result;
   }
 
-  /**
-   * @return Optional.empty if the test is not a class or method
-   */
+  /** @return Optional.empty if the test is not a class or method */
   private Optional<String> fullyQualifiedName(TestIdentifier testIdentifier) {
 
     TestSource testSource = testIdentifier.getSource().orElse(null);
@@ -272,12 +271,13 @@ public class JupiterTestCollector {
     if (testSource instanceof MethodSource) {
 
       MethodSource methodSource = (MethodSource) testSource;
-      return Optional.of(methodSource.getClassName()
-          + '#'
-          + methodSource.getMethodName()
-          + '('
-          + methodSource.getMethodParameterTypes()
-          + ')');
+      return Optional.of(
+          methodSource.getClassName()
+              + '#'
+              + methodSource.getMethodName()
+              + '('
+              + methodSource.getMethodParameterTypes()
+              + ')');
     }
 
     return Optional.empty();
