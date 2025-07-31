@@ -42,6 +42,7 @@ ThisBuild / libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" 
 
  sbt Plugin      | JUnit Platform | JUnit Engine
 :----------------|:---------------|:-------------
+ 0.15.x          | 1.13.x         | 5.13.x
  0.14.x          | 1.12.x         | 5.12.x
  0.13.x          | 1.11.x         | 5.11.x
  0.12.x          | 1.10.x         | 5.10.x
