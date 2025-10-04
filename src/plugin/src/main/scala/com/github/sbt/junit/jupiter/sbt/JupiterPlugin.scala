@@ -96,7 +96,7 @@ object JupiterPlugin extends AutoPlugin {
    */
   private def collectTests = Def.task[Seq[TestDefinition]] {
     val classes = classDirectory.value
-    val classpath = dependencyClasspath.value.map(_.data.toURI.toURL).toArray :+ classes.toURI.toURL
+    val classpath = JupiterPluginCompat.dependencyClasspathUrlArray.value :+ classes.toURI.toURL
 
     val collector = new JupiterTestCollector.Builder()
       .withClassDirectory(classes)

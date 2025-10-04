@@ -76,7 +76,7 @@ jobs:
         run: sbt '++ ${{ matrix.scala }}' githubWorkflowCheck
 
       - shell: bash
-        run: sbt '++ ${{ matrix.scala }}' javafmtCheckAll test scripted
+        run: sbt '++ ${{ matrix.scala }}' javafmtCheckAll '+ test' scripted
 
       - name: Clean up Ivy Local repo
         shell: bash
