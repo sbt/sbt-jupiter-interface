@@ -62,7 +62,7 @@ object JupiterPlugin extends AutoPlugin {
   override def requires = JvmPlugin
   override def trigger: PluginTrigger = allRequirements
 
-  override def globalSettings: Seq[Def.Setting[_]] = Seq(
+  override def globalSettings: Seq[Def.Setting[?]] = Seq(
 
     jupiterVersion := readResourceProperty("jupiter-interface.properties", "version"),
     junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
@@ -70,7 +70,7 @@ object JupiterPlugin extends AutoPlugin {
     junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version")
   )
 
-  override def projectSettings: Seq[Def.Setting[_]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
+  override def projectSettings: Seq[Def.Setting[?]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
 
   /**
    * Configuration scope specific plugin settings.
@@ -79,7 +79,7 @@ object JupiterPlugin extends AutoPlugin {
    *
    * By default this is applied to the Test configuration only.
    */
-  def scopedSettings: Seq[Def.Setting[_]] = Seq(
+  def scopedSettings: Seq[Def.Setting[?]] = Seq(
     definedTests ++= collectTests.value
   )
 
