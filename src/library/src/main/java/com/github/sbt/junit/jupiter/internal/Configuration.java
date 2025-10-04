@@ -104,7 +104,8 @@ public class Configuration {
         .map(
             className -> {
               try {
-                final Object listener = classLoader.loadClass(className).newInstance();
+                final Object listener =
+                    classLoader.loadClass(className).getDeclaredConstructor().newInstance();
                 return (TestExecutionListener) listener;
               } catch (Exception e) {
                 throw new RuntimeException(e);
