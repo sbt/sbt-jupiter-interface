@@ -57,7 +57,15 @@ lazy val plugin = (project in file("src/plugin"))
   .settings(
     commonSettings,
     name := "sbt-jupiter-interface",
-    Compile / scalacOptions ++= Seq("-Xlint", "-Xfatal-warnings"),
+    Compile / scalacOptions ++= Seq("-Xlint"),
+    Compile / scalacOptions ++= {
+      scalaBinaryVersion.value match {
+        case "2.12" =>
+          Seq("-Xfatal-warnings")
+        case _ =>
+          Nil
+      }
+    },
     scriptedBufferLog := false,
     scriptedLaunchOpts ++= Seq(
       s"-Dproject.version=${version.value}",
@@ -73,8 +81,10 @@ lazy val plugin = (project in file("src/plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" => "1.5.8"
+        case "3" => "2.0.0-RC6"
       }
     },
+    crossScalaVersions += "3.7.3"
   )
 
 lazy val root = (project in file("."))
@@ -116,7 +126,7 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
     MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
   )
 }
-ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "test", "scripted")))
+ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "+ test", "scripted")))
 ThisBuild / githubWorkflowBuildPostamble += WorkflowStep.Run(
   commands = List("""rm -rf "$HOME/.ivy2/local""""),
   name = Some("Clean up Ivy Local repo")
