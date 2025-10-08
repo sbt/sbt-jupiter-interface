@@ -24,9 +24,9 @@ ThisBuild / scalaVersion := "2.12.20"
 
 lazy val commonSettings: Seq[Setting[_]] = Def.settings(
   Compile / javacOptions ++= Seq(
-    "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "1.8", "-target", "1.8"
+    "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "17", "-target", "17"
   ),
-  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "1.8"),
+  Compile / doc / javacOptions := Seq("-encoding", "UTF-8", "-source", "17"),
 )
 
 lazy val library = (project in file("src/library"))
@@ -93,8 +93,8 @@ lazy val plugin = (project in file("src/plugin"))
     scriptedBufferLog := false,
     scriptedLaunchOpts ++= Seq(
       s"-Dproject.version=${version.value}",
-      s"-Djunit.jupiter.version=${junitJupiterVer}",
-      s"-Djunit.platform.version=${junitPlatformVer}"
+      s"-Djunit.jupiter.version=${junitVersion}",
+      s"-Djunit.platform.version=${junitVersion}"
     ),
     scriptedDependencies := {
       val () = publishLocal.value
@@ -123,9 +123,9 @@ def generateVersionFile = Def.task {
   val version = (library / Keys.version).value
   val file = (Compile / resourceManaged).value / "jupiter-interface.properties"
   val content = s"version=$version\n" +
-    s"junit.platform.version=${junitPlatformVer}\n" +
-    s"junit.jupiter.version=${junitJupiterVer}\n" +
-    s"junit.vintage.version=${junitVintageVer}\n"
+    s"junit.platform.version=${junitVersion}\n" +
+    s"junit.jupiter.version=${junitVersion}\n" +
+    s"junit.vintage.version=${junitVersion}\n"
   IO.write(file, content)
   Seq(file)
 }
@@ -142,11 +142,10 @@ ThisBuild / scmInfo := Some(
   )
 )
 ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest", "windows-latest")
-ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.zulu("8"), JavaSpec.temurin("17"))
+ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.temurin("17"))
 ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
   val sv = (ThisBuild / scalaVersion).value
   List(
-    MatrixExclude(Map("scala" -> sv, "java" -> "zulu@8", "os" -> "macos-latest")),
     MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
   )
 }

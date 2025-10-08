@@ -20,7 +20,6 @@
 name := "test-project"
 libraryDependencies ++= Seq(
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test,
-  "org.junit.platform" % "junit-platform-runner" % JupiterKeys.junitPlatformVersion.value % Test,
   "com.github.sbt" % "junit-interface" % "0.13.3" % Test,
   "junit" % "junit" % "4.13.2" % Test,
 )
@@ -37,7 +36,6 @@ checkTestDefinitions := {
 
   val expected = Map(
     "interop.JUnit4Test" -> "com.novocode.junit",
-    "interop.JUnitVintageTest" -> "com.github.sbt.junit.jupiter",
     "interop.JUnitJupiterTest" -> "com.github.sbt.junit.jupiter"
   )
 
@@ -48,5 +46,5 @@ checkTestDefinitions := {
     assert(count == 1, s"Expected test <$testName> to have annotation <$annotationName>")
   }
 
-  assert(definitions.length == 3, "Found more than the 3 tests (" + definitions.length + ")!")
+  assert(definitions.length == 2, "Found more than the 2 tests (" + definitions.length + ")!")
 }

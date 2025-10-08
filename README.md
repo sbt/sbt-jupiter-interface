@@ -40,24 +40,25 @@ ThisBuild / libraryDependencies += "com.github.sbt.junit" % "jupiter-interface" 
 
 ## Releases
 
- sbt Plugin      | JUnit Platform | JUnit Engine
-:----------------|:---------------|:-------------
- 0.16.x          | 1.14.x         | 5.14.x
- 0.15.x          | 1.13.x         | 5.13.x
- 0.14.x          | 1.12.x         | 5.12.x
- 0.13.x          | 1.11.x         | 5.11.x
- 0.12.x          | 1.10.x         | 5.10.x
- 0.11.x          | 1.9.x          | 5.9.x
- 0.10.x          | 1.8.x          | 5.8.x
- 0.9.x           | 1.7.x          | 5.7.x
- 0.8.x           | 1.1.x          | 5.1.x
- 0.7.x           | 1.1.0          | 5.1.0
- 0.6.x           | 1.0.0          | 5.0.0
- 0.5.x           | 1.0.0          | 5.0.0
- 0.4.x           | 1.0.0-RC2      | 5.0.0-RC2
- 0.3.x           | 1.0.0-M6       | 5.0.0-M6
- 0.2.x           | 1.0.0-M5       | 5.0.0-M5
- 0.1.x           | 1.0.0-M4       | 5.0.0-M4
+sbt Plugin | JUnit Platform | JUnit Engine | Minimum Java version |
+:-----------|:---------------|:-------------|:---------------------|
+ 0.17.x     | 6.0.x          | 6.0.x        | 17+                  |
+ 0.16.x     | 1.14.x         | 5.14.x       | 8+                   |
+ 0.15.x     | 1.13.x         | 5.13.x       | 8+                   |
+ 0.14.x     | 1.12.x         | 5.12.x       | 8+                   |
+ 0.13.x     | 1.11.x         | 5.11.x       | 8+                   |
+ 0.12.x     | 1.10.x         | 5.10.x       | 8+                   |
+ 0.11.x     | 1.9.x          | 5.9.x        | 8+                   |
+ 0.10.x     | 1.8.x          | 5.8.x        | 8+                   |
+ 0.9.x      | 1.7.x          | 5.7.x        | 8+                   |
+ 0.8.x      | 1.1.x          | 5.1.x        | 8+                   |
+ 0.7.x      | 1.1.0          | 5.1.0        | 8+                   |
+ 0.6.x      | 1.0.0          | 5.0.0        | 8+                   |
+ 0.5.x      | 1.0.0          | 5.0.0        | 8+                   |
+ 0.4.x      | 1.0.0-RC2      | 5.0.0-RC2    | 8+                   |
+ 0.3.x      | 1.0.0-M6       | 5.0.0-M6     | 8+                   |
+ 0.2.x      | 1.0.0-M5       | 5.0.0-M5     | 8+                   |
+ 0.1.x      | 1.0.0-M4       | 5.0.0-M4     | 8+                   |
 
 **Note** `0.9.0`+ artifacts are published on Maven Central via Sonatype OSS. Previous versions were available via <https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/net.aichler/sbt-jupiter-interface/scala_2.10/sbt_0.13/>, whose underlying host has migrated from Bintray to Scala Center Artifactory instance.
 
