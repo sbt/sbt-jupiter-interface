@@ -81,9 +81,7 @@ lazy val plugin = (project in file("src/plugin"))
         "basic" -> "dispatcher",
         "basic" -> "finds-test-from-extended-config",
         "basic" -> "finds-test-from-it-config",
-        "basic" -> "run-listener",
         "basic" -> "tags",
-        "interop" -> "reports-missing-runtime"
       )
       val args = values.filterNot(exclude).map { case (x1, x2) => s"${x1}/${x2}" }
       val arg = args.mkString(" ", " ", "")
