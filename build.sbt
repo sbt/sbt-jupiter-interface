@@ -66,6 +66,30 @@ lazy val plugin = (project in file("src/plugin"))
           Nil
       }
     },
+    TaskKey[Unit]("scriptedTestSbt2") := Def.taskDyn {
+      val values = sbtTestDirectory.value
+        .listFiles(_.isDirectory)
+        .flatMap { dir1 =>
+          dir1.listFiles(_.isDirectory).map { dir2 =>
+            dir1.getName -> dir2.getName
+          }
+        }
+        .toList
+      val log = streams.value.log
+      // TODO enable all tests
+      val exclude: Set[(String, String)] = Set(
+        "basic" -> "dispatcher",
+        "basic" -> "finds-test-from-extended-config",
+        "basic" -> "finds-test-from-it-config",
+        "basic" -> "run-listener",
+        "basic" -> "tags",
+        "interop" -> "reports-missing-runtime"
+      )
+      val args = values.filterNot(exclude).map { case (x1, x2) => s"${x1}/${x2}" }
+      val arg = args.mkString(" ", " ", "")
+      log.info("scripted" + arg)
+      scripted.toTask(arg)
+    }.value,
     scriptedBufferLog := false,
     scriptedLaunchOpts ++= Seq(
       s"-Dproject.version=${version.value}",
@@ -125,7 +149,7 @@ ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
     MatrixExclude(Map("scala" -> sv, "java" -> "temurin@17", "os" -> "windows-latest")),
   )
 }
-ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "+ test", "scripted")))
+ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("javafmtCheckAll", "+ test", "scripted", "++ 3.x", "scriptedTestSbt2")))
 ThisBuild / githubWorkflowBuildPostamble += WorkflowStep.Run(
   commands = List("""rm -rf "$HOME/.ivy2/local""""),
   name = Some("Clean up Ivy Local repo")
