@@ -25,6 +25,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -139,9 +143,36 @@ public class OutputCapture {
 
     private static final String NAME = SharedProperty.class.getName();
 
+    private static final MethodHandle threadIdMethodHandle;
+
+    static {
+      final String methodName;
+      if (Arrays.stream(Thread.class.getMethods())
+          .filter(x -> x.getName() == "threadId")
+          .findFirst()
+          .isPresent()) {
+        methodName = "threadId";
+      } else {
+        methodName = "getId";
+      }
+
+      try {
+        threadIdMethodHandle =
+            MethodHandles.lookup()
+                .findVirtual(Thread.class, methodName, MethodType.methodType(Long.TYPE));
+      } catch (NoSuchMethodException | IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
     /** @return A unique identifier for the current thread. */
     String id() {
-      return ":" + Thread.currentThread().getId();
+      try {
+        long value = (long) threadIdMethodHandle.invoke(Thread.currentThread());
+        return ":" + value;
+      } catch (Throwable e) {
+        throw new RuntimeException(e);
+      }
     }
 
     /** @return {@code True}, if output capture should be installed. */
