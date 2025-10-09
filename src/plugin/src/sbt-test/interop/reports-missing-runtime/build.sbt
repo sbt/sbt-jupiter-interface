@@ -27,14 +27,14 @@ libraryDependencies ++= Seq(
  * library is missing.
  */
 TaskKey[Unit]("checkDefinedTestsThrowsException") := {
-  (Test / definedTests).result.value match {
-    case Inc(cause:Incomplete) =>
+  (Test / definedTests).result.value.toEither match {
+    case Left(cause:Incomplete) =>
       val actualMessage = cause.causes.flatMap(_.causes).headOption.flatMap(_.directCause).map(_.getMessage).getOrElse("")
       val expectedMessage = "Found at least one JUnit 5 test"
       assert(actualMessage.startsWith(expectedMessage),
         s"Expected an exception containing a message starting with `$expectedMessage` (actual: `$actualMessage`)")
       Seq.empty
-    case Value(_:Seq[TestDefinition]) =>
+    case Right(_:Seq[TestDefinition]) =>
       sys.error(s"Expected task `definedTests` to throw an exception due to " +
         "`jupiter-interface` not being on the test-classpath.")
   }
