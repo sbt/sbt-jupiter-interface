@@ -3,7 +3,7 @@ Jupiter Interface
 
 [![Build Status](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml/badge.svg)](https://github.com/sbt/sbt-jupiter-interface/actions/workflows/ci.yml)
 [![License](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/sbt/sbt-jupiter-interface/main/LICENSE)
-![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.sbt.junit/jupiter-interface?server=https%3A%2F%2Foss.sonatype.org)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.sbt.junit/jupiter-interface)](https://central.sonatype.com/artifact/com.github.sbt.junit/jupiter-interface)
 
 An implementation of [sbt's test interface](https://github.com/sbt/test-interface) for [JUnit Jupiter](http://junit.org/junit5). This allows you to run JUnit 5 tests from [sbt](http://www.scala-sbt.org/).
 
@@ -14,7 +14,7 @@ The code is split into:
 
 ## Usage
 
-![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.sbt.junit/jupiter-interface?server=https%3A%2F%2Foss.sonatype.org)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.sbt.junit/jupiter-interface)](https://central.sonatype.com/artifact/com.github.sbt.junit/jupiter-interface)
 
 Add the following line to `./project/plugins.sbt`:
 
