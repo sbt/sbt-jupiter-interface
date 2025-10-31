@@ -1,7 +1,7 @@
 import sbt.*
 
 object Dependencies {
-  val junitVersion = "6.0.0"
+  val junitVersion = "6.0.1"
   val testInterfaceVer = "1.0"
 
   val junitPlatformLauncher = "org.junit.platform" % "junit-platform-launcher" % junitVersion
