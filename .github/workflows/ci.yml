@@ -38,14 +38,14 @@ jobs:
 
       - name: Configure pagefile for Windows
         if: contains(runner.os, 'windows')
-        uses: al-cheb/configure-pagefile-action@v1.4
+        uses: al-cheb/configure-pagefile-action@v1.5
         with:
           minimum-size: 2GB
           maximum-size: 8GB
           disk-root: 'C:'
 
       - name: Checkout current branch (full)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -76,7 +76,7 @@ jobs:
         run: tar cf targets.tar target src/library/target src/plugin/target project/target
 
       - name: Upload target directories
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: target-${{ matrix.os }}-${{ matrix.scala }}-${{ matrix.java }}
           path: targets.tar
@@ -98,14 +98,14 @@ jobs:
 
       - name: Configure pagefile for Windows
         if: contains(runner.os, 'windows')
-        uses: al-cheb/configure-pagefile-action@v1.4
+        uses: al-cheb/configure-pagefile-action@v1.5
         with:
           minimum-size: 2GB
           maximum-size: 8GB
           disk-root: 'C:'
 
       - name: Checkout current branch (full)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -121,7 +121,7 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Download target directories (2.12.20)
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: target-${{ matrix.os }}-2.12.20-${{ matrix.java }}
 
