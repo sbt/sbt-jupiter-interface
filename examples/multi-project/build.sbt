@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.12.20"
+ThisBuild / scalaVersion := "2.12.21"
 ThisBuild / libraryDependencies ++= Seq(
   "com.github.sbt.junit" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
 )
