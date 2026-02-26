@@ -106,7 +106,7 @@ lazy val plugin = (project in file("src/plugin"))
         case "3" => "2.0.0-RC9"
       }
     },
-    crossScalaVersions += "3.8.1"
+    crossScalaVersions += "3.8.2"
   )
 
 lazy val root = (project in file("."))
