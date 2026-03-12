@@ -30,6 +30,7 @@ import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.UniqueId.Segment;
 import org.junit.platform.engine.support.descriptor.ClassSource;
+import org.junit.platform.engine.support.descriptor.ClasspathResourceSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
@@ -177,6 +178,14 @@ public class Configuration {
 
     if (testSource instanceof MethodSource) {
       return ((MethodSource) testSource).getClassName();
+    }
+
+    if (testSource instanceof ClasspathResourceSource) {
+      return UniqueId.parse(identifier.getUniqueId()).getSegments().stream()
+          .filter(s -> "suite".equals(s.getType()))
+          .map(Segment::getValue)
+          .findFirst()
+          .orElse(((ClasspathResourceSource) testSource).getClasspathResourceName());
     }
 
     throw new RuntimeException("Test identifier with unknown source: " + identifier);
