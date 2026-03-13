@@ -22,7 +22,6 @@ emptyLogFile := {
 
 assertNoWarnings := {
   val log = IO.read(file("target/test.log"))
-  println(log)
   assert(
     !log.contains("WARNING: TestExecutionListener [com.github.sbt.junit.jupiter.internal.listeners.FlatPrintingTestListener] threw exception for method: executionFinished"),
     "Expected no warnings in the test log"
