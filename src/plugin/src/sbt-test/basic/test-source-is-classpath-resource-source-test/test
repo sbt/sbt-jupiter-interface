@@ -1,0 +1,6 @@
+# empty log file
+> emptyLogFile
+# run tests expect failure
+-> test
+# assert no warning
+> assertNoWarning
