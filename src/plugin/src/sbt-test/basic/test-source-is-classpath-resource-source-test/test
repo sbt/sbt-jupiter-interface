@@ -3,4 +3,4 @@
 # run tests expect failure
 -> test
 # assert no warning
-> assertNoWarning
+> assertNoWarnings
