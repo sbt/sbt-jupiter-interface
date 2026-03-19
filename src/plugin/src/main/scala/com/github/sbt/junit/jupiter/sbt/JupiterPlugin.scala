@@ -78,7 +78,12 @@ object JupiterPlugin extends AutoPlugin {
     jupiterVersion := readResourceProperty("jupiter-interface.properties", "version"),
     junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
     junitJupiterVersion := readResourceProperty("jupiter-interface.properties", "junit.jupiter.version"),
-    junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version")
+    junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version"),
+    jupiterTestDiscoveryTestEngineAutoRegistrationEnabled := true,
+    jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled := true,
+    jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled := true,
+    jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled := true,
+    jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled := true
   )
 
   override def projectSettings: Seq[Def.Setting[?]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
@@ -98,12 +103,7 @@ object JupiterPlugin extends AutoPlugin {
    * Adds this plugins test framework to the list of testFrameworks.
    */
   private def unscopedSettings: Seq[Def.Setting[?]] = Seq(
-    testFrameworks += jupiterTestFramework,
-    jupiterTestDiscoveryTestEngineAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled := true
+    testFrameworks += jupiterTestFramework
   )
 
   /*
