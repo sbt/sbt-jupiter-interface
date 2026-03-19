@@ -18,6 +18,16 @@
  */
 package com.github.sbt.junit.jupiter.api;
 
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.concurrent.Callable;
 import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
@@ -30,17 +40,6 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import sbt.testing.Fingerprint;
 import sbt.testing.Selector;
 import sbt.testing.SuiteSelector;
-
-import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.concurrent.Callable;
-
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
 
 /**
  * Collects available tests via a {@link LauncherDiscoveryRequest}.
@@ -207,8 +206,8 @@ public class JupiterTestCollector {
     }
 
     /**
-     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test engines.
-     * Test engines need to be present on the classpath to be registered automatically.
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test
+     * engines. Test engines need to be present on the classpath to be registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
@@ -219,8 +218,9 @@ public class JupiterTestCollector {
     }
 
     /**
-     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of launcher session listeners.
-     * Launcher session listeners need to be present on the classpath to be registered automatically.
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of
+     * launcher session listeners. Launcher session listeners need to be present on the classpath to
+     * be registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
@@ -231,8 +231,9 @@ public class JupiterTestCollector {
     }
 
     /**
-     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of launcher discovery listeners.
-     * Launcher discovery listeners need to be present on the classpath to be registered automatically.
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of
+     * launcher discovery listeners. Launcher discovery listeners need to be present on the
+     * classpath to be registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
@@ -243,8 +244,9 @@ public class JupiterTestCollector {
     }
 
     /**
-     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test execution listeners.
-     * Test execution listeners need to be present on the classpath to be registered automatically.
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test
+     * execution listeners. Test execution listeners need to be present on the classpath to be
+     * registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
@@ -255,8 +257,9 @@ public class JupiterTestCollector {
     }
 
     /**
-     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of post discovery filters.
-     * Post discovery filters need to be present on the classpath to be registered automatically.
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of post
+     * discovery filters. Post discovery filters need to be present on the classpath to be
+     * registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
@@ -288,10 +291,14 @@ public class JupiterTestCollector {
     this.classDirectory = builder.classDirectory;
     this.classLoader = builder.classLoader;
     this.testEngineAutoRegistrationEnabled = builder.testEngineAutoRegistrationEnabled;
-    this.launcherSessionListenerAutoRegistrationEnabled = builder.launcherSessionListenerAutoRegistrationEnabled;
-    this.launcherDiscoveryListenerAutoRegistrationEnabled = builder.launcherDiscoveryListenerAutoRegistrationEnabled;
-    this.testExecutionListenerAutoRegistrationEnabled = builder.testExecutionListenerAutoRegistrationEnabled;
-    this.postDiscoveryFilterAutoRegistrationEnabled = builder.postDiscoveryFilterAutoRegistrationEnabled;
+    this.launcherSessionListenerAutoRegistrationEnabled =
+        builder.launcherSessionListenerAutoRegistrationEnabled;
+    this.launcherDiscoveryListenerAutoRegistrationEnabled =
+        builder.launcherDiscoveryListenerAutoRegistrationEnabled;
+    this.testExecutionListenerAutoRegistrationEnabled =
+        builder.testExecutionListenerAutoRegistrationEnabled;
+    this.postDiscoveryFilterAutoRegistrationEnabled =
+        builder.postDiscoveryFilterAutoRegistrationEnabled;
   }
 
   /**
@@ -310,11 +317,15 @@ public class JupiterTestCollector {
             .selectors(selectDirectory(classDirectory))
             .build();
 
-    LauncherConfig config = LauncherConfig.builder()
+    LauncherConfig config =
+        LauncherConfig.builder()
             .enableTestEngineAutoRegistration(testEngineAutoRegistrationEnabled)
-            .enableLauncherSessionListenerAutoRegistration(launcherSessionListenerAutoRegistrationEnabled)
-            .enableLauncherDiscoveryListenerAutoRegistration(launcherDiscoveryListenerAutoRegistrationEnabled)
-            .enableTestExecutionListenerAutoRegistration(testExecutionListenerAutoRegistrationEnabled)
+            .enableLauncherSessionListenerAutoRegistration(
+                launcherSessionListenerAutoRegistrationEnabled)
+            .enableLauncherDiscoveryListenerAutoRegistration(
+                launcherDiscoveryListenerAutoRegistrationEnabled)
+            .enableTestExecutionListenerAutoRegistration(
+                testExecutionListenerAutoRegistrationEnabled)
             .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled)
             .build();
 
