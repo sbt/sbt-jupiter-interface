@@ -18,8 +18,18 @@
  */
 package com.github.sbt.junit.jupiter.api;
 
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
+import org.junit.platform.engine.TestSource;
+import org.junit.platform.engine.support.descriptor.ClassSource;
+import org.junit.platform.engine.support.descriptor.MethodSource;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestIdentifier;
+import org.junit.platform.launcher.TestPlan;
+import org.junit.platform.launcher.core.LauncherConfig;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import org.junit.platform.launcher.core.LauncherFactory;
+import sbt.testing.Fingerprint;
+import sbt.testing.Selector;
+import sbt.testing.SuiteSelector;
 
 import java.io.File;
 import java.net.URL;
@@ -28,17 +38,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.Callable;
-import org.junit.platform.engine.TestSource;
-import org.junit.platform.engine.support.descriptor.ClassSource;
-import org.junit.platform.engine.support.descriptor.MethodSource;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.TestIdentifier;
-import org.junit.platform.launcher.TestPlan;
-import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
-import org.junit.platform.launcher.core.LauncherFactory;
-import sbt.testing.Fingerprint;
-import sbt.testing.Selector;
-import sbt.testing.SuiteSelector;
+
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
 
 /**
  * Collects available tests via a {@link LauncherDiscoveryRequest}.
@@ -50,6 +52,12 @@ public class JupiterTestCollector {
   private final ClassLoader classLoader;
   private final URL[] runtimeClassPath;
   private final File classDirectory;
+
+  private final boolean testEngineAutoRegistrationEnabled;
+  private final boolean launcherSessionListenerAutoRegistrationEnabled;
+  private final boolean launcherDiscoveryListenerAutoRegistrationEnabled;
+  private final boolean testExecutionListenerAutoRegistrationEnabled;
+  private final boolean postDiscoveryFilterAutoRegistrationEnabled;
 
   /**
    * Executes a JUnit Jupiter launcher discovery request.
@@ -155,6 +163,12 @@ public class JupiterTestCollector {
     private URL[] runtimeClassPath = new URL[0];
     private File classDirectory;
 
+    private boolean testEngineAutoRegistrationEnabled = true;
+    private boolean launcherSessionListenerAutoRegistrationEnabled = true;
+    private boolean launcherDiscoveryListenerAutoRegistrationEnabled = true;
+    private boolean testExecutionListenerAutoRegistrationEnabled = true;
+    private boolean postDiscoveryFilterAutoRegistrationEnabled = true;
+
     /**
      * Specifies the classloader which should be used by the collector.
      *
@@ -193,6 +207,66 @@ public class JupiterTestCollector {
     }
 
     /**
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test engines.
+     * Test engines need to be present on the classpath to be registered automatically.
+     *
+     * @param value enable/disable auto registration
+     * @return This builder.
+     */
+    public Builder withTestEngineAutoRegistrationEnabled(boolean value) {
+      this.testEngineAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of launcher session listeners.
+     * Launcher session listeners need to be present on the classpath to be registered automatically.
+     *
+     * @param value enable/disable auto registration
+     * @return This builder.
+     */
+    public Builder withLauncherSessionListenerAutoRegistrationEnabled(boolean value) {
+      this.launcherSessionListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of launcher discovery listeners.
+     * Launcher discovery listeners need to be present on the classpath to be registered automatically.
+     *
+     * @param value enable/disable auto registration
+     * @return This builder.
+     */
+    public Builder withLauncherDiscoveryListenerAutoRegistrationEnabled(boolean value) {
+      this.launcherDiscoveryListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test execution listeners.
+     * Test execution listeners need to be present on the classpath to be registered automatically.
+     *
+     * @param value enable/disable auto registration
+     * @return This builder.
+     */
+    public Builder withTestExecutionListenerAutoRegistrationEnabled(boolean value) {
+      this.testExecutionListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of post discovery filters.
+     * Post discovery filters need to be present on the classpath to be registered automatically.
+     *
+     * @param value enable/disable auto registration
+     * @return This builder.
+     */
+    public Builder withPostDiscoveryFilterAutoRegistrationEnabled(boolean value) {
+      this.postDiscoveryFilterAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    /**
      * Creates an instance of {@link JupiterTestCollector}.
      *
      * @return A new collector.
@@ -213,6 +287,11 @@ public class JupiterTestCollector {
     this.runtimeClassPath = builder.runtimeClassPath;
     this.classDirectory = builder.classDirectory;
     this.classLoader = builder.classLoader;
+    this.testEngineAutoRegistrationEnabled = builder.testEngineAutoRegistrationEnabled;
+    this.launcherSessionListenerAutoRegistrationEnabled = builder.launcherSessionListenerAutoRegistrationEnabled;
+    this.launcherDiscoveryListenerAutoRegistrationEnabled = builder.launcherDiscoveryListenerAutoRegistrationEnabled;
+    this.testExecutionListenerAutoRegistrationEnabled = builder.testExecutionListenerAutoRegistrationEnabled;
+    this.postDiscoveryFilterAutoRegistrationEnabled = builder.postDiscoveryFilterAutoRegistrationEnabled;
   }
 
   /**
@@ -231,7 +310,15 @@ public class JupiterTestCollector {
             .selectors(selectDirectory(classDirectory))
             .build();
 
-    TestPlan testPlan = LauncherFactory.create().discover(request);
+    LauncherConfig config = LauncherConfig.builder()
+            .enableTestEngineAutoRegistration(testEngineAutoRegistrationEnabled)
+            .enableLauncherSessionListenerAutoRegistration(launcherSessionListenerAutoRegistrationEnabled)
+            .enableLauncherDiscoveryListenerAutoRegistration(launcherDiscoveryListenerAutoRegistrationEnabled)
+            .enableTestExecutionListenerAutoRegistration(testExecutionListenerAutoRegistrationEnabled)
+            .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled)
+            .build();
+
+    TestPlan testPlan = LauncherFactory.create(config).discover(request);
 
     Result result = new Result();
 
