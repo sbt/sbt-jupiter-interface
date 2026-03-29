@@ -200,7 +200,7 @@ public class JupiterRunner implements Runner {
       return selectClass(testClassName);
     }
 
-    private Filter[] testFilters(Dispatcher dispatcher) {
+    private Filter<?>[] testFilters(Dispatcher dispatcher) {
 
       List<Filter<?>> filters = new ArrayList<>();
 
@@ -215,7 +215,7 @@ public class JupiterRunner implements Runner {
       TestFilter.create(options.getTestFilters(), dispatcher).ifPresent(filters::add);
       GlobFilter.create(options.getGlobPatterns(), dispatcher).ifPresent(filters::add);
 
-      return filters.toArray(new Filter[filters.size()]);
+      return filters.toArray(new Filter<?>[filters.size()]);
     }
   }
 
