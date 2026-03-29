@@ -40,7 +40,7 @@ import sbt.testing.TaskDef;
 
 /** @author Michael Aichler */
 @SuppressWarnings("WeakerAccess")
-public class Configuration {
+public final class Configuration {
 
   private final Options options;
   private final TestLogger logger;
