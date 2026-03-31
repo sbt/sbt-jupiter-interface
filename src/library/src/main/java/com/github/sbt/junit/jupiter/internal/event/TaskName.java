@@ -182,6 +182,7 @@ class TaskName {
   }
 
   /**
+   * @param identifier The test identifier.
    * @param id The unique test identifier.
    * @return A string representation of the current invocation (might be {@code null}).
    */
@@ -195,9 +196,8 @@ class TaskName {
 
       switch (last.getType()) {
         case "dynamic-test":
-          return identifier.getDisplayName();
         case "test-template-invocation":
-          return last.getValue().replace("#", "");
+          return identifier.getDisplayName();
       }
     }
 

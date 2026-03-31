@@ -30,11 +30,11 @@ public class FlatPrintingTestListenerFormatterTest {
 
     return new Object[][] {
       {"jupiter.samples.NestedTests", "testOfFirstNestedClass", "{0}$First#{1}()"},
-      {"jupiter.samples.RepeatedTests", "repeatedTest", "{0}#{1}():#1"},
+      {"jupiter.samples.RepeatedTests", "repeatedTest", "{0}#{1}():repetition 1 of 10"},
       {
         "jupiter.samples.RepeatedTests",
         "repeatedTestWithRepetitionInfo",
-        "{0}#{1}(org.junit.jupiter.api.RepetitionInfo):#1"
+        "{0}#{1}(org.junit.jupiter.api.RepetitionInfo):repetition 1 of 5"
       },
       {"jupiter.samples.SimpleTests", "firstTestMethod", "{0}#{1}()"},
       {

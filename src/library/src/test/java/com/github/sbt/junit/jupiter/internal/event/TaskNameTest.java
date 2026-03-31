@@ -117,7 +117,7 @@ public class TaskNameTest {
       TestIdentifier identifier = TestIdentifier.from(descriptor);
 
       String result = TaskName.invocation(identifier, id);
-      assertThat(result, equalTo("1"));
+      assertThat(result, equalTo("myTestTemplateInvocation"));
     }
 
     @Test

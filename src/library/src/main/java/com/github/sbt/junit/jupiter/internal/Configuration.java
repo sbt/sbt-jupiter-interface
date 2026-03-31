@@ -400,7 +400,7 @@ public final class Configuration {
           name = colorTheme.testTemplate().format("#" + segment.getValue());
           break;
         case "test-template-invocation":
-          name = colorTheme.container().format(":" + segment.getValue());
+          name = colorTheme.container().format(":" + identifier.getDisplayName());
           break;
         case "suite": // Don't show junit5 suite as part of name
           name = null;

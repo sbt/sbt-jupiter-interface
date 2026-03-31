@@ -61,6 +61,12 @@ class DispatcherSampleTests {
     void testValueSourceWithStrings(String value) {}
   }
 
+  static class CustomDisplayNameParameterizedTests {
+    @ParameterizedTest(name = "[param = {0}]")
+    @ValueSource(strings = {"foo", "bar", "baz"})
+    void testValueSourceWithStrings(String param) {}
+  }
+
   static class SingleParamTests {
 
     @Test
