@@ -26,6 +26,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 
+import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.CustomDisplayNameParameterizedTests;
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.DurationTests;
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.DynamicTests;
 import com.github.sbt.junit.jupiter.internal.event.DispatcherSampleTests.MultipleParamsTests;
@@ -104,12 +105,35 @@ public class DispatcherTest {
     List<Event> result = testRunner.eventHandler().byStatus(Status.Success);
 
     String suiteName = ".event.DispatcherSampleTests$ParameterizedTests";
-    String testName = "testValueSourceWithStrings(String):1";
+    String testName = "testValueSourceWithStrings(String):[1] \"foo\"";
 
     assertThat(result, hasSize(1));
     assertThat(result, hasItem(fullyQualifiedName(endsWith(suiteName))));
     assertThat(result, hasItem(selector(instanceOf(TestSelector.class))));
     assertThat(result, hasItem(selector(testName(equalTo(testName)))));
+  }
+
+  @Test
+  public void shouldReportParameterizedTestsWithCustomDisplayName() {
+
+    testRunner.withArgs("-v");
+    testRunner.execute(CustomDisplayNameParameterizedTests.class);
+
+    List<Event> result = testRunner.eventHandler().byStatus(Status.Success);
+
+    String suiteName = ".event.DispatcherSampleTests$CustomDisplayNameParameterizedTests";
+    List<String> testNames =
+        Arrays.asList(
+            "testValueSourceWithStrings(String):[param = \"foo\"]",
+            "testValueSourceWithStrings(String):[param = \"bar\"]",
+            "testValueSourceWithStrings(String):[param = \"baz\"]");
+
+    assertThat(result, hasSize(3));
+    assertThat(result, hasItem(fullyQualifiedName(endsWith(suiteName))));
+    assertThat(result, hasItem(selector(instanceOf(TestSelector.class))));
+    for (String testName : testNames) {
+      assertThat(result, hasItem(selector(testName(equalTo(testName)))));
+    }
   }
 
   @Test
