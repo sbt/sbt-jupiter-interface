@@ -87,13 +87,17 @@ public class JupiterTestCollector {
 
     private List<Item> discoveredTests = new ArrayList<>();
 
-    /** @return An empty result. */
+    /**
+     * @return An empty result.
+     */
     public static Result emptyResult() {
 
       return EMPTY_RESULT;
     }
 
-    /** @return The list of discovered test items. */
+    /**
+     * @return The list of discovered test items.
+     */
     public List<Item> getDiscoveredTests() {
 
       return discoveredTests;
@@ -112,25 +116,33 @@ public class JupiterTestCollector {
     private List<Selector> selectors = new ArrayList<>();
     private boolean explicit;
 
-    /** @return The fully qualified class-name of the discovered test. */
+    /**
+     * @return The fully qualified class-name of the discovered test.
+     */
     public String getFullyQualifiedClassName() {
 
       return fullyQualifiedClassName;
     }
 
-    /** @return The fingerprint used for this test item. */
+    /**
+     * @return The fingerprint used for this test item.
+     */
     public Fingerprint getFingerprint() {
 
       return fingerprint;
     }
 
-    /** @return Whether this test item was explicitly specified. */
+    /**
+     * @return Whether this test item was explicitly specified.
+     */
     public boolean isExplicit() {
 
       return explicit;
     }
 
-    /** @return The list of test selectors for this test item. */
+    /**
+     * @return The list of test selectors for this test item.
+     */
     public Selector[] getSelectors() {
 
       return selectors.toArray(new Selector[0]);
@@ -355,7 +367,9 @@ public class JupiterTestCollector {
     return result;
   }
 
-  /** @return Optional.empty if the test is not a class or method */
+  /**
+   * @return Optional.empty if the test is not a class or method
+   */
   private Optional<String> fullyQualifiedName(TestIdentifier testIdentifier) {
 
     TestSource testSource = testIdentifier.getSource().orElse(null);

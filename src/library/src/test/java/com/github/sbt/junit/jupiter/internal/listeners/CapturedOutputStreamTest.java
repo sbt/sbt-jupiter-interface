@@ -25,7 +25,9 @@ import static org.hamcrest.Matchers.contains;
 import java.io.PrintStream;
 import org.junit.Test;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class CapturedOutputStreamTest {
 
   @Test

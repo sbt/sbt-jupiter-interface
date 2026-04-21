@@ -28,7 +28,9 @@ import sbt.testing.AnnotatedFingerprint;
  */
 public class JupiterTestFingerprint implements AnnotatedFingerprint {
 
-  /** @return Always {@code false}. */
+  /**
+   * @return Always {@code false}.
+   */
   @Override
   public boolean isModule() {
     return false;

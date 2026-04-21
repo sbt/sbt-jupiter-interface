@@ -38,7 +38,9 @@ import org.junit.platform.launcher.TestPlan;
 import sbt.testing.Logger;
 import sbt.testing.TaskDef;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 @SuppressWarnings("WeakerAccess")
 public final class Configuration {
 
@@ -54,19 +56,25 @@ public final class Configuration {
     this.logger = new TestLogger(loggers, this);
   }
 
-  /** @return The configured color theme. */
+  /**
+   * @return The configured color theme.
+   */
   public ColorTheme getColorTheme() {
 
     return colorTheme;
   }
 
-  /** @return The configured test logger. */
+  /**
+   * @return The configured test logger.
+   */
   public TestLogger getLogger() {
 
     return logger;
   }
 
-  /** @return The provided commandline options. */
+  /**
+   * @return The provided commandline options.
+   */
   public Options getOptions() {
 
     return options;
@@ -81,7 +89,9 @@ public final class Configuration {
     return testSuiteName;
   }
 
-  /** @return The configured test listener. */
+  /**
+   * @return The configured test listener.
+   */
   public JupiterTestListener getTestListener() {
 
     switch (options.getDisplayMode()) {
@@ -314,7 +324,9 @@ public final class Configuration {
       this.identifier = testIdentifier;
     }
 
-    /** @return The formatted test name using the configured color theme. */
+    /**
+     * @return The formatted test name using the configured color theme.
+     */
     public String format() {
 
       final List<TestIdentifier> path = getPath(testPlan, identifier);

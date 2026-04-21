@@ -30,7 +30,9 @@ import org.junit.platform.engine.reporting.ReportEntry;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class FlatPrintingTestListener implements JupiterTestListener {
 
   private TestPlan testPlan;

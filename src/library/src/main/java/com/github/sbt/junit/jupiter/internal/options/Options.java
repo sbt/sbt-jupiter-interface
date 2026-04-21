@@ -53,7 +53,9 @@ public class Options {
   private final String displayMode;
   private final String runListener;
 
-  /** @param builder The builder instance. */
+  /**
+   * @param builder The builder instance.
+   */
   private Options(Builder builder) {
 
     assertLogEnabled = builder.assertLogEnabled;
@@ -73,13 +75,17 @@ public class Options {
     displayMode = builder.displayMode;
   }
 
-  /** @return {@code True}, if colored output should be enabled. */
+  /**
+   * @return {@code True}, if colored output should be enabled.
+   */
   public boolean isColorsEnabled() {
 
     return colorsEnabled;
   }
 
-  /** @return {@code True}, if should be decoded. */
+  /**
+   * @return {@code True}, if should be decoded.
+   */
   public boolean isDecodeScalaNames() {
 
     return decodeScalaNames;
@@ -111,67 +117,89 @@ public class Options {
     return assertLogEnabled;
   }
 
-  /** @return {@code True}, if the class name of an exception should be logged. */
+  /**
+   * @return {@code True}, if the class name of an exception should be logged.
+   */
   public boolean isExceptionClassLogEnabled() {
 
     return exceptionClassLogEnabled;
   }
 
-  /** @return {@code True}, if the type for every {@link Segment} should be logged. */
+  /**
+   * @return {@code True}, if the type for every {@link Segment} should be logged.
+   */
   public boolean isTypesEnabled() {
 
     return typesEnabled;
   }
 
-  /** @return The display type ('flat', 'tree') */
+  /**
+   * @return The display type ('flat', 'tree')
+   */
   public String getDisplayMode() {
 
     return displayMode;
   }
 
-  /** @return An optional test run listener. */
+  /**
+   * @return An optional test run listener.
+   */
   public Optional<String> getRunListener() {
 
     return Optional.ofNullable(runListener);
   }
 
-  /** @return The set of test name filters (might be empty). */
+  /**
+   * @return The set of test name filters (might be empty).
+   */
   public Set<String> getTestFilters() {
 
     return testFilters;
   }
 
-  /** @return An optional path to a file where dispatch events should be logged. */
+  /**
+   * @return An optional path to a file where dispatch events should be logged.
+   */
   public Optional<String> getDispatchEventsTracePath() {
 
     return Optional.ofNullable(traceDispatchEvents ? DISPATCH_EVENTS_TRACE_PATH : null);
   }
 
-  /** @return The set of tags which should be included (might be empty). */
+  /**
+   * @return The set of tags which should be included (might be empty).
+   */
   public List<String> getIncludeTags() {
 
     return includeTags;
   }
 
-  /** @return The set of tags which should be excluded (might be empty). */
+  /**
+   * @return The set of tags which should be excluded (might be empty).
+   */
   public List<String> getExcludeTags() {
 
     return excludeTags;
   }
 
-  /** @return The set of glob patterns for test names which should be executed (might be empty). */
+  /**
+   * @return The set of glob patterns for test names which should be executed (might be empty).
+   */
   public Set<String> getGlobPatterns() {
 
     return globPatterns;
   }
 
-  /** @return A list of system properties to be set before execution. */
+  /**
+   * @return A list of system properties to be set before execution.
+   */
   public Map<String, String> getSystemProperties() {
 
     return systemProperties;
   }
 
-  /** @author Michael Aichler */
+  /**
+   * @author Michael Aichler
+   */
   static class Builder {
 
     private boolean quiet = false;

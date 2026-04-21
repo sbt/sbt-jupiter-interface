@@ -37,7 +37,9 @@ public interface ColorTheme {
     return Color.BLUE;
   }
 
-  /** @return The color which should be used for the indicator of a successful test. */
+  /**
+   * @return The color which should be used for the indicator of a successful test.
+   */
   default Color successful() {
     return Color.GREEN;
   }
@@ -46,42 +48,58 @@ public interface ColorTheme {
     return Color.RED;
   }
 
-  /** @return The color which should be used for test containers. */
+  /**
+   * @return The color which should be used for test containers.
+   */
   default Color container() {
     return Color.YELLOW;
   }
 
-  /** @return The color which should be used for a test method. */
+  /**
+   * @return The color which should be used for a test method.
+   */
   default Color testMethod() {
     return Color.CYAN;
   }
 
-  /** @return The color which should be used for a test factory. */
+  /**
+   * @return The color which should be used for a test factory.
+   */
   default Color testFactory() {
     return Color.CYAN;
   }
 
-  /** @return The color which should be used for a test template. */
+  /**
+   * @return The color which should be used for a test template.
+   */
   default Color testTemplate() {
     return Color.CYAN;
   }
 
-  /** @return The color which should be used for a dynamic test. */
+  /**
+   * @return The color which should be used for a dynamic test.
+   */
   default Color dynamicTest() {
     return Color.MAGENTA;
   }
 
-  /** @return The color which should be used for a native method within a stacktrace. */
+  /**
+   * @return The color which should be used for a native method within a stacktrace.
+   */
   default Color nativeMethod() {
     return Color.YELLOW;
   }
 
-  /** @return The color which should be used for an unknown source within a stacktrace. */
+  /**
+   * @return The color which should be used for an unknown source within a stacktrace.
+   */
   default Color unknownSource() {
     return Color.YELLOW;
   }
 
-  /** @return The color which should be used for the test file within a stacktrace. */
+  /**
+   * @return The color which should be used for the test file within a stacktrace.
+   */
   default Color testFile() {
     return Color.MAGENTA;
   }
