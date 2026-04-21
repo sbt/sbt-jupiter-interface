@@ -31,7 +31,9 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 class DispatcherSampleTests {
 
   static class DurationTests {

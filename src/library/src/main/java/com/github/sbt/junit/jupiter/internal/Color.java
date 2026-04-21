@@ -37,7 +37,9 @@ public enum Color {
 
   private final String ansiString;
 
-  /** @param ansiCode The ANSI color code. */
+  /**
+   * @param ansiCode The ANSI color code.
+   */
   Color(int ansiCode) {
     this.ansiString = (ansiCode > -1) ? "\u001B[" + ansiCode + "m" : "";
   }
@@ -81,7 +83,9 @@ public enum Color {
     return toString() + value + RESET;
   }
 
-  /** @return The ANSI representation of this color. */
+  /**
+   * @return The ANSI representation of this color.
+   */
   @Override
   public String toString() {
 

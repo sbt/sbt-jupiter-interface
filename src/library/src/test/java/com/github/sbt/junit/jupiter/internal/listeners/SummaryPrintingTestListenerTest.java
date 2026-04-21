@@ -30,7 +30,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.Disabled;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class SummaryPrintingTestListenerTest {
 
   @Rule public final TestRunner testRunner = new TestRunner();

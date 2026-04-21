@@ -23,7 +23,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Test;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class ColorTest {
 
   @Test

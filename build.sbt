@@ -22,6 +22,8 @@ import Dependencies.*
 ThisBuild / organization := "com.github.sbt.junit"
 ThisBuild / scalaVersion := "2.12.21"
 
+ThisBuild / javafmtFormatterCompatibleJavaVersion := 17
+
 lazy val commonSettings: Seq[Setting[_]] = Def.settings(
   Compile / javacOptions ++= Seq(
     "-encoding", "UTF-8", "-Xlint:all", "-Xlint:-processing", "-source", "17", "-target", "17"

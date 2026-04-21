@@ -34,7 +34,9 @@ public class JupiterFramework implements Framework {
   private static final Fingerprint[] FINGERPRINTS =
       new Fingerprint[] {new JupiterTestFingerprint()};
 
-  /** @return The human-friendly name of the Jupiter test framework. */
+  /**
+   * @return The human-friendly name of the Jupiter test framework.
+   */
   @Override
   public String name() {
 

@@ -69,13 +69,17 @@ public class TestRunner extends ExternalResource {
     return this;
   }
 
-  /** @return The dummy event handler. */
+  /**
+   * @return The dummy event handler.
+   */
   public DummyEventHandler eventHandler() {
 
     return eventHandler;
   }
 
-  /** @return The dummy logger. */
+  /**
+   * @return The dummy logger.
+   */
   public DummyLogger logger() {
 
     return logger;
@@ -109,12 +113,16 @@ public class TestRunner extends ExternalResource {
     return new TaskDef(fullyQualifiedName, new JupiterTestFingerprint(), false, selectors);
   }
 
-  /** @author Michael Aichler */
+  /**
+   * @author Michael Aichler
+   */
   public static class DummyEventHandler implements EventHandler {
 
     final List<Event> events = new ArrayList<>();
 
-    /** @return The list of received events. */
+    /**
+     * @return The list of received events.
+     */
     public List<Event> all() {
       return events;
     }
@@ -135,12 +143,16 @@ public class TestRunner extends ExternalResource {
     }
   }
 
-  /** @author Michael Aichler */
+  /**
+   * @author Michael Aichler
+   */
   public static class DummyLogger implements Logger {
 
     public final List<String> entries = new ArrayList<>();
 
-    /** @return All log entries received by this logger. */
+    /**
+     * @return All log entries received by this logger.
+     */
     public List<String> all() {
 
       return entries;

@@ -26,7 +26,9 @@ import static org.mockito.Mockito.mock;
 import java.io.PrintStream;
 import org.junit.Test;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class StreamPairTest {
 
   @Test

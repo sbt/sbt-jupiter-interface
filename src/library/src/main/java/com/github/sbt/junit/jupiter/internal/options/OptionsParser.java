@@ -24,7 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** @author Michael Aichler */
+/**
+ * @author Michael Aichler
+ */
 public class OptionsParser {
 
   private static final String OPT_TESTS = "--tests=";
