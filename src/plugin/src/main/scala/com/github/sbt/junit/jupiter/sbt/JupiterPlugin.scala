@@ -21,6 +21,7 @@ package com.github.sbt.junit.jupiter.sbt
 import java.net.URLClassLoader
 
 import com.github.sbt.junit.jupiter.api.JupiterFramework
+import com.github.sbt.junit.jupiter.api.JupiterLauncherConfig
 import com.github.sbt.junit.jupiter.api.JupiterTestCollector
 import sbt.Keys.testFrameworks
 import sbt.Keys.*
@@ -28,6 +29,7 @@ import sbt.plugins.JvmPlugin
 import sbt.AutoPlugin
 import sbt.Def
 import sbt.*
+import scala.annotation.nowarn
 import scala.collection.JavaConverters.*
 
 object Import {
@@ -45,14 +47,22 @@ object Import {
     val junitVintageVersion: SettingKey[String] = SettingKey[String]("junit-vintage-version",
       "The JUnit Vintage version which is compatible with this plugin.")
 
+    val jupiterTestDiscoveryLauncherConfig: SettingKey[JupiterLauncherConfig] =
+      settingKey("Configures the JUnit Jupiter Test Discovery Launcher.")
+
+    @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryTestEngineAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of test engines during test discovery (default true)")
+    @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of launcher session listeners during test discovery (default true)")
+    @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of launcher discovery listeners during test discovery (default true)")
+    @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of test execution listeners during test discovery (default true)")
+    @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of post discovery filters during test discovery (default true)")
   }
@@ -79,6 +89,16 @@ object JupiterPlugin extends AutoPlugin {
     junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
     junitJupiterVersion := readResourceProperty("jupiter-interface.properties", "junit.jupiter.version"),
     junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version"),
+    jupiterTestDiscoveryLauncherConfig := JupiterLauncherConfig.DEFAULT
+  ) ++ deprecatedKeyDefaults
+
+  /*
+   * Defaults for the deprecated per-flag setting keys. They are no longer read by the plugin, but
+   * sbt requires every declared setting key to have a default to avoid undefined-setting errors on
+   * startup. `@nowarn` suppresses the deprecation warnings emitted by the LHS references.
+   */
+  @nowarn
+  private def deprecatedKeyDefaults: Seq[Def.Setting[?]] = Seq(
     jupiterTestDiscoveryTestEngineAutoRegistrationEnabled := true,
     jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled := true,
     jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled := true,
@@ -117,11 +137,7 @@ object JupiterPlugin extends AutoPlugin {
       .withClassDirectory(classes)
       .withClassLoader(getClass.getClassLoader)
       .withRuntimeClassPath(classpath)
-      .withTestEngineAutoRegistrationEnabled(jupiterTestDiscoveryTestEngineAutoRegistrationEnabled.value)
-      .withLauncherSessionListenerAutoRegistrationEnabled(jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled.value)
-      .withLauncherDiscoveryListenerAutoRegistrationEnabled(jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled.value)
-      .withTestExecutionListenerAutoRegistrationEnabled(jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled.value)
-      .withPostDiscoveryFilterAutoRegistrationEnabled(jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled.value)
+      .withLauncherConfig(jupiterTestDiscoveryLauncherConfig.value)
       .build()
 
     val discoveredTests = collector.collectTests().getDiscoveredTests.asScala.toList.map(toTestDefinition)

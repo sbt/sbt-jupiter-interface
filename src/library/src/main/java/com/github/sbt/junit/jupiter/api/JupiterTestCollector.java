@@ -51,12 +51,7 @@ public class JupiterTestCollector {
   private final ClassLoader classLoader;
   private final URL[] runtimeClassPath;
   private final File classDirectory;
-
-  private final boolean testEngineAutoRegistrationEnabled;
-  private final boolean launcherSessionListenerAutoRegistrationEnabled;
-  private final boolean launcherDiscoveryListenerAutoRegistrationEnabled;
-  private final boolean testExecutionListenerAutoRegistrationEnabled;
-  private final boolean postDiscoveryFilterAutoRegistrationEnabled;
+  private final JupiterLauncherConfig launcherConfig;
 
   /**
    * Executes a JUnit Jupiter launcher discovery request.
@@ -173,6 +168,7 @@ public class JupiterTestCollector {
     private ClassLoader classLoader;
     private URL[] runtimeClassPath = new URL[0];
     private File classDirectory;
+    private JupiterLauncherConfig launcherConfig;
 
     private boolean testEngineAutoRegistrationEnabled = true;
     private boolean launcherSessionListenerAutoRegistrationEnabled = true;
@@ -218,12 +214,28 @@ public class JupiterTestCollector {
     }
 
     /**
+     * Configures the Jupiter Test Discovery Launcher.
+     *
+     * <p>When set, the value supplied here takes precedence over any of the deprecated per-flag
+     * setters on this builder.
+     *
+     * @param value the launcher configuration.
+     * @return This builder.
+     */
+    public Builder withLauncherConfig(JupiterLauncherConfig value) {
+      this.launcherConfig = value;
+      return this;
+    }
+
+    /**
      * Configures the Jupiter Test Discovery Launcher to enable/disable auto registration of test
      * engines. Test engines need to be present on the classpath to be registered automatically.
      *
      * @param value enable/disable auto registration
      * @return This builder.
+     * @deprecated Use {@link #withLauncherConfig(JupiterLauncherConfig)} instead.
      */
+    @Deprecated(since = "0.19.0", forRemoval = true)
     public Builder withTestEngineAutoRegistrationEnabled(boolean value) {
       this.testEngineAutoRegistrationEnabled = value;
       return this;
@@ -236,7 +248,9 @@ public class JupiterTestCollector {
      *
      * @param value enable/disable auto registration
      * @return This builder.
+     * @deprecated Use {@link #withLauncherConfig(JupiterLauncherConfig)} instead.
      */
+    @Deprecated(since = "0.19.0", forRemoval = true)
     public Builder withLauncherSessionListenerAutoRegistrationEnabled(boolean value) {
       this.launcherSessionListenerAutoRegistrationEnabled = value;
       return this;
@@ -249,7 +263,9 @@ public class JupiterTestCollector {
      *
      * @param value enable/disable auto registration
      * @return This builder.
+     * @deprecated Use {@link #withLauncherConfig(JupiterLauncherConfig)} instead.
      */
+    @Deprecated(since = "0.19.0", forRemoval = true)
     public Builder withLauncherDiscoveryListenerAutoRegistrationEnabled(boolean value) {
       this.launcherDiscoveryListenerAutoRegistrationEnabled = value;
       return this;
@@ -262,7 +278,9 @@ public class JupiterTestCollector {
      *
      * @param value enable/disable auto registration
      * @return This builder.
+     * @deprecated Use {@link #withLauncherConfig(JupiterLauncherConfig)} instead.
      */
+    @Deprecated(since = "0.19.0", forRemoval = true)
     public Builder withTestExecutionListenerAutoRegistrationEnabled(boolean value) {
       this.testExecutionListenerAutoRegistrationEnabled = value;
       return this;
@@ -275,7 +293,9 @@ public class JupiterTestCollector {
      *
      * @param value enable/disable auto registration
      * @return This builder.
+     * @deprecated Use {@link #withLauncherConfig(JupiterLauncherConfig)} instead.
      */
+    @Deprecated(since = "0.19.0", forRemoval = true)
     public Builder withPostDiscoveryFilterAutoRegistrationEnabled(boolean value) {
       this.postDiscoveryFilterAutoRegistrationEnabled = value;
       return this;
@@ -302,15 +322,15 @@ public class JupiterTestCollector {
     this.runtimeClassPath = builder.runtimeClassPath;
     this.classDirectory = builder.classDirectory;
     this.classLoader = builder.classLoader;
-    this.testEngineAutoRegistrationEnabled = builder.testEngineAutoRegistrationEnabled;
-    this.launcherSessionListenerAutoRegistrationEnabled =
-        builder.launcherSessionListenerAutoRegistrationEnabled;
-    this.launcherDiscoveryListenerAutoRegistrationEnabled =
-        builder.launcherDiscoveryListenerAutoRegistrationEnabled;
-    this.testExecutionListenerAutoRegistrationEnabled =
-        builder.testExecutionListenerAutoRegistrationEnabled;
-    this.postDiscoveryFilterAutoRegistrationEnabled =
-        builder.postDiscoveryFilterAutoRegistrationEnabled;
+    this.launcherConfig =
+        builder.launcherConfig != null
+            ? builder.launcherConfig
+            : new JupiterLauncherConfig(
+                builder.testEngineAutoRegistrationEnabled,
+                builder.launcherSessionListenerAutoRegistrationEnabled,
+                builder.launcherDiscoveryListenerAutoRegistrationEnabled,
+                builder.testExecutionListenerAutoRegistrationEnabled,
+                builder.postDiscoveryFilterAutoRegistrationEnabled);
   }
 
   /**
@@ -331,14 +351,15 @@ public class JupiterTestCollector {
 
     LauncherConfig config =
         LauncherConfig.builder()
-            .enableTestEngineAutoRegistration(testEngineAutoRegistrationEnabled)
+            .enableTestEngineAutoRegistration(launcherConfig.testEngineAutoRegistrationEnabled())
             .enableLauncherSessionListenerAutoRegistration(
-                launcherSessionListenerAutoRegistrationEnabled)
+                launcherConfig.launcherSessionListenerAutoRegistrationEnabled())
             .enableLauncherDiscoveryListenerAutoRegistration(
-                launcherDiscoveryListenerAutoRegistrationEnabled)
+                launcherConfig.launcherDiscoveryListenerAutoRegistrationEnabled())
             .enableTestExecutionListenerAutoRegistration(
-                testExecutionListenerAutoRegistrationEnabled)
-            .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled)
+                launcherConfig.testExecutionListenerAutoRegistrationEnabled())
+            .enablePostDiscoveryFilterAutoRegistration(
+                launcherConfig.postDiscoveryFilterAutoRegistrationEnabled())
             .build();
 
     TestPlan testPlan = LauncherFactory.create(config).discover(request);
