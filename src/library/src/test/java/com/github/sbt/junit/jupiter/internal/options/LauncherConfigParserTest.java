@@ -1,6 +1,8 @@
 package com.github.sbt.junit.jupiter.internal.options;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
@@ -61,5 +63,39 @@ public class LauncherConfigParserTest {
               "--test-engine-auto-registration-enabled=false"
             });
     assertThat(cfg.testEngineAutoRegistrationEnabled(), is(false));
+  }
+
+  @Test
+  public void emptyListFlagYieldsEmptyList() {
+
+    final var cfg = LauncherConfigParser.parse(new String[] {"--test-engine-class-names="});
+    assertThat(cfg.testEngineClassNames(), is(empty()));
+  }
+
+  @Test
+  public void singleFqnInListFlag() {
+
+    final var cfg = LauncherConfigParser.parse(new String[] {"--test-engine-class-names=foo.Bar"});
+    assertThat(cfg.testEngineClassNames(), contains("foo.Bar"));
+  }
+
+  @Test
+  public void multipleFqnsInListFlag() {
+
+    final var cfg =
+        LauncherConfigParser.parse(
+            new String[] {"--test-execution-listener-class-names=foo.Bar,baz.Qux"});
+    assertThat(cfg.testExecutionListenerClassNames(), contains("foo.Bar", "baz.Qux"));
+  }
+
+  @Test
+  public void lastListOccurrenceWins() {
+
+    final var cfg =
+        LauncherConfigParser.parse(
+            new String[] {
+              "--test-engine-class-names=first.A", "--test-engine-class-names=second.B,third.C"
+            });
+    assertThat(cfg.testEngineClassNames(), contains("second.B", "third.C"));
   }
 }

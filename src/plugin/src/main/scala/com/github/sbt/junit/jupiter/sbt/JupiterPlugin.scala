@@ -132,7 +132,12 @@ object JupiterPlugin extends AutoPlugin {
     s"--launcher-session-listener-auto-registration-enabled=${cfg.launcherSessionListenerAutoRegistrationEnabled}",
     s"--launcher-discovery-listener-auto-registration-enabled=${cfg.launcherDiscoveryListenerAutoRegistrationEnabled}",
     s"--test-execution-listener-auto-registration-enabled=${cfg.testExecutionListenerAutoRegistrationEnabled}",
-    s"--post-discovery-filter-auto-registration-enabled=${cfg.postDiscoveryFilterAutoRegistrationEnabled}"
+    s"--post-discovery-filter-auto-registration-enabled=${cfg.postDiscoveryFilterAutoRegistrationEnabled}",
+    s"--test-engine-class-names=${cfg.testEngineClassNames.asScala.mkString(",")}",
+    s"--launcher-session-listener-class-names=${cfg.launcherSessionListenerClassNames.asScala.mkString(",")}",
+    s"--launcher-discovery-listener-class-names=${cfg.launcherDiscoveryListenerClassNames.asScala.mkString(",")}",
+    s"--test-execution-listener-class-names=${cfg.testExecutionListenerClassNames.asScala.mkString(",")}",
+    s"--post-discovery-filter-class-names=${cfg.postDiscoveryFilterClassNames.asScala.mkString(",")}"
   )
 
   /*

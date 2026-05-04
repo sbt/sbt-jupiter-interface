@@ -34,7 +34,6 @@ import org.junit.platform.engine.support.descriptor.MethodSource;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
-import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import sbt.testing.Fingerprint;
@@ -349,18 +348,7 @@ public class JupiterTestCollector {
             .selectors(selectDirectory(classDirectory))
             .build();
 
-    LauncherConfig config =
-        LauncherConfig.builder()
-            .enableTestEngineAutoRegistration(launcherConfig.testEngineAutoRegistrationEnabled())
-            .enableLauncherSessionListenerAutoRegistration(
-                launcherConfig.launcherSessionListenerAutoRegistrationEnabled())
-            .enableLauncherDiscoveryListenerAutoRegistration(
-                launcherConfig.launcherDiscoveryListenerAutoRegistrationEnabled())
-            .enableTestExecutionListenerAutoRegistration(
-                launcherConfig.testExecutionListenerAutoRegistrationEnabled())
-            .enablePostDiscoveryFilterAutoRegistration(
-                launcherConfig.postDiscoveryFilterAutoRegistrationEnabled())
-            .build();
+    final var config = launcherConfig.toJUnitConfig(Thread.currentThread().getContextClassLoader());
 
     TestPlan testPlan = LauncherFactory.create(config).discover(request);
 
