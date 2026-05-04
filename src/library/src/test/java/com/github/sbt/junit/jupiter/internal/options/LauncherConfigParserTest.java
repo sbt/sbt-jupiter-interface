@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import com.github.sbt.junit.jupiter.api.JupiterLauncherConfig;
+import java.util.List;
 import org.junit.Test;
 
 public class LauncherConfigParserTest {
@@ -50,7 +51,13 @@ public class LauncherConfigParserTest {
               "--test-execution-listener-auto-registration-enabled=false",
               "--post-discovery-filter-auto-registration-enabled=false"
             });
-    assertThat(cfg, is(equalTo(new JupiterLauncherConfig(false, false, false, false, false))));
+    assertThat(
+        cfg,
+        is(
+            equalTo(
+                new JupiterLauncherConfig(
+                    false, false, false, false, false, List.of(), List.of(), List.of(), List.of(),
+                    List.of()))));
   }
 
   @Test

@@ -85,32 +85,10 @@ public record JupiterLauncherConfig(
     List<String> testExecutionListenerClassNames,
     List<String> postDiscoveryFilterClassNames) {
 
-  /**
-   * Convenience constructor for the 5 boolean toggles, with all FQN lists empty. Equivalent to
-   * passing {@link List#of()} for each list component.
-   */
-  public JupiterLauncherConfig(
-      boolean testEngineAutoRegistrationEnabled,
-      boolean launcherSessionListenerAutoRegistrationEnabled,
-      boolean launcherDiscoveryListenerAutoRegistrationEnabled,
-      boolean testExecutionListenerAutoRegistrationEnabled,
-      boolean postDiscoveryFilterAutoRegistrationEnabled) {
-    this(
-        testEngineAutoRegistrationEnabled,
-        launcherSessionListenerAutoRegistrationEnabled,
-        launcherDiscoveryListenerAutoRegistrationEnabled,
-        testExecutionListenerAutoRegistrationEnabled,
-        postDiscoveryFilterAutoRegistrationEnabled,
-        List.of(),
-        List.of(),
-        List.of(),
-        List.of(),
-        List.of());
-  }
-
   /** A configuration with auto registration enabled for all service provider interfaces. */
   public static final JupiterLauncherConfig DEFAULT =
-      new JupiterLauncherConfig(true, true, true, true, true);
+      new JupiterLauncherConfig(
+          true, true, true, true, true, List.of(), List.of(), List.of(), List.of(), List.of());
 
   /**
    * Builds a JUnit Platform {@link LauncherConfig} from this configuration. Each FQN in the 5 list

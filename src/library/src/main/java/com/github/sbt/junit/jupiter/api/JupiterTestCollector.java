@@ -329,7 +329,12 @@ public class JupiterTestCollector {
                 builder.launcherSessionListenerAutoRegistrationEnabled,
                 builder.launcherDiscoveryListenerAutoRegistrationEnabled,
                 builder.testExecutionListenerAutoRegistrationEnabled,
-                builder.postDiscoveryFilterAutoRegistrationEnabled);
+                builder.postDiscoveryFilterAutoRegistrationEnabled,
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of());
   }
 
   /**
