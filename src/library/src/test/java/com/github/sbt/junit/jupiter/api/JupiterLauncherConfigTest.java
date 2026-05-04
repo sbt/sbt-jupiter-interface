@@ -17,7 +17,6 @@ public class JupiterLauncherConfigTest {
 
   @Test
   public void defaultConfigBuildsJUnitConfig() {
-
     final var jUnitConfig =
         JupiterLauncherConfig.DEFAULT.toJUnitConfig(getClass().getClassLoader());
     assertThat(jUnitConfig, is(notNullValue()));
@@ -25,7 +24,6 @@ public class JupiterLauncherConfigTest {
 
   @Test
   public void registersExplicitTestEngineByFqn() {
-
     final var cfg =
         new JupiterLauncherConfig(
             false,
@@ -44,7 +42,6 @@ public class JupiterLauncherConfigTest {
 
   @Test
   public void registersExplicitTestExecutionListenerByFqn() {
-
     final var cfg =
         new JupiterLauncherConfig(
             true,
@@ -63,7 +60,6 @@ public class JupiterLauncherConfigTest {
 
   @Test
   public void unknownFqnThrowsRuntimeException() {
-
     final var cfg =
         new JupiterLauncherConfig(
             false,
@@ -83,7 +79,6 @@ public class JupiterLauncherConfigTest {
 
   @Test
   public void wrongInterfaceThrowsRuntimeException() {
-
     // NoOpTestEngine implements TestEngine, not TestExecutionListener.
     final var cfg =
         new JupiterLauncherConfig(

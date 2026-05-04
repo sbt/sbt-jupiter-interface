@@ -14,14 +14,12 @@ public class LauncherConfigParserTest {
 
   @Test
   public void emptyArgsYieldDefault() {
-
     final var cfg = LauncherConfigParser.parse(new String[0]);
     assertThat(cfg, is(equalTo(JupiterLauncherConfig.DEFAULT)));
   }
 
   @Test
   public void unrelatedArgsAreIgnored() {
-
     final var cfg =
         LauncherConfigParser.parse(new String[] {"-v", "--include-tags=fast", "-Dfoo=bar"});
     assertThat(cfg, is(equalTo(JupiterLauncherConfig.DEFAULT)));
@@ -29,7 +27,6 @@ public class LauncherConfigParserTest {
 
   @Test
   public void singleFlagFlipsOnlyThatField() {
-
     final var cfg =
         LauncherConfigParser.parse(new String[] {"--test-engine-auto-registration-enabled=false"});
     assertThat(cfg.testEngineAutoRegistrationEnabled(), is(false));
@@ -41,7 +38,6 @@ public class LauncherConfigParserTest {
 
   @Test
   public void allFiveFlagsParsed() {
-
     final var cfg =
         LauncherConfigParser.parse(
             new String[] {
@@ -62,7 +58,6 @@ public class LauncherConfigParserTest {
 
   @Test
   public void lastOccurrenceWins() {
-
     final var cfg =
         LauncherConfigParser.parse(
             new String[] {
@@ -74,21 +69,18 @@ public class LauncherConfigParserTest {
 
   @Test
   public void emptyListFlagYieldsEmptyList() {
-
     final var cfg = LauncherConfigParser.parse(new String[] {"--test-engine-class-names="});
     assertThat(cfg.testEngineClassNames(), is(empty()));
   }
 
   @Test
   public void singleFqnInListFlag() {
-
     final var cfg = LauncherConfigParser.parse(new String[] {"--test-engine-class-names=foo.Bar"});
     assertThat(cfg.testEngineClassNames(), contains("foo.Bar"));
   }
 
   @Test
   public void multipleFqnsInListFlag() {
-
     final var cfg =
         LauncherConfigParser.parse(
             new String[] {"--test-execution-listener-class-names=foo.Bar,baz.Qux"});
@@ -97,7 +89,6 @@ public class LauncherConfigParserTest {
 
   @Test
   public void lastListOccurrenceWins() {
-
     final var cfg =
         LauncherConfigParser.parse(
             new String[] {
