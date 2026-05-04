@@ -50,6 +50,9 @@ object Import {
     val jupiterTestDiscoveryLauncherConfig: SettingKey[JupiterLauncherConfig] =
       settingKey("Configures the JUnit Jupiter Test Discovery Launcher.")
 
+    val jupiterTestRunningLauncherConfig: SettingKey[JupiterLauncherConfig] =
+      settingKey("Configures the JUnit Jupiter Test Running Launcher.")
+
     @deprecated(message = "No longer used. Use jupiterTestDiscoveryLauncherConfig instead.", since = "0.19.0")
     val jupiterTestDiscoveryTestEngineAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of test engines during test discovery (default true)")
@@ -89,7 +92,8 @@ object JupiterPlugin extends AutoPlugin {
     junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
     junitJupiterVersion := readResourceProperty("jupiter-interface.properties", "junit.jupiter.version"),
     junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version"),
-    jupiterTestDiscoveryLauncherConfig := JupiterLauncherConfig.DEFAULT
+    jupiterTestDiscoveryLauncherConfig := JupiterLauncherConfig.DEFAULT,
+    jupiterTestRunningLauncherConfig := JupiterLauncherConfig.DEFAULT
   ) ++ deprecatedKeyDefaults
 
   /*
@@ -116,7 +120,19 @@ object JupiterPlugin extends AutoPlugin {
    * By default this is applied to the Test configuration only.
    */
   def scopedSettings: Seq[Def.Setting[?]] = Seq(
-    definedTests ++= collectTests.value
+    definedTests ++= collectTests.value,
+    testOptions += Tests.Argument(
+      Some(jupiterTestFramework),
+      formatLauncherConfigArgs(jupiterTestRunningLauncherConfig.value).toList
+    )
+  )
+
+  private def formatLauncherConfigArgs(cfg: JupiterLauncherConfig): Seq[String] = Seq(
+    s"--test-engine-auto-registration-enabled=${cfg.testEngineAutoRegistrationEnabled}",
+    s"--launcher-session-listener-auto-registration-enabled=${cfg.launcherSessionListenerAutoRegistrationEnabled}",
+    s"--launcher-discovery-listener-auto-registration-enabled=${cfg.launcherDiscoveryListenerAutoRegistrationEnabled}",
+    s"--test-execution-listener-auto-registration-enabled=${cfg.testExecutionListenerAutoRegistrationEnabled}",
+    s"--post-discovery-filter-auto-registration-enabled=${cfg.postDiscoveryFilterAutoRegistrationEnabled}"
   )
 
   /*

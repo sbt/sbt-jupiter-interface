@@ -23,6 +23,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectMetho
 import static org.junit.platform.launcher.TagFilter.excludeTags;
 import static org.junit.platform.launcher.TagFilter.includeTags;
 
+import com.github.sbt.junit.jupiter.api.JupiterLauncherConfig;
 import com.github.sbt.junit.jupiter.api.JupiterTestListener;
 import com.github.sbt.junit.jupiter.api.StreamPair;
 import com.github.sbt.junit.jupiter.internal.event.Dispatcher;
@@ -31,6 +32,7 @@ import com.github.sbt.junit.jupiter.internal.filter.GlobFilter;
 import com.github.sbt.junit.jupiter.internal.filter.TestFilter;
 import com.github.sbt.junit.jupiter.internal.listeners.OutputCapturingTestListener;
 import com.github.sbt.junit.jupiter.internal.listeners.SummaryPrintingTestListener;
+import com.github.sbt.junit.jupiter.internal.options.LauncherConfigParser;
 import com.github.sbt.junit.jupiter.internal.options.Options;
 import com.github.sbt.junit.jupiter.internal.options.OptionsParser;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.engine.Filter;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import sbt.testing.EventHandler;
@@ -60,6 +63,7 @@ public class JupiterRunner implements Runner {
   private final String[] args;
   private final String[] remoteArgs;
   private final Options options;
+  private final JupiterLauncherConfig launcherConfig;
 
   public JupiterRunner(
       String[] args,
@@ -72,6 +76,7 @@ public class JupiterRunner implements Runner {
     this.testClassLoader = testClassLoader;
     this.systemStreamPair = systemStreamPair;
     this.options = new OptionsParser().parse(args);
+    this.launcherConfig = LauncherConfigParser.parse(args);
   }
 
   @Override
@@ -172,7 +177,20 @@ public class JupiterRunner implements Runner {
         builder.selectors(testSelector(testSuiteName));
         builder.filters(testFilters(dispatcher));
 
-        Launcher launcher = LauncherFactory.create();
+        final var config =
+            LauncherConfig.builder()
+                .enableTestEngineAutoRegistration(
+                    launcherConfig.testEngineAutoRegistrationEnabled())
+                .enableLauncherSessionListenerAutoRegistration(
+                    launcherConfig.launcherSessionListenerAutoRegistrationEnabled())
+                .enableLauncherDiscoveryListenerAutoRegistration(
+                    launcherConfig.launcherDiscoveryListenerAutoRegistrationEnabled())
+                .enableTestExecutionListenerAutoRegistration(
+                    launcherConfig.testExecutionListenerAutoRegistrationEnabled())
+                .enablePostDiscoveryFilterAutoRegistration(
+                    launcherConfig.postDiscoveryFilterAutoRegistrationEnabled())
+                .build();
+        final Launcher launcher = LauncherFactory.create(config);
 
         launcher.registerTestExecutionListeners(dispatcher);
         launcher.registerTestExecutionListeners(outputCapturingListener);
