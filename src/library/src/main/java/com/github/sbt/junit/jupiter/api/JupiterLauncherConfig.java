@@ -19,6 +19,7 @@
 package com.github.sbt.junit.jupiter.api;
 
 import java.util.List;
+import java.util.function.IntFunction;
 import org.junit.platform.engine.TestEngine;
 import org.junit.platform.launcher.LauncherDiscoveryListener;
 import org.junit.platform.launcher.LauncherSessionListener;
@@ -101,44 +102,39 @@ public record JupiterLauncherConfig(
    *     constructor, or does not implement the corresponding SPI interface.
    */
   public LauncherConfig toJUnitConfig(ClassLoader cl) {
-
-    final var builder =
-        LauncherConfig.builder()
-            .enableTestEngineAutoRegistration(testEngineAutoRegistrationEnabled)
-            .enableLauncherSessionListenerAutoRegistration(
-                launcherSessionListenerAutoRegistrationEnabled)
-            .enableLauncherDiscoveryListenerAutoRegistration(
-                launcherDiscoveryListenerAutoRegistrationEnabled)
-            .enableTestExecutionListenerAutoRegistration(
-                testExecutionListenerAutoRegistrationEnabled)
-            .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled);
-
-    for (final var fqn : testEngineClassNames) {
-      builder.addTestEngines(newInstance(cl, fqn, TestEngine.class));
-    }
-    for (final var fqn : launcherSessionListenerClassNames) {
-      builder.addLauncherSessionListeners(newInstance(cl, fqn, LauncherSessionListener.class));
-    }
-    for (final var fqn : launcherDiscoveryListenerClassNames) {
-      builder.addLauncherDiscoveryListeners(newInstance(cl, fqn, LauncherDiscoveryListener.class));
-    }
-    for (final var fqn : testExecutionListenerClassNames) {
-      builder.addTestExecutionListeners(newInstance(cl, fqn, TestExecutionListener.class));
-    }
-    for (final var fqn : postDiscoveryFilterClassNames) {
-      builder.addPostDiscoveryFilters(newInstance(cl, fqn, PostDiscoveryFilter.class));
-    }
-
-    return builder.build();
+    return LauncherConfig.builder()
+        .enableTestEngineAutoRegistration(testEngineAutoRegistrationEnabled)
+        .enableLauncherSessionListenerAutoRegistration(
+            launcherSessionListenerAutoRegistrationEnabled)
+        .enableLauncherDiscoveryListenerAutoRegistration(
+            launcherDiscoveryListenerAutoRegistrationEnabled)
+        .enableTestExecutionListenerAutoRegistration(testExecutionListenerAutoRegistrationEnabled)
+        .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled)
+        .addTestEngines(newInstances(cl, testEngineClassNames, TestEngine[]::new))
+        .addLauncherSessionListeners(
+            newInstances(cl, launcherSessionListenerClassNames, LauncherSessionListener[]::new))
+        .addLauncherDiscoveryListeners(
+            newInstances(cl, launcherDiscoveryListenerClassNames, LauncherDiscoveryListener[]::new))
+        .addTestExecutionListeners(
+            newInstances(cl, testExecutionListenerClassNames, TestExecutionListener[]::new))
+        .addPostDiscoveryFilters(
+            newInstances(cl, postDiscoveryFilterClassNames, PostDiscoveryFilter[]::new))
+        .build();
   }
 
-  private static <T> T newInstance(ClassLoader cl, String fqn, Class<T> iface) {
-    try {
-      final var clazz = Class.forName(fqn, true, cl);
-      final var instance = clazz.getConstructor().newInstance();
-      return iface.cast(instance);
-    } catch (ReflectiveOperationException | ClassCastException e) {
-      throw new RuntimeException("Failed to instantiate " + fqn + " as " + iface.getName(), e);
+  @SuppressWarnings("unchecked")
+  private static <T> T[] newInstances(
+      ClassLoader cl, List<String> fqns, IntFunction<T[]> arrayFactory) {
+    final var result = arrayFactory.apply(fqns.size());
+    final var iface = result.getClass().getComponentType();
+    for (var i = 0; i < fqns.size(); i++) {
+      final var fqn = fqns.get(i);
+      try {
+        result[i] = (T) Class.forName(fqn, true, cl).getConstructor().newInstance();
+      } catch (ReflectiveOperationException | ArrayStoreException | ClassCastException e) {
+        throw new RuntimeException("Failed to instantiate " + fqn + " as " + iface.getName(), e);
+      }
     }
+    return result;
   }
 }
