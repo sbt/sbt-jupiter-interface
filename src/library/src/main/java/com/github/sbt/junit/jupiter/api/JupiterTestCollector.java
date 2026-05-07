@@ -445,9 +445,7 @@ public class JupiterTestCollector {
                     TestExecutionListener[]::new))
             .addPostDiscoveryFilters(
                 instantiateAll(
-                    postDiscoveryFilters,
-                    PostDiscoveryFilter.class,
-                    PostDiscoveryFilter[]::new))
+                    postDiscoveryFilters, PostDiscoveryFilter.class, PostDiscoveryFilter[]::new))
             .build();
 
     TestPlan testPlan = LauncherFactory.create(config).discover(request);
@@ -476,8 +474,7 @@ public class JupiterTestCollector {
     return result;
   }
 
-  private <T> T[] instantiateAll(
-      List<String> fqns, Class<T> type, IntFunction<T[]> arrayFactory) {
+  private <T> T[] instantiateAll(List<String> fqns, Class<T> type, IntFunction<T[]> arrayFactory) {
 
     T[] instances = arrayFactory.apply(fqns.size());
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -487,8 +484,7 @@ public class JupiterTestCollector {
         Class<?> cls = Class.forName(fqn, true, loader);
         Object instance = cls.getConstructor().newInstance();
         if (!type.isInstance(instance)) {
-          throw new IllegalArgumentException(
-              "'" + fqn + "' does not implement " + type.getName());
+          throw new IllegalArgumentException("'" + fqn + "' does not implement " + type.getName());
         }
         instances[i] = type.cast(instance);
       } catch (ReflectiveOperationException e) {

@@ -90,8 +90,7 @@ public class Options {
         builder.launcherDiscoveryListenerAutoRegistrationEnabled;
     testExecutionListenerAutoRegistrationEnabled =
         builder.testExecutionListenerAutoRegistrationEnabled;
-    postDiscoveryFilterAutoRegistrationEnabled =
-        builder.postDiscoveryFilterAutoRegistrationEnabled;
+    postDiscoveryFilterAutoRegistrationEnabled = builder.postDiscoveryFilterAutoRegistrationEnabled;
     testEngines = builder.testEngines;
     launcherSessionListeners = builder.launcherSessionListeners;
     launcherDiscoveryListeners = builder.launcherDiscoveryListeners;

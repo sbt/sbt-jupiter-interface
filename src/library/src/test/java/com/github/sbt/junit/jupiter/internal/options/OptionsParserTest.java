@@ -147,8 +147,7 @@ public class OptionsParserTest {
   public void malformedAutoRegistrationValueThrowsIllegalArgumentException() {
     IllegalArgumentException ex =
         assertThrows(
-            IllegalArgumentException.class,
-            () -> parse("--test-engine-auto-registration=garbage"));
+            IllegalArgumentException.class, () -> parse("--test-engine-auto-registration=garbage"));
     assertThat(ex.getMessage(), containsString("--test-engine-auto-registration=garbage"));
   }
 
