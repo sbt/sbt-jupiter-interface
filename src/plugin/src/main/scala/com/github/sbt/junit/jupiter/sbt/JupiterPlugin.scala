@@ -45,16 +45,16 @@ object Import {
     val junitVintageVersion: SettingKey[String] = SettingKey[String]("junit-vintage-version",
       "The JUnit Vintage version which is compatible with this plugin.")
 
-    val jupiterTestDiscoveryTestEngineAutoRegistrationEnabled: SettingKey[Boolean] =
-      settingKey("Enable automatic registration of test engines during test discovery (default true)")
-    val jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
-      settingKey("Enable automatic registration of launcher session listeners during test discovery (default true)")
-    val jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled: SettingKey[Boolean] =
-      settingKey("Enable automatic registration of launcher discovery listeners during test discovery (default true)")
-    val jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
-      settingKey("Enable automatic registration of test execution listeners during test discovery (default true)")
-    val jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled: SettingKey[Boolean] =
-      settingKey("Enable automatic registration of post discovery filters during test discovery (default true)")
+    val jupiterTestEngineAutoRegistrationEnabled: SettingKey[Boolean] =
+      settingKey("Enable automatic registration of test engines (default true)")
+    val jupiterLauncherSessionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
+      settingKey("Enable automatic registration of launcher session listeners (default true)")
+    val jupiterLauncherDiscoveryListenerAutoRegistrationEnabled: SettingKey[Boolean] =
+      settingKey("Enable automatic registration of launcher discovery listeners (default true)")
+    val jupiterTestExecutionListenerAutoRegistrationEnabled: SettingKey[Boolean] =
+      settingKey("Enable automatic registration of test execution listeners (default true)")
+    val jupiterPostDiscoveryFilterAutoRegistrationEnabled: SettingKey[Boolean] =
+      settingKey("Enable automatic registration of post discovery filters (default true)")
   }
 }
 
@@ -79,11 +79,11 @@ object JupiterPlugin extends AutoPlugin {
     junitPlatformVersion := readResourceProperty("jupiter-interface.properties", "junit.platform.version"),
     junitJupiterVersion := readResourceProperty("jupiter-interface.properties", "junit.jupiter.version"),
     junitVintageVersion := readResourceProperty("jupiter-interface.properties", "junit.vintage.version"),
-    jupiterTestDiscoveryTestEngineAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled := true,
-    jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled := true
+    jupiterTestEngineAutoRegistrationEnabled := true,
+    jupiterLauncherSessionListenerAutoRegistrationEnabled := true,
+    jupiterLauncherDiscoveryListenerAutoRegistrationEnabled := true,
+    jupiterTestExecutionListenerAutoRegistrationEnabled := true,
+    jupiterPostDiscoveryFilterAutoRegistrationEnabled := true
   )
 
   override def projectSettings: Seq[Def.Setting[?]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
@@ -117,11 +117,11 @@ object JupiterPlugin extends AutoPlugin {
       .withClassDirectory(classes)
       .withClassLoader(getClass.getClassLoader)
       .withRuntimeClassPath(classpath)
-      .withTestEngineAutoRegistrationEnabled(jupiterTestDiscoveryTestEngineAutoRegistrationEnabled.value)
-      .withLauncherSessionListenerAutoRegistrationEnabled(jupiterTestDiscoveryLauncherSessionListenerAutoRegistrationEnabled.value)
-      .withLauncherDiscoveryListenerAutoRegistrationEnabled(jupiterTestDiscoveryLauncherDiscoveryListenerAutoRegistrationEnabled.value)
-      .withTestExecutionListenerAutoRegistrationEnabled(jupiterTestDiscoveryTestExecutionListenerAutoRegistrationEnabled.value)
-      .withPostDiscoveryFilterAutoRegistrationEnabled(jupiterTestDiscoveryPostDiscoveryFilterAutoRegistrationEnabled.value)
+      .withTestEngineAutoRegistrationEnabled(jupiterTestEngineAutoRegistrationEnabled.value)
+      .withLauncherSessionListenerAutoRegistrationEnabled(jupiterLauncherSessionListenerAutoRegistrationEnabled.value)
+      .withLauncherDiscoveryListenerAutoRegistrationEnabled(jupiterLauncherDiscoveryListenerAutoRegistrationEnabled.value)
+      .withTestExecutionListenerAutoRegistrationEnabled(jupiterTestExecutionListenerAutoRegistrationEnabled.value)
+      .withPostDiscoveryFilterAutoRegistrationEnabled(jupiterPostDiscoveryFilterAutoRegistrationEnabled.value)
       .build()
 
     val discoveredTests = collector.collectTests().getDiscoveredTests.asScala.toList.map(toTestDefinition)
