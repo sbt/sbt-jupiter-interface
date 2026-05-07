@@ -20,6 +20,7 @@ package com.github.sbt.junit.jupiter.internal.options;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,6 +46,11 @@ public class OptionsParser {
       "--test-execution-listener-auto-registration=";
   private static final String OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION =
       "--post-discovery-filter-auto-registration=";
+  private static final String OPT_TEST_ENGINES = "--test-engines=";
+  private static final String OPT_LAUNCHER_SESSION_LISTENERS = "--launcher-session-listeners=";
+  private static final String OPT_LAUNCHER_DISCOVERY_LISTENERS = "--launcher-discovery-listeners=";
+  private static final String OPT_TEST_EXECUTION_LISTENERS = "--test-execution-listeners=";
+  private static final String OPT_POST_DISCOVERY_FILTERS = "--post-discovery-filters=";
 
   public Options parse(String[] arguments) {
 
@@ -83,6 +89,16 @@ public class OptionsParser {
       else if (arg.startsWith(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION))
         builder.withPostDiscoveryFilterAutoRegistrationEnabled(
             toBool(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_TEST_ENGINES))
+        builder.withTestEngines(toList(OPT_TEST_ENGINES, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_SESSION_LISTENERS))
+        builder.withLauncherSessionListeners(toList(OPT_LAUNCHER_SESSION_LISTENERS, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_DISCOVERY_LISTENERS))
+        builder.withLauncherDiscoveryListeners(toList(OPT_LAUNCHER_DISCOVERY_LISTENERS, arg));
+      else if (arg.startsWith(OPT_TEST_EXECUTION_LISTENERS))
+        builder.withTestExecutionListeners(toList(OPT_TEST_EXECUTION_LISTENERS, arg));
+      else if (arg.startsWith(OPT_POST_DISCOVERY_FILTERS))
+        builder.withPostDiscoveryFilters(toList(OPT_POST_DISCOVERY_FILTERS, arg));
       else if (arg.startsWith("-D") && arg.contains("=")) builder.withSystemProperty(toEntry(arg));
       else if (!arg.startsWith("-") && !arg.startsWith("+")) builder.withGlobPattern(arg);
     }
@@ -123,6 +139,23 @@ public class OptionsParser {
         .filter(s -> !s.isEmpty())
         .map(this::stripQuotes)
         .collect(Collectors.toSet());
+  }
+
+  /**
+   * Splits a comma separated list of arguments into an order-preserving list.
+   *
+   * @param key parameter name with equal sign (e.g. --test-engines=)
+   * @param arg arg
+   */
+  private List<String> toList(String key, String arg) {
+
+    final String arguments = arg.substring(key.length());
+    final String[] values = stripQuotes(arguments).split(",");
+    return Arrays.stream(values)
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .map(this::stripQuotes)
+        .collect(Collectors.toList());
   }
 
   private String toValue(String key, String arg) {

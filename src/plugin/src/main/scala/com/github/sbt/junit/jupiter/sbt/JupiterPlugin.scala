@@ -55,6 +55,17 @@ object Import {
       settingKey("Enable automatic registration of test execution listeners (default true)")
     val jupiterPostDiscoveryFilterAutoRegistrationEnabled: SettingKey[Boolean] =
       settingKey("Enable automatic registration of post discovery filters (default true)")
+
+    val jupiterTestEngines: SettingKey[Seq[String]] =
+      settingKey("Fully-qualified class names of TestEngine implementations to manually register (default empty)")
+    val jupiterLauncherSessionListeners: SettingKey[Seq[String]] =
+      settingKey("Fully-qualified class names of LauncherSessionListener implementations to manually register (default empty)")
+    val jupiterLauncherDiscoveryListeners: SettingKey[Seq[String]] =
+      settingKey("Fully-qualified class names of LauncherDiscoveryListener implementations to manually register (default empty)")
+    val jupiterTestExecutionListeners: SettingKey[Seq[String]] =
+      settingKey("Fully-qualified class names of TestExecutionListener implementations to manually register (default empty)")
+    val jupiterPostDiscoveryFilters: SettingKey[Seq[String]] =
+      settingKey("Fully-qualified class names of PostDiscoveryFilter implementations to manually register (default empty)")
   }
 }
 
@@ -83,7 +94,12 @@ object JupiterPlugin extends AutoPlugin {
     jupiterLauncherSessionListenerAutoRegistrationEnabled := true,
     jupiterLauncherDiscoveryListenerAutoRegistrationEnabled := true,
     jupiterTestExecutionListenerAutoRegistrationEnabled := true,
-    jupiterPostDiscoveryFilterAutoRegistrationEnabled := true
+    jupiterPostDiscoveryFilterAutoRegistrationEnabled := true,
+    jupiterTestEngines := Seq.empty[String],
+    jupiterLauncherSessionListeners := Seq.empty[String],
+    jupiterLauncherDiscoveryListeners := Seq.empty[String],
+    jupiterTestExecutionListeners := Seq.empty[String],
+    jupiterPostDiscoveryFilters := Seq.empty[String]
   )
 
   override def projectSettings: Seq[Def.Setting[?]] = inConfig(Test)(scopedSettings) ++ unscopedSettings
@@ -102,7 +118,12 @@ object JupiterPlugin extends AutoPlugin {
       s"--launcher-session-listener-auto-registration=${jupiterLauncherSessionListenerAutoRegistrationEnabled.value}",
       s"--launcher-discovery-listener-auto-registration=${jupiterLauncherDiscoveryListenerAutoRegistrationEnabled.value}",
       s"--test-execution-listener-auto-registration=${jupiterTestExecutionListenerAutoRegistrationEnabled.value}",
-      s"--post-discovery-filter-auto-registration=${jupiterPostDiscoveryFilterAutoRegistrationEnabled.value}")
+      s"--post-discovery-filter-auto-registration=${jupiterPostDiscoveryFilterAutoRegistrationEnabled.value}",
+      s"--test-engines=${jupiterTestEngines.value.mkString(",")}",
+      s"--launcher-session-listeners=${jupiterLauncherSessionListeners.value.mkString(",")}",
+      s"--launcher-discovery-listeners=${jupiterLauncherDiscoveryListeners.value.mkString(",")}",
+      s"--test-execution-listeners=${jupiterTestExecutionListeners.value.mkString(",")}",
+      s"--post-discovery-filters=${jupiterPostDiscoveryFilters.value.mkString(",")}")
   )
 
   /*
@@ -128,6 +149,11 @@ object JupiterPlugin extends AutoPlugin {
       .withLauncherDiscoveryListenerAutoRegistrationEnabled(jupiterLauncherDiscoveryListenerAutoRegistrationEnabled.value)
       .withTestExecutionListenerAutoRegistrationEnabled(jupiterTestExecutionListenerAutoRegistrationEnabled.value)
       .withPostDiscoveryFilterAutoRegistrationEnabled(jupiterPostDiscoveryFilterAutoRegistrationEnabled.value)
+      .withTestEngines(jupiterTestEngines.value.asJava)
+      .withLauncherSessionListeners(jupiterLauncherSessionListeners.value.asJava)
+      .withLauncherDiscoveryListeners(jupiterLauncherDiscoveryListeners.value.asJava)
+      .withTestExecutionListeners(jupiterTestExecutionListeners.value.asJava)
+      .withPostDiscoveryFilters(jupiterPostDiscoveryFilters.value.asJava)
       .build()
 
     val discoveredTests = collector.collectTests().getDiscoveredTests.asScala.toList.map(toTestDefinition)

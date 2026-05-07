@@ -50,6 +50,11 @@ public class Options {
   private final boolean launcherDiscoveryListenerAutoRegistrationEnabled;
   private final boolean testExecutionListenerAutoRegistrationEnabled;
   private final boolean postDiscoveryFilterAutoRegistrationEnabled;
+  private final List<String> testEngines;
+  private final List<String> launcherSessionListeners;
+  private final List<String> launcherDiscoveryListeners;
+  private final List<String> testExecutionListeners;
+  private final List<String> postDiscoveryFilters;
   private final Set<String> testFilters;
   private final List<String> includeTags;
   private final List<String> excludeTags;
@@ -87,6 +92,11 @@ public class Options {
         builder.testExecutionListenerAutoRegistrationEnabled;
     postDiscoveryFilterAutoRegistrationEnabled =
         builder.postDiscoveryFilterAutoRegistrationEnabled;
+    testEngines = builder.testEngines;
+    launcherSessionListeners = builder.launcherSessionListeners;
+    launcherDiscoveryListeners = builder.launcherDiscoveryListeners;
+    testExecutionListeners = builder.testExecutionListeners;
+    postDiscoveryFilters = builder.postDiscoveryFilters;
   }
 
   /**
@@ -256,6 +266,50 @@ public class Options {
   }
 
   /**
+   * @return Fully-qualified class names of test engines to manually register (might be empty).
+   */
+  public List<String> getTestEngines() {
+
+    return testEngines;
+  }
+
+  /**
+   * @return Fully-qualified class names of launcher session listeners to manually register (might
+   *     be empty).
+   */
+  public List<String> getLauncherSessionListeners() {
+
+    return launcherSessionListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of launcher discovery listeners to manually register (might
+   *     be empty).
+   */
+  public List<String> getLauncherDiscoveryListeners() {
+
+    return launcherDiscoveryListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of test execution listeners to manually register (might be
+   *     empty).
+   */
+  public List<String> getTestExecutionListeners() {
+
+    return testExecutionListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of post discovery filters to manually register (might be
+   *     empty).
+   */
+  public List<String> getPostDiscoveryFilters() {
+
+    return postDiscoveryFilters;
+  }
+
+  /**
    * @author Michael Aichler
    */
   static class Builder {
@@ -273,6 +327,11 @@ public class Options {
     private boolean launcherDiscoveryListenerAutoRegistrationEnabled = true;
     private boolean testExecutionListenerAutoRegistrationEnabled = true;
     private boolean postDiscoveryFilterAutoRegistrationEnabled = true;
+    private List<String> testEngines = new ArrayList<>();
+    private List<String> launcherSessionListeners = new ArrayList<>();
+    private List<String> launcherDiscoveryListeners = new ArrayList<>();
+    private List<String> testExecutionListeners = new ArrayList<>();
+    private List<String> postDiscoveryFilters = new ArrayList<>();
     private Set<String> testFilters = new HashSet<>();
     private List<String> includeTags = new ArrayList<>();
     private List<String> excludeTags = new ArrayList<>();
@@ -398,6 +457,36 @@ public class Options {
     Builder withPostDiscoveryFilterAutoRegistrationEnabled(boolean value) {
 
       this.postDiscoveryFilterAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withTestEngines(List<String> value) {
+
+      this.testEngines.addAll(value);
+      return this;
+    }
+
+    Builder withLauncherSessionListeners(List<String> value) {
+
+      this.launcherSessionListeners.addAll(value);
+      return this;
+    }
+
+    Builder withLauncherDiscoveryListeners(List<String> value) {
+
+      this.launcherDiscoveryListeners.addAll(value);
+      return this;
+    }
+
+    Builder withTestExecutionListeners(List<String> value) {
+
+      this.testExecutionListeners.addAll(value);
+      return this;
+    }
+
+    Builder withPostDiscoveryFilters(List<String> value) {
+
+      this.postDiscoveryFilters.addAll(value);
       return this;
     }
 

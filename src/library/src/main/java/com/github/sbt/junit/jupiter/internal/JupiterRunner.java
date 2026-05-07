@@ -38,9 +38,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.IntFunction;
 import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.engine.Filter;
+import org.junit.platform.engine.TestEngine;
 import org.junit.platform.launcher.Launcher;
+import org.junit.platform.launcher.LauncherDiscoveryListener;
+import org.junit.platform.launcher.LauncherSessionListener;
+import org.junit.platform.launcher.PostDiscoveryFilter;
 import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -184,6 +189,28 @@ public class JupiterRunner implements Runner {
                     options.isTestExecutionListenerAutoRegistrationEnabled())
                 .enablePostDiscoveryFilterAutoRegistration(
                     options.isPostDiscoveryFilterAutoRegistrationEnabled())
+                .addTestEngines(
+                    instantiateAll(options.getTestEngines(), TestEngine.class, TestEngine[]::new))
+                .addLauncherSessionListeners(
+                    instantiateAll(
+                        options.getLauncherSessionListeners(),
+                        LauncherSessionListener.class,
+                        LauncherSessionListener[]::new))
+                .addLauncherDiscoveryListeners(
+                    instantiateAll(
+                        options.getLauncherDiscoveryListeners(),
+                        LauncherDiscoveryListener.class,
+                        LauncherDiscoveryListener[]::new))
+                .addTestExecutionListeners(
+                    instantiateAll(
+                        options.getTestExecutionListeners(),
+                        TestExecutionListener.class,
+                        TestExecutionListener[]::new))
+                .addPostDiscoveryFilters(
+                    instantiateAll(
+                        options.getPostDiscoveryFilters(),
+                        PostDiscoveryFilter.class,
+                        PostDiscoveryFilter[]::new))
                 .build();
 
         Launcher launcher = LauncherFactory.create(launcherConfig);
@@ -214,6 +241,27 @@ public class JupiterRunner implements Runner {
       }
 
       return selectClass(testClassName);
+    }
+
+    private <T> T[] instantiateAll(
+        List<String> fqns, Class<T> type, IntFunction<T[]> arrayFactory) {
+
+      T[] instances = arrayFactory.apply(fqns.size());
+      for (int i = 0; i < fqns.size(); i++) {
+        String fqn = fqns.get(i);
+        try {
+          Class<?> cls = Class.forName(fqn, true, testClassLoader);
+          Object instance = cls.getConstructor().newInstance();
+          if (!type.isInstance(instance)) {
+            throw new IllegalArgumentException(
+                "'" + fqn + "' does not implement " + type.getName());
+          }
+          instances[i] = type.cast(instance);
+        } catch (ReflectiveOperationException e) {
+          throw new RuntimeException("Failed to instantiate '" + fqn + "'", e);
+        }
+      }
+      return instances;
     }
 
     private Filter<?>[] testFilters(Dispatcher dispatcher) {

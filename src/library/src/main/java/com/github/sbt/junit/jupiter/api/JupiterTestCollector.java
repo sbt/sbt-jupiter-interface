@@ -28,10 +28,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.function.IntFunction;
+import org.junit.platform.engine.TestEngine;
 import org.junit.platform.engine.TestSource;
 import org.junit.platform.engine.support.descriptor.ClassSource;
 import org.junit.platform.engine.support.descriptor.MethodSource;
+import org.junit.platform.launcher.LauncherDiscoveryListener;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.LauncherSessionListener;
+import org.junit.platform.launcher.PostDiscoveryFilter;
+import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.core.LauncherConfig;
@@ -57,6 +63,12 @@ public class JupiterTestCollector {
   private final boolean launcherDiscoveryListenerAutoRegistrationEnabled;
   private final boolean testExecutionListenerAutoRegistrationEnabled;
   private final boolean postDiscoveryFilterAutoRegistrationEnabled;
+
+  private final List<String> testEngines;
+  private final List<String> launcherSessionListeners;
+  private final List<String> launcherDiscoveryListeners;
+  private final List<String> testExecutionListeners;
+  private final List<String> postDiscoveryFilters;
 
   /**
    * Executes a JUnit Jupiter launcher discovery request.
@@ -180,6 +192,12 @@ public class JupiterTestCollector {
     private boolean testExecutionListenerAutoRegistrationEnabled = true;
     private boolean postDiscoveryFilterAutoRegistrationEnabled = true;
 
+    private List<String> testEngines = Collections.emptyList();
+    private List<String> launcherSessionListeners = Collections.emptyList();
+    private List<String> launcherDiscoveryListeners = Collections.emptyList();
+    private List<String> testExecutionListeners = Collections.emptyList();
+    private List<String> postDiscoveryFilters = Collections.emptyList();
+
     /**
      * Specifies the classloader which should be used by the collector.
      *
@@ -282,6 +300,71 @@ public class JupiterTestCollector {
     }
 
     /**
+     * Configures the Jupiter Test Discovery Launcher to manually register the given test engines,
+     * specified by fully-qualified class name. Each class must declare a public zero-argument
+     * constructor.
+     *
+     * @param value list of fully-qualified class names
+     * @return This builder.
+     */
+    public Builder withTestEngines(List<String> value) {
+      this.testEngines = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to manually register the given launcher
+     * session listeners, specified by fully-qualified class name. Each class must declare a public
+     * zero-argument constructor.
+     *
+     * @param value list of fully-qualified class names
+     * @return This builder.
+     */
+    public Builder withLauncherSessionListeners(List<String> value) {
+      this.launcherSessionListeners = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to manually register the given launcher
+     * discovery listeners, specified by fully-qualified class name. Each class must declare a
+     * public zero-argument constructor.
+     *
+     * @param value list of fully-qualified class names
+     * @return This builder.
+     */
+    public Builder withLauncherDiscoveryListeners(List<String> value) {
+      this.launcherDiscoveryListeners = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to manually register the given test execution
+     * listeners, specified by fully-qualified class name. Each class must declare a public
+     * zero-argument constructor.
+     *
+     * @param value list of fully-qualified class names
+     * @return This builder.
+     */
+    public Builder withTestExecutionListeners(List<String> value) {
+      this.testExecutionListeners = value;
+      return this;
+    }
+
+    /**
+     * Configures the Jupiter Test Discovery Launcher to manually register the given post discovery
+     * filters, specified by fully-qualified class name. Each class must declare a public
+     * zero-argument constructor.
+     *
+     * @param value list of fully-qualified class names
+     * @return This builder.
+     */
+    public Builder withPostDiscoveryFilters(List<String> value) {
+      this.postDiscoveryFilters = value;
+      return this;
+    }
+
+    /**
      * Creates an instance of {@link JupiterTestCollector}.
      *
      * @return A new collector.
@@ -311,6 +394,11 @@ public class JupiterTestCollector {
         builder.testExecutionListenerAutoRegistrationEnabled;
     this.postDiscoveryFilterAutoRegistrationEnabled =
         builder.postDiscoveryFilterAutoRegistrationEnabled;
+    this.testEngines = builder.testEngines;
+    this.launcherSessionListeners = builder.launcherSessionListeners;
+    this.launcherDiscoveryListeners = builder.launcherDiscoveryListeners;
+    this.testExecutionListeners = builder.testExecutionListeners;
+    this.postDiscoveryFilters = builder.postDiscoveryFilters;
   }
 
   /**
@@ -339,6 +427,27 @@ public class JupiterTestCollector {
             .enableTestExecutionListenerAutoRegistration(
                 testExecutionListenerAutoRegistrationEnabled)
             .enablePostDiscoveryFilterAutoRegistration(postDiscoveryFilterAutoRegistrationEnabled)
+            .addTestEngines(instantiateAll(testEngines, TestEngine.class, TestEngine[]::new))
+            .addLauncherSessionListeners(
+                instantiateAll(
+                    launcherSessionListeners,
+                    LauncherSessionListener.class,
+                    LauncherSessionListener[]::new))
+            .addLauncherDiscoveryListeners(
+                instantiateAll(
+                    launcherDiscoveryListeners,
+                    LauncherDiscoveryListener.class,
+                    LauncherDiscoveryListener[]::new))
+            .addTestExecutionListeners(
+                instantiateAll(
+                    testExecutionListeners,
+                    TestExecutionListener.class,
+                    TestExecutionListener[]::new))
+            .addPostDiscoveryFilters(
+                instantiateAll(
+                    postDiscoveryFilters,
+                    PostDiscoveryFilter.class,
+                    PostDiscoveryFilter[]::new))
             .build();
 
     TestPlan testPlan = LauncherFactory.create(config).discover(request);
@@ -365,6 +474,28 @@ public class JupiterTestCollector {
     }
 
     return result;
+  }
+
+  private <T> T[] instantiateAll(
+      List<String> fqns, Class<T> type, IntFunction<T[]> arrayFactory) {
+
+    T[] instances = arrayFactory.apply(fqns.size());
+    ClassLoader loader = Thread.currentThread().getContextClassLoader();
+    for (int i = 0; i < fqns.size(); i++) {
+      String fqn = fqns.get(i);
+      try {
+        Class<?> cls = Class.forName(fqn, true, loader);
+        Object instance = cls.getConstructor().newInstance();
+        if (!type.isInstance(instance)) {
+          throw new IllegalArgumentException(
+              "'" + fqn + "' does not implement " + type.getName());
+        }
+        instances[i] = type.cast(instance);
+      } catch (ReflectiveOperationException e) {
+        throw new RuntimeException("Failed to instantiate '" + fqn + "'", e);
+      }
+    }
+    return instances;
   }
 
   /**
