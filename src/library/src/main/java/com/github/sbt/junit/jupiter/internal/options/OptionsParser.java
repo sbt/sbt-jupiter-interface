@@ -35,6 +35,16 @@ public class OptionsParser {
   private static final String OPT_RUN_LISTENER = "--run-listener=";
   private static final String OPT_INCLUDE_TAGS = "--include-tags=";
   private static final String OPT_EXCLUDE_TAGS = "--exclude-tags=";
+  private static final String OPT_TEST_ENGINE_AUTO_REGISTRATION =
+      "--test-engine-auto-registration=";
+  private static final String OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION =
+      "--launcher-session-listener-auto-registration=";
+  private static final String OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION =
+      "--launcher-discovery-listener-auto-registration=";
+  private static final String OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION =
+      "--test-execution-listener-auto-registration=";
+  private static final String OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION =
+      "--post-discovery-filter-auto-registration=";
 
   public Options parse(String[] arguments) {
 
@@ -58,6 +68,21 @@ public class OptionsParser {
         builder.withIncludeTags(toSet(OPT_INCLUDE_TAGS, arg));
       else if (arg.startsWith(OPT_EXCLUDE_TAGS))
         builder.withExcludeTags(toSet(OPT_EXCLUDE_TAGS, arg));
+      else if (arg.startsWith(OPT_TEST_ENGINE_AUTO_REGISTRATION))
+        builder.withTestEngineAutoRegistrationEnabled(
+            toBool(OPT_TEST_ENGINE_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION))
+        builder.withLauncherSessionListenerAutoRegistrationEnabled(
+            toBool(OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION))
+        builder.withLauncherDiscoveryListenerAutoRegistrationEnabled(
+            toBool(OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION))
+        builder.withTestExecutionListenerAutoRegistrationEnabled(
+            toBool(OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION))
+        builder.withPostDiscoveryFilterAutoRegistrationEnabled(
+            toBool(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION, arg));
       else if (arg.startsWith("-D") && arg.contains("=")) builder.withSystemProperty(toEntry(arg));
       else if (!arg.startsWith("-") && !arg.startsWith("+")) builder.withGlobPattern(arg);
     }
@@ -103,6 +128,15 @@ public class OptionsParser {
   private String toValue(String key, String arg) {
 
     return arg.substring(key.length());
+  }
+
+  private boolean toBool(String prefix, String arg) {
+
+    String value = arg.substring(prefix.length());
+    if ("true".equalsIgnoreCase(value)) return true;
+    if ("false".equalsIgnoreCase(value)) return false;
+    throw new IllegalArgumentException(
+        "Invalid boolean value in argument '" + arg + "': expected 'true' or 'false'");
   }
 
   private static final char DQ = '"';

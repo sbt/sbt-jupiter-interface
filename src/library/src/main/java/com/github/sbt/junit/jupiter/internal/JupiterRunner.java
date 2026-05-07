@@ -42,6 +42,7 @@ import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.engine.Filter;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 import sbt.testing.EventHandler;
@@ -172,7 +173,20 @@ public class JupiterRunner implements Runner {
         builder.selectors(testSelector(testSuiteName));
         builder.filters(testFilters(dispatcher));
 
-        Launcher launcher = LauncherFactory.create();
+        LauncherConfig launcherConfig =
+            LauncherConfig.builder()
+                .enableTestEngineAutoRegistration(options.isTestEngineAutoRegistrationEnabled())
+                .enableLauncherSessionListenerAutoRegistration(
+                    options.isLauncherSessionListenerAutoRegistrationEnabled())
+                .enableLauncherDiscoveryListenerAutoRegistration(
+                    options.isLauncherDiscoveryListenerAutoRegistrationEnabled())
+                .enableTestExecutionListenerAutoRegistration(
+                    options.isTestExecutionListenerAutoRegistrationEnabled())
+                .enablePostDiscoveryFilterAutoRegistration(
+                    options.isPostDiscoveryFilterAutoRegistrationEnabled())
+                .build();
+
+        Launcher launcher = LauncherFactory.create(launcherConfig);
 
         launcher.registerTestExecutionListeners(dispatcher);
         launcher.registerTestExecutionListeners(outputCapturingListener);

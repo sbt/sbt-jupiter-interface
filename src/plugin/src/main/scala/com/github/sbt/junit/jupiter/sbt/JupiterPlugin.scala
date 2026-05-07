@@ -96,7 +96,13 @@ object JupiterPlugin extends AutoPlugin {
    * By default this is applied to the Test configuration only.
    */
   def scopedSettings: Seq[Def.Setting[?]] = Seq(
-    definedTests ++= collectTests.value
+    definedTests ++= collectTests.value,
+    testOptions += Tests.Argument(jupiterTestFramework,
+      s"--test-engine-auto-registration=${jupiterTestEngineAutoRegistrationEnabled.value}",
+      s"--launcher-session-listener-auto-registration=${jupiterLauncherSessionListenerAutoRegistrationEnabled.value}",
+      s"--launcher-discovery-listener-auto-registration=${jupiterLauncherDiscoveryListenerAutoRegistrationEnabled.value}",
+      s"--test-execution-listener-auto-registration=${jupiterTestExecutionListenerAutoRegistrationEnabled.value}",
+      s"--post-discovery-filter-auto-registration=${jupiterPostDiscoveryFilterAutoRegistrationEnabled.value}")
   )
 
   /*
