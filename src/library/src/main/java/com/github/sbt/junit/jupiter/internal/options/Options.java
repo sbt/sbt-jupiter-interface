@@ -45,6 +45,16 @@ public class Options {
   private final boolean verbose;
   private final boolean traceDispatchEvents;
   private final boolean typesEnabled;
+  private final boolean testEngineAutoRegistrationEnabled;
+  private final boolean launcherSessionListenerAutoRegistrationEnabled;
+  private final boolean launcherDiscoveryListenerAutoRegistrationEnabled;
+  private final boolean testExecutionListenerAutoRegistrationEnabled;
+  private final boolean postDiscoveryFilterAutoRegistrationEnabled;
+  private final List<String> testEngines;
+  private final List<String> launcherSessionListeners;
+  private final List<String> launcherDiscoveryListeners;
+  private final List<String> testExecutionListeners;
+  private final List<String> postDiscoveryFilters;
   private final Set<String> testFilters;
   private final List<String> includeTags;
   private final List<String> excludeTags;
@@ -73,6 +83,19 @@ public class Options {
     traceDispatchEvents = builder.traceDispatchEvents;
     typesEnabled = builder.typesEnabled;
     displayMode = builder.displayMode;
+    testEngineAutoRegistrationEnabled = builder.testEngineAutoRegistrationEnabled;
+    launcherSessionListenerAutoRegistrationEnabled =
+        builder.launcherSessionListenerAutoRegistrationEnabled;
+    launcherDiscoveryListenerAutoRegistrationEnabled =
+        builder.launcherDiscoveryListenerAutoRegistrationEnabled;
+    testExecutionListenerAutoRegistrationEnabled =
+        builder.testExecutionListenerAutoRegistrationEnabled;
+    postDiscoveryFilterAutoRegistrationEnabled = builder.postDiscoveryFilterAutoRegistrationEnabled;
+    testEngines = builder.testEngines;
+    launcherSessionListeners = builder.launcherSessionListeners;
+    launcherDiscoveryListeners = builder.launcherDiscoveryListeners;
+    testExecutionListeners = builder.testExecutionListeners;
+    postDiscoveryFilters = builder.postDiscoveryFilters;
   }
 
   /**
@@ -198,6 +221,94 @@ public class Options {
   }
 
   /**
+   * @return {@code True}, if the JUnit Platform Launcher should auto-register test engines.
+   */
+  public boolean isTestEngineAutoRegistrationEnabled() {
+
+    return testEngineAutoRegistrationEnabled;
+  }
+
+  /**
+   * @return {@code True}, if the JUnit Platform Launcher should auto-register launcher session
+   *     listeners.
+   */
+  public boolean isLauncherSessionListenerAutoRegistrationEnabled() {
+
+    return launcherSessionListenerAutoRegistrationEnabled;
+  }
+
+  /**
+   * @return {@code True}, if the JUnit Platform Launcher should auto-register launcher discovery
+   *     listeners.
+   */
+  public boolean isLauncherDiscoveryListenerAutoRegistrationEnabled() {
+
+    return launcherDiscoveryListenerAutoRegistrationEnabled;
+  }
+
+  /**
+   * @return {@code True}, if the JUnit Platform Launcher should auto-register test execution
+   *     listeners.
+   */
+  public boolean isTestExecutionListenerAutoRegistrationEnabled() {
+
+    return testExecutionListenerAutoRegistrationEnabled;
+  }
+
+  /**
+   * @return {@code True}, if the JUnit Platform Launcher should auto-register post discovery
+   *     filters.
+   */
+  public boolean isPostDiscoveryFilterAutoRegistrationEnabled() {
+
+    return postDiscoveryFilterAutoRegistrationEnabled;
+  }
+
+  /**
+   * @return Fully-qualified class names of test engines to manually register (might be empty).
+   */
+  public List<String> getTestEngines() {
+
+    return testEngines;
+  }
+
+  /**
+   * @return Fully-qualified class names of launcher session listeners to manually register (might
+   *     be empty).
+   */
+  public List<String> getLauncherSessionListeners() {
+
+    return launcherSessionListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of launcher discovery listeners to manually register (might
+   *     be empty).
+   */
+  public List<String> getLauncherDiscoveryListeners() {
+
+    return launcherDiscoveryListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of test execution listeners to manually register (might be
+   *     empty).
+   */
+  public List<String> getTestExecutionListeners() {
+
+    return testExecutionListeners;
+  }
+
+  /**
+   * @return Fully-qualified class names of post discovery filters to manually register (might be
+   *     empty).
+   */
+  public List<String> getPostDiscoveryFilters() {
+
+    return postDiscoveryFilters;
+  }
+
+  /**
    * @author Michael Aichler
    */
   static class Builder {
@@ -210,6 +321,16 @@ public class Options {
     private boolean exceptionClassLogEnabled = true;
     private boolean traceDispatchEvents = false;
     private boolean typesEnabled = false;
+    private boolean testEngineAutoRegistrationEnabled = true;
+    private boolean launcherSessionListenerAutoRegistrationEnabled = true;
+    private boolean launcherDiscoveryListenerAutoRegistrationEnabled = true;
+    private boolean testExecutionListenerAutoRegistrationEnabled = true;
+    private boolean postDiscoveryFilterAutoRegistrationEnabled = true;
+    private List<String> testEngines = new ArrayList<>();
+    private List<String> launcherSessionListeners = new ArrayList<>();
+    private List<String> launcherDiscoveryListeners = new ArrayList<>();
+    private List<String> testExecutionListeners = new ArrayList<>();
+    private List<String> postDiscoveryFilters = new ArrayList<>();
     private Set<String> testFilters = new HashSet<>();
     private List<String> includeTags = new ArrayList<>();
     private List<String> excludeTags = new ArrayList<>();
@@ -305,6 +426,66 @@ public class Options {
     Builder withSystemProperty(Map.Entry<String, String> entry) {
 
       this.systemProperties.put(entry.getKey(), entry.getValue());
+      return this;
+    }
+
+    Builder withTestEngineAutoRegistrationEnabled(boolean value) {
+
+      this.testEngineAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withLauncherSessionListenerAutoRegistrationEnabled(boolean value) {
+
+      this.launcherSessionListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withLauncherDiscoveryListenerAutoRegistrationEnabled(boolean value) {
+
+      this.launcherDiscoveryListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withTestExecutionListenerAutoRegistrationEnabled(boolean value) {
+
+      this.testExecutionListenerAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withPostDiscoveryFilterAutoRegistrationEnabled(boolean value) {
+
+      this.postDiscoveryFilterAutoRegistrationEnabled = value;
+      return this;
+    }
+
+    Builder withTestEngines(List<String> value) {
+
+      this.testEngines.addAll(value);
+      return this;
+    }
+
+    Builder withLauncherSessionListeners(List<String> value) {
+
+      this.launcherSessionListeners.addAll(value);
+      return this;
+    }
+
+    Builder withLauncherDiscoveryListeners(List<String> value) {
+
+      this.launcherDiscoveryListeners.addAll(value);
+      return this;
+    }
+
+    Builder withTestExecutionListeners(List<String> value) {
+
+      this.testExecutionListeners.addAll(value);
+      return this;
+    }
+
+    Builder withPostDiscoveryFilters(List<String> value) {
+
+      this.postDiscoveryFilters.addAll(value);
       return this;
     }
 

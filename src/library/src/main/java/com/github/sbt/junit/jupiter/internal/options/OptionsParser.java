@@ -20,6 +20,7 @@ package com.github.sbt.junit.jupiter.internal.options;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,6 +36,21 @@ public class OptionsParser {
   private static final String OPT_RUN_LISTENER = "--run-listener=";
   private static final String OPT_INCLUDE_TAGS = "--include-tags=";
   private static final String OPT_EXCLUDE_TAGS = "--exclude-tags=";
+  private static final String OPT_TEST_ENGINE_AUTO_REGISTRATION =
+      "--test-engine-auto-registration=";
+  private static final String OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION =
+      "--launcher-session-listener-auto-registration=";
+  private static final String OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION =
+      "--launcher-discovery-listener-auto-registration=";
+  private static final String OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION =
+      "--test-execution-listener-auto-registration=";
+  private static final String OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION =
+      "--post-discovery-filter-auto-registration=";
+  private static final String OPT_TEST_ENGINES = "--test-engines=";
+  private static final String OPT_LAUNCHER_SESSION_LISTENERS = "--launcher-session-listeners=";
+  private static final String OPT_LAUNCHER_DISCOVERY_LISTENERS = "--launcher-discovery-listeners=";
+  private static final String OPT_TEST_EXECUTION_LISTENERS = "--test-execution-listeners=";
+  private static final String OPT_POST_DISCOVERY_FILTERS = "--post-discovery-filters=";
 
   public Options parse(String[] arguments) {
 
@@ -58,6 +74,31 @@ public class OptionsParser {
         builder.withIncludeTags(toSet(OPT_INCLUDE_TAGS, arg));
       else if (arg.startsWith(OPT_EXCLUDE_TAGS))
         builder.withExcludeTags(toSet(OPT_EXCLUDE_TAGS, arg));
+      else if (arg.startsWith(OPT_TEST_ENGINE_AUTO_REGISTRATION))
+        builder.withTestEngineAutoRegistrationEnabled(
+            toBool(OPT_TEST_ENGINE_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION))
+        builder.withLauncherSessionListenerAutoRegistrationEnabled(
+            toBool(OPT_LAUNCHER_SESSION_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION))
+        builder.withLauncherDiscoveryListenerAutoRegistrationEnabled(
+            toBool(OPT_LAUNCHER_DISCOVERY_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION))
+        builder.withTestExecutionListenerAutoRegistrationEnabled(
+            toBool(OPT_TEST_EXECUTION_LISTENER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION))
+        builder.withPostDiscoveryFilterAutoRegistrationEnabled(
+            toBool(OPT_POST_DISCOVERY_FILTER_AUTO_REGISTRATION, arg));
+      else if (arg.startsWith(OPT_TEST_ENGINES))
+        builder.withTestEngines(toList(OPT_TEST_ENGINES, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_SESSION_LISTENERS))
+        builder.withLauncherSessionListeners(toList(OPT_LAUNCHER_SESSION_LISTENERS, arg));
+      else if (arg.startsWith(OPT_LAUNCHER_DISCOVERY_LISTENERS))
+        builder.withLauncherDiscoveryListeners(toList(OPT_LAUNCHER_DISCOVERY_LISTENERS, arg));
+      else if (arg.startsWith(OPT_TEST_EXECUTION_LISTENERS))
+        builder.withTestExecutionListeners(toList(OPT_TEST_EXECUTION_LISTENERS, arg));
+      else if (arg.startsWith(OPT_POST_DISCOVERY_FILTERS))
+        builder.withPostDiscoveryFilters(toList(OPT_POST_DISCOVERY_FILTERS, arg));
       else if (arg.startsWith("-D") && arg.contains("=")) builder.withSystemProperty(toEntry(arg));
       else if (!arg.startsWith("-") && !arg.startsWith("+")) builder.withGlobPattern(arg);
     }
@@ -100,9 +141,35 @@ public class OptionsParser {
         .collect(Collectors.toSet());
   }
 
+  /**
+   * Splits a comma separated list of arguments into an order-preserving list.
+   *
+   * @param key parameter name with equal sign (e.g. --test-engines=)
+   * @param arg arg
+   */
+  private List<String> toList(String key, String arg) {
+
+    final String arguments = arg.substring(key.length());
+    final String[] values = stripQuotes(arguments).split(",");
+    return Arrays.stream(values)
+        .map(String::trim)
+        .filter(s -> !s.isEmpty())
+        .map(this::stripQuotes)
+        .collect(Collectors.toList());
+  }
+
   private String toValue(String key, String arg) {
 
     return arg.substring(key.length());
+  }
+
+  private boolean toBool(String prefix, String arg) {
+
+    String value = arg.substring(prefix.length());
+    if ("true".equalsIgnoreCase(value)) return true;
+    if ("false".equalsIgnoreCase(value)) return false;
+    throw new IllegalArgumentException(
+        "Invalid boolean value in argument '" + arg + "': expected 'true' or 'false'");
   }
 
   private static final char DQ = '"';

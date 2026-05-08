@@ -1,0 +1,6 @@
+# Auto-registration of test engines is disabled and only the Jupiter
+# engine is registered manually. The Vintage engine is on the classpath
+# but should not load, so the JUnit 4 test must not run.
+> test
+> testsExecuted jupiter-test
+> testsNotExecuted junit4-test
