@@ -45,7 +45,7 @@ jobs:
           disk-root: 'C:'
 
       - name: Checkout current branch (full)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -62,10 +62,10 @@ jobs:
 
       - name: Check that workflows are up to date
         shell: bash
-        run: sbt '++ ${{ matrix.scala }}' githubWorkflowCheck
+        run: sbt '++ ${{ matrix.scala }}; githubWorkflowCheck'
 
       - shell: bash
-        run: sbt '++ ${{ matrix.scala }}' javafmtCheckAll '+ test' scripted '++ 3.x' scriptedTestSbt2
+        run: sbt '++ ${{ matrix.scala }}; javafmtCheckAll; + test; scripted; ++ 3.x; scriptedTestSbt2'
 
       - name: Clean up Ivy Local repo
         shell: bash
@@ -105,7 +105,7 @@ jobs:
           disk-root: 'C:'
 
       - name: Checkout current branch (full)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
