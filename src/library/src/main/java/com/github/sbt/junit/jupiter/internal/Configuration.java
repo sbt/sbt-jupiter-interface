@@ -343,7 +343,7 @@ public final class Configuration {
           .map(this::toName)
           .filter(Objects::nonNull)
           .collect(Collectors.joining())
-          .trim();
+          .strip();
     }
 
     private List<TestIdentifier> getPath(TestPlan testPlan, TestIdentifier identifier) {
