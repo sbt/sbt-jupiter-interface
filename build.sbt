@@ -63,7 +63,7 @@ lazy val plugin = (project in file("src/plugin"))
     Compile / scalacOptions ++= {
       scalaBinaryVersion.value match {
         case "2.12" =>
-          Seq("-Xfatal-warnings")
+          Seq("-Xsource:3", "-Xfatal-warnings", "-release:17")
         case _ =>
           Nil
       }
@@ -90,6 +90,7 @@ lazy val plugin = (project in file("src/plugin"))
       log.info("scripted" + arg)
       scripted.toTask(arg)
     }.value,
+    scriptedSbt := (if (scalaBinaryVersion.value == "2.12") "1.13.1" else "2.1.0"),
     scriptedBufferLog := false,
     scriptedLaunchOpts ++= Seq(
       s"-Dproject.version=${version.value}",
@@ -105,10 +106,10 @@ lazy val plugin = (project in file("src/plugin"))
     (pluginCrossBuild / sbtVersion) := {
       scalaBinaryVersion.value match {
         case "2.12" => "1.5.8"
-        case "3" => "2.0.0"
+        case "3" => "2.1.0"
       }
     },
-    crossScalaVersions += "3.8.4"
+    crossScalaVersions := Seq("2.12.21", "3.9.0")
   )
 
 lazy val root = (project in file("."))
@@ -142,7 +143,7 @@ ThisBuild / scmInfo := Some(
   )
 )
 ThisBuild / githubWorkflowOSes := Seq("ubuntu-latest", "macos-latest", "windows-latest")
-ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.temurin("17"))
+ThisBuild / githubWorkflowJavaVersions := List(JavaSpec.temurin("17"), JavaSpec.temurin("21"), JavaSpec.temurin("25"))
 ThisBuild / githubWorkflowBuildMatrixExclusions ++= {
   val sv = (ThisBuild / scalaVersion).value
   List(
@@ -173,3 +174,5 @@ ThisBuild / githubWorkflowPublish := Seq(
   )
 )
 Global / onChangedBuildSource := ReloadOnSourceChanges
+
+ThisBuild / githubWorkflowPublishJavaVersion := JavaSpec.temurin("17")
